@@ -1,10 +1,13 @@
-//  @ts-check
-
+import { createFileRoute } from '@tanstack/react-router';
 import { useState } from 'react';
-import reactLogo from './assets/react.svg';
-import viteLogo from './assets/vite.svg';
-import heroImg from './assets/hero.png';
-import './App.css';
+import reactLogo from '../assets/react.svg';
+import viteLogo from '../assets/vite.svg';
+import heroImg from '../assets/hero.png';
+import '../App.css';
+
+export const Route = createFileRoute('/')({
+  component: App,
+});
 
 function App() {
   const [count, setCount] = useState(0);
@@ -25,7 +28,7 @@ function App() {
         </div>
         <button
           className="counter"
-          onClick={() => setCount((count) => count + 1)}
+          onClick={() => setCount((prev) => prev + 1)}
         >
           Count is {count}
         </button>
@@ -119,5 +122,3 @@ function App() {
     </>
   );
 }
-
-export default App;
