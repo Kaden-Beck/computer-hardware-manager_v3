@@ -24,6 +24,16 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 // TanStack Table Imports
 import {
   createColumnHelper,
@@ -140,6 +150,7 @@ export default function CategoryTable() {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [globalFilter, setGlobalFilter] = useState('');
   const [sheetOpen, setSheetOpen] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
   const [newName, setNewName] = useState('');
   const [newDescription, setNewDescription] = useState('');
   const [newIsParent, setNewIsParent] = useState(true);
@@ -160,8 +171,12 @@ export default function CategoryTable() {
     },
   });
 
-  function handleAdd() {
+  function handleSaveClick() {
     if (!newName.trim()) return;
+    setConfirmOpen(true);
+  }
+
+  function handleConfirm() {
     const newCategory: Category = {
       id: Math.random().toString(16).slice(2, 10),
       name: newName.trim(),
@@ -174,6 +189,7 @@ export default function CategoryTable() {
     setNewDescription('');
     setNewIsParent(true);
     setNewParentId('');
+    setConfirmOpen(false);
     setSheetOpen(false);
   }
 
@@ -237,12 +253,35 @@ export default function CategoryTable() {
                   />
                 </div>
               )}
-              <Button onClick={handleAdd} className="mt-2">
+              <Button onClick={handleSaveClick} className="mt-2">
                 Save
               </Button>
             </div>
           </SheetContent>
         </Sheet>
+        <AlertDialog open={confirmOpen} onOpenChange={setConfirmOpen}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Confirm New Category</AlertDialogTitle>
+              <AlertDialogDescription asChild>
+                <div className="space-y-1 text-sm">
+                  <p><span className="font-medium">Name:</span> {newName.trim()}</p>
+                  {newDescription.trim() && (
+                    <p><span className="font-medium">Description:</span> {newDescription.trim()}</p>
+                  )}
+                  <p><span className="font-medium">Top-level:</span> {newIsParent ? 'Yes' : 'No'}</p>
+                  {!newIsParent && newParentId.trim() && (
+                    <p><span className="font-medium">Parent ID:</span> {newParentId.trim()}</p>
+                  )}
+                </div>
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogAction onClick={handleConfirm}>Confirm</AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </div>
       <Table>
         <TableHeader className="bg-muted/50">

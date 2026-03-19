@@ -1,7 +1,8 @@
 # Logs
 logs
 *.log
-npm-debug.log*
+npm-debug.log*\
+.vscode
 
 # Dev 
 *.tsbuildinfo
@@ -38,3 +39,7 @@ ui-debug.log
 .claude
 CLAUDE.md
 src/routeTree.gen.ts
+
+
+# Tanstack 
+.tanstack/
