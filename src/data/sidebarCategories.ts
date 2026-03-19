@@ -1,4 +1,4 @@
-const data = {
+const sidebarData = {
   versions: ['1.0.1', '1.1.0-alpha', '2.0.0-beta1'],
   navMain: [
     {
@@ -7,15 +7,7 @@ const data = {
       items: [
         {
           title: 'Browse All',
-          url: '/browse',
-        },
-        {
-          title: 'Browse by Category',
-          url: '/browse/category?cat=default',
-        },
-        {
-          title: 'Browse by Manufacturer',
-          url: '/browse/manufacturer?man=default',
+          url: '/dashboard/inventory',
         },
       ],
     },
@@ -23,17 +15,17 @@ const data = {
       title: 'Manage Inventory',
       url: '#',
       items: [
-        { title: 'Products', url: '/manageProducts' },
-        { title: 'Categories', url: '/manageCategories' },
-        { title: 'Manufacturers', url: '/manageManufacturers' },
+        { title: 'Products', url: '/dashboard/products' },
+        { title: 'Categories', url: '/dashboard/categories' },
+        { title: 'Manufacturers', url: '/dashboard/manufacturers' },
       ],
     },
     {
       title: 'Manage Account',
       url: '#',
-      items: [{ title: 'User Management', url: '/manageUsers' }],
+      items: [{ title: 'User Management', url: '/dashboard/users' }],
     },
   ],
 };
 
-export { data };
+export { sidebarData };

@@ -14,8 +14,14 @@ import {
   SidebarRail,
 } from '@/components/ui/sidebar';
 
-// This is sample data.
-import { data } from '@/data/sidebarCategories';
+interface SidebarData {
+  title: string;
+  url: string;
+  items: Array<{ title: string; url: string }>;
+}
+
+import { sidebarData } from '@/data/sidebarCategories';
+import { Link } from '@tanstack/react-router';
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
@@ -27,7 +33,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         {/* We create a SidebarGroup for each parent. */}
-        {data.navMain.map((sbGroup) => (
+        {sidebarData.navMain.map((sbGroup: SidebarData) => (
           <SidebarGroup key={sbGroup.title}>
             <SidebarGroupLabel>{sbGroup.title}</SidebarGroupLabel>
             <SidebarGroupContent>
@@ -35,8 +41,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 {sbGroup.items.map((item) => (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild isActive={item.isActive}>
-                      {/* Change to Link */}
-                      <a href={item.url}>{item.title}</a>
+                      <Link to={item.url}>{item.title}</Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 ))}
