@@ -1,8 +1,12 @@
 export type Product = {
   id: string;
   name: string;
-  manufacturerId: string;
-  categoryId: string;
+  sku: string;
   description: string;
-  price: number;
+  color?: string;
+  msrp: number;
+  price?: number;
+  quantity: number;
+  manufacturerId: string; // references Manufacturer
+  categoryId: string;     // references Category
 };
