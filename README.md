@@ -2,19 +2,29 @@
 
 Full-stack app utilizing React and TypeScript to demonstrate type-safe patterns of user interaction and reactive design.
 
-## Framework and Management
+## Development Tools
+
+- Visual Studio Code with Claude Code
+- Node.js
+- ESLint and Prettier
+- TanStack Dev Tools
+
+## Framework
 
 - React TypeScript with Vite.js 8.0
-- Routing and Query Handled by TanStack
+- TanStack Routing
+- TanStack Query
+- TanStack Table
 
 ## Backend
 
-- Firebase BASS:
   - Firestore
   - Firebase Authentication
   - Firebase Hosting
+  - Firebase App Check
 
 ## Design
 
-- TailwindCSS
+- Tailwind CSS
 - Shadcn using the `avlwEeO` preset
+
