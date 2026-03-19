@@ -1,7 +1,6 @@
 import * as React from 'react';
 
 import { SearchForm } from '@/components/search-form';
-import { VersionSwitcher } from '@/components/version-switcher';
 import {
   Sidebar,
   SidebarContent,
@@ -23,19 +22,20 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     <Sidebar {...props}>
       <SidebarHeader>
         {/* add logo */}
-        <h2>Kaden's Computer Repair</h2>
+        <span>Kaden's Computer Repair</span>
         <SearchForm />
       </SidebarHeader>
       <SidebarContent>
         {/* We create a SidebarGroup for each parent. */}
-        {data.navMain.map((item) => (
-          <SidebarGroup key={item.title}>
-            <SidebarGroupLabel>{item.title}</SidebarGroupLabel>
+        {data.navMain.map((sbGroup) => (
+          <SidebarGroup key={sbGroup.title}>
+            <SidebarGroupLabel>{sbGroup.title}</SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
-                {item.items.map((item) => (
+                {sbGroup.items.map((item) => (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild isActive={item.isActive}>
+                      {/* Change to Link */}
                       <a href={item.url}>{item.title}</a>
                     </SidebarMenuButton>
                   </SidebarMenuItem>

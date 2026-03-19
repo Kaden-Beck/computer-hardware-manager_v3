@@ -6,11 +6,11 @@ import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
 import tseslint from 'typescript-eslint';
 import prettier from 'eslint-config-prettier';
-import { tanstackConfig } from '@tanstack/eslint-config';
+import pluginRouter from '@tanstack/eslint-plugin-router';
 import { defineConfig, globalIgnores } from 'eslint/config';
 
 export default defineConfig([
-  ...tanstackConfig,
+  ...pluginRouter.configs['flat/recommended'],
   {
     rules: {
       'import/no-cycle': 'off',
@@ -18,7 +18,6 @@ export default defineConfig([
       'sort-imports': 'off',
       '@typescript-eslint/array-type': 'off',
       '@typescript-eslint/require-await': 'off',
-      'pnpm/json-enforce-catalog': 'off',
     },
     files: ['**/*.{ts,tsx}'],
     extends: [
