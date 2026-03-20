@@ -79,4 +79,54 @@ export const manufacturerDetails: Manufacturer[] = [
     name: 'be quiet!',
     description: 'Produces silent PC cases, PSUs, and cooling solutions.',
   },
+  {
+    id: 'nzxt0001',
+    name: 'NZXT',
+    description: 'Produces PC cases, AIO coolers, and smart home accessories.',
+  },
+  {
+    id: 'frac0001',
+    name: 'Fractal Design',
+    description: 'Produces PC cases and cooling solutions with a minimalist aesthetic.',
+  },
+  {
+    id: 'lian0001',
+    name: 'Lian Li',
+    description: 'Produces aluminum PC cases and AIO liquid coolers.',
+  },
+  {
+    id: 'cru00001',
+    name: 'Crucial',
+    description: 'Produces RAM and SSDs; a Micron Technology brand.',
+  },
+  {
+    id: 'gskl0001',
+    name: 'G.Skill',
+    description: 'Produces high-performance RAM kits for enthusiast and gaming builds.',
+  },
+  {
+    id: 'seas0001',
+    name: 'Seasonic',
+    description: 'Produces high-efficiency PSUs renowned for build quality and reliability.',
+  },
+  {
+    id: 'ttke0001',
+    name: 'Thermaltake',
+    description: 'Produces PC cases, PSUs, cooling, and gaming peripherals.',
+  },
+  {
+    id: 'depc0001',
+    name: 'DeepCool',
+    description: 'Produces CPU air coolers, AIO coolers, and PC cases.',
+  },
+  {
+    id: 'asrk0001',
+    name: 'ASRock',
+    description: 'Produces motherboards, mini PCs, and graphics cards.',
+  },
+  {
+    id: 'skhx0001',
+    name: 'SK Hynix',
+    description: 'Produces NAND flash, DRAM, and NVMe SSDs.',
+  },
 ];

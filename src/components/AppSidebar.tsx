@@ -22,13 +22,16 @@ interface SidebarData {
 
 import { sidebarData } from '@/data/sidebarCategories';
 import { Link } from '@tanstack/react-router';
+import { GalleryVerticalEnd } from 'lucide-react';
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar {...props}>
       <SidebarHeader>
-        {/* add logo */}
-        <span>Kaden's Computer Repair</span>
+        <div className="flex items-center gap-2">
+          <GalleryVerticalEnd className="size-4" />
+          Kaden's Computer Repair
+        </div>
         <SearchForm />
       </SidebarHeader>
       <SidebarContent>
