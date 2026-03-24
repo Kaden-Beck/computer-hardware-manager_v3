@@ -6,7 +6,7 @@ import {
 } from '@/components/ui/sidebar';
 import { SearchIcon } from 'lucide-react';
 
-export function SearchForm({ ...props }: React.ComponentProps<'form'>) {
+export function SearchForm({ ...props }: React.ComponentProps<'form'>): React.JSX.Element {
   return (
     <form {...props}>
       <SidebarGroup className="py-0">

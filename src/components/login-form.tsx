@@ -12,7 +12,7 @@ import { signInWithGoogle } from '@/lib/firebase';
 export function LoginForm({
   className,
   ...props
-}: React.ComponentProps<'div'>) {
+}: React.ComponentProps<'div'>): React.JSX.Element {
   return (
     <div className={cn('flex flex-col gap-6', className)} {...props}>
       <Card>

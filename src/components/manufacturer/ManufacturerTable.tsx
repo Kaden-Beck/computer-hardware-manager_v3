@@ -49,6 +49,7 @@ import { ArrowUpDown, ArrowUp, ArrowDown, Plus } from 'lucide-react';
 // TanStack Router Import for Link Element
 import { Link } from '@tanstack/react-router';
 
+import type React from 'react';
 import { useState } from 'react';
 
 // Types and Data
@@ -131,7 +132,7 @@ const columns = [
   }),
 ];
 
-export default function ManufacturerTable() {
+export default function ManufacturerTable(): React.JSX.Element {
   'use no memo';
   const [data, setData] = useState<Manufacturer[]>(manufacturerDetails);
   const [sorting, setSorting] = useState<SortingState>([]);

@@ -1,9 +1,10 @@
+import type React from 'react';
 import { useParams } from '@tanstack/react-router';
 import { productDetails } from '@/data/stub/productData';
 import { manufacturerDetails } from '@/data/stub/manufacturerData';
 import { categoryDetails } from '@/data/stub/categoryData';
 
-export default function ProductDetailComponent() {
+export default function ProductDetailComponent(): React.JSX.Element | null {
   const { prodId } = useParams({ from: '/dashboard/products/$prodId' });
   const product = productDetails.find((p) => p.id === prodId);
 

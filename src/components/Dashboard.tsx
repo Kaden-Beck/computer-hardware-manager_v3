@@ -1,3 +1,4 @@
+import type React from 'react';
 import { AppSidebar } from './AppSidebar';
 import { Link, Outlet, useRouterState } from '@tanstack/react-router';
 
@@ -30,6 +31,7 @@ const SECTIONS: Record<string, { label: string; href: string }> = {
   products: { label: 'Products', href: '/dashboard/products' },
   categories: { label: 'Categories', href: '/dashboard/categories' },
   inventory: { label: 'Inventory', href: '/dashboard/inventory' },
+  users: { label: 'User Management', href: '/dashboard/users' },
 };
 
 function buildCrumbs(pathname: string): Crumb[] {
@@ -75,7 +77,7 @@ function buildCrumbs(pathname: string): Crumb[] {
   return crumbs;
 }
 
-export default function DashboardComponent() {
+export default function DashboardComponent(): React.JSX.Element {
   const { location } = useRouterState();
   const crumbs = buildCrumbs(location.pathname);
 

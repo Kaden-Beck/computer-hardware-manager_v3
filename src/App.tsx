@@ -1,10 +1,11 @@
+import type React from 'react';
 import { useNavigate } from '@tanstack/react-router';
 import { useEffect } from 'react';
 import { GalleryVerticalEnd } from 'lucide-react';
 import { LoginForm } from '@/components/login-form';
 import { useAuth } from '@/hooks/useAuth';
 
-export default function App() {
+export default function App(): React.JSX.Element | null {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
 

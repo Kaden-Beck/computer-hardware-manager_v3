@@ -1,7 +1,7 @@
 import React from 'react';
 import ManufacturerTable from './ManufacturerTable';
 
-export default function ManufacturerPage() {
+export default function ManufacturerPage(): React.JSX.Element {
   return (
     <React.Fragment>
       <h2>Manage Manufacturers</h2>

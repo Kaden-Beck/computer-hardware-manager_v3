@@ -1,7 +1,8 @@
+import type React from 'react';
 import { manufacturerDetails } from '@/data/stub/manufacturerData';
 import { useParams } from '@tanstack/react-router';
 
-export default function ManufacturerDetailComponent() {
+export default function ManufacturerDetailComponent(): React.JSX.Element | null {
   const { manId } = useParams({ from: '/dashboard/manufacturers/$manId' });
   const manufacturer = manufacturerDetails.find((m) => m.id === manId);
 
