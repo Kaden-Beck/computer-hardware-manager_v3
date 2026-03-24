@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { SearchForm } from '@/components/search-form';
+import { GlobalSearch } from '@/components/GlobalSearch';
 import {
   Sidebar,
   SidebarContent,
@@ -34,7 +34,7 @@ export function AppSidebar({
           <GalleryVerticalEnd className="size-4" />
           Kaden's Computer Repair
         </div>
-        <SearchForm />
+        <GlobalSearch />
       </SidebarHeader>
       <SidebarContent>
         {/* We create a SidebarGroup for each parent. */}
