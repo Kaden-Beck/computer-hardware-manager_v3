@@ -4,6 +4,7 @@ import { GlobalSearch } from '@/components/GlobalSearch';
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
@@ -21,12 +22,16 @@ interface SidebarData {
 }
 
 import { sidebarData } from '@/data/sidebarCategories';
+import { signInWithGoogle, signOutUser } from '@/lib/firebase';
+import { useAuth } from '@/hooks/useAuth';
 import { Link } from '@tanstack/react-router';
-import { GalleryVerticalEnd } from 'lucide-react';
+import { GalleryVerticalEnd, LogInIcon, LogOutIcon } from 'lucide-react';
 
 export function AppSidebar({
   ...props
 }: React.ComponentProps<typeof Sidebar>): React.JSX.Element {
+  const { user, loading } = useAuth();
+
   return (
     <Sidebar {...props}>
       <SidebarHeader>
@@ -55,6 +60,36 @@ export function AppSidebar({
           </SidebarGroup>
         ))}
       </SidebarContent>
+      <SidebarFooter>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            {!loading && (
+              user ? (
+                <SidebarMenuButton
+                  onClick={() => void signOutUser()}
+                  className="w-full"
+                >
+                  <LogOutIcon className="size-4" />
+                  <span>Sign Out</span>
+                  {user.displayName && (
+                    <span className="ml-auto truncate text-xs text-muted-foreground">
+                      {user.displayName}
+                    </span>
+                  )}
+                </SidebarMenuButton>
+              ) : (
+                <SidebarMenuButton
+                  onClick={() => void signInWithGoogle()}
+                  className="w-full"
+                >
+                  <LogInIcon className="size-4" />
+                  <span>Sign In with Google</span>
+                </SidebarMenuButton>
+              )
+            )}
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarFooter>
       <SidebarRail />
     </Sidebar>
   );
