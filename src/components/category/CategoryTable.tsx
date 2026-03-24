@@ -124,8 +124,21 @@ const columns = [
     cell: (info) => {
       const parentId = info.getValue();
       if (!parentId) return '—';
-      const parent = categoryDetails.find((c) => c.id === parentId);
-      return parent?.name ?? parentId;
+      else {
+        const parent = categoryDetails.find(
+          (c) => c.id === parentId
+        );
+        return (
+          <Link
+            to="/dashboard/categories/$catId"
+            params={{ catId: parentId }}
+            className="underline hover:text-primary"
+          >
+            {parent?.name ?? "orphan"}
+          </Link>
+        );
+        // parent?.name ?? parentId;
+      }
     },
   }),
   columnHelper.display({
