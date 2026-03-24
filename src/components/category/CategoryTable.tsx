@@ -126,16 +126,14 @@ const columns = [
       const parentId = info.getValue();
       if (!parentId) return '—';
       else {
-        const parent = categoryDetails.find(
-          (c) => c.id === parentId
-        );
+        const parent = categoryDetails.find((c) => c.id === parentId);
         return (
           <Link
             to="/dashboard/categories/$catId"
             params={{ catId: parentId }}
             className="underline hover:text-primary"
           >
-            {parent?.name ?? "orphan"}
+            {parent?.name ?? 'orphan'}
           </Link>
         );
         // parent?.name ?? parentId;

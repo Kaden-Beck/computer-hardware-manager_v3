@@ -196,11 +196,7 @@ function buildColumns(
         const user = info.row.original;
         if (user.isCurrentUser) return null;
         return user.revoked ? (
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => onRestore(user)}
-          >
+          <Button variant="outline" size="sm" onClick={() => onRestore(user)}>
             Restore
           </Button>
         ) : (
@@ -223,7 +219,9 @@ export default function UserTable(): React.JSX.Element {
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [globalFilter, setGlobalFilter] = React.useState('');
   const [pendingUser, setPendingUser] = React.useState<AppUser | null>(null);
-  const [dialogAction, setDialogAction] = React.useState<'revoke' | 'restore'>('revoke');
+  const [dialogAction, setDialogAction] = React.useState<'revoke' | 'restore'>(
+    'revoke'
+  );
 
   function handleRevoke(user: AppUser): void {
     setPendingUser(user);
@@ -343,7 +341,9 @@ export default function UserTable(): React.JSX.Element {
 
       <AlertDialog
         open={!!pendingUser}
-        onOpenChange={(open) => { if (!open) setPendingUser(null); }}
+        onOpenChange={(open) => {
+          if (!open) setPendingUser(null);
+        }}
       >
         <AlertDialogContent>
           <AlertDialogHeader>

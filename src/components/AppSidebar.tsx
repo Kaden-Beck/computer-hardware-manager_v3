@@ -24,7 +24,9 @@ import { sidebarData } from '@/data/sidebarCategories';
 import { Link } from '@tanstack/react-router';
 import { GalleryVerticalEnd } from 'lucide-react';
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>): React.JSX.Element {
+export function AppSidebar({
+  ...props
+}: React.ComponentProps<typeof Sidebar>): React.JSX.Element {
   return (
     <Sidebar {...props}>
       <SidebarHeader>
