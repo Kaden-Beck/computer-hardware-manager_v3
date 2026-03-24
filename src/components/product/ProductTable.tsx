@@ -123,14 +123,30 @@ const columns = [
       const manufacturer = manufacturerDetails.find(
         (m) => m.id === info.getValue()
       );
-      return manufacturer?.name ?? info.getValue();
+      return (
+        <Link
+          to="/dashboard/manufacturers/$manId"
+          params={{ manId: manufacturer?.id ?? info.getValue() }}
+          className="underline hover:text-primary"
+        >
+          {manufacturer?.name ?? info.getValue()}
+        </Link>
+      );
     },
   }),
   columnHelper.accessor('categoryId', {
     header: 'Category',
     cell: (info) => {
       const category = categoryDetails.find((c) => c.id === info.getValue());
-      return category?.name ?? info.getValue();
+      return (
+        <Link
+          to="/dashboard/categories/$catId"
+          params={{ catId: category?.id ?? info.getValue() }}
+          className="underline hover:text-primary"
+        >
+          {category?.name ?? info.getValue()}
+        </Link>
+      );
     },
   }),
   columnHelper.accessor('msrp', {
