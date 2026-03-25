@@ -1,5 +1,6 @@
 import type React from 'react';
 import { useParams, Link } from '@tanstack/react-router';
+import { Button } from '@/components/ui/button';
 
 import { productDetails } from '@/data/stub/productData';
 import { manufacturerDetails } from '@/data/stub/manufacturerData';
@@ -30,7 +31,7 @@ export default function ProductDetailComponent(): React.JSX.Element | null {
         'bg-background text-foreground border rounded-lg overflow-hidden w-full p-4 md:p-6'
       )}
     >
-      <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr_1fr] gap-6 items-start">
+      <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr_1fr] gap-6 items-stretch">
         {/* Column 1: Image */}
         <div className="w-full aspect-square max-w-50 mx-auto bg-muted rounded-md overflow-hidden">
           <img
@@ -75,9 +76,17 @@ export default function ProductDetailComponent(): React.JSX.Element | null {
         </div>
 
         {/* Column 3: Pricing */}
-        <div className="flex flex-col gap-1">
+        <div className="flex flex-col gap-1 h-full">
           <h3 className="text-3xl font-bold">${product.msrp.toFixed(2)}</h3>
           <p className="text-sm text-muted-foreground">MSRP</p>
+          <Button asChild className="mt-auto w-fit px-8">
+            <Link
+              to="/dashboard/products/$prodId/edit"
+              params={{ prodId: product.id }}
+            >
+              Edit
+            </Link>
+          </Button>
         </div>
       </div>
     </div>
