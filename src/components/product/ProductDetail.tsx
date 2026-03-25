@@ -1,5 +1,5 @@
 import type React from 'react';
-import { useParams } from '@tanstack/react-router';
+import { useParams, Link } from '@tanstack/react-router';
 
 import { productDetails } from '@/data/stub/productData';
 import { manufacturerDetails } from '@/data/stub/manufacturerData';
@@ -19,8 +19,6 @@ export default function ProductDetailComponent(): React.JSX.Element | null {
 
   const specs = [
     `SKU: ${product.sku}`,
-    `Manufacturer: ${manufacturer?.name ?? product.manufacturerId}`,
-    `Category: ${category?.name ?? product.categoryId}`,
     product.description,
     ...(product.color ? [`Color: ${product.color}`] : []),
     `In Stock: ${product.quantity} units`,
@@ -50,6 +48,26 @@ export default function ProductDetailComponent(): React.JSX.Element | null {
             {product.name}
           </h2>
           <ul className="space-y-2 text-sm list-none text-muted-foreground pt-2">
+            <li>
+              Manufacturer:{' '}
+              <Link
+                to="/dashboard/manufacturers/$manId"
+                params={{ manId: product.manufacturerId }}
+                className="text-primary hover:underline"
+              >
+                {manufacturer?.name ?? product.manufacturerId}
+              </Link>
+            </li>
+            <li>
+              Category:{' '}
+              <Link
+                to="/dashboard/categories/$catId"
+                params={{ catId: product.categoryId }}
+                className="text-primary hover:underline"
+              >
+                {category?.name ?? product.categoryId}
+              </Link>
+            </li>
             {specs.map((spec, index) => (
               <li key={index}>{spec}</li>
             ))}
