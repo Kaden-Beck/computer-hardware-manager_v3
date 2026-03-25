@@ -19,9 +19,7 @@ export default function ManufacturerDetailComponent(): React.JSX.Element | null 
 
   if (!manufacturer) return <div>Manufacturer not found.</div>;
 
-  const products = productDetails.filter(
-    (p) => p.manufacturerId === manId
-  );
+  const products = productDetails.filter((p) => p.manufacturerId === manId);
 
   const specs = [`ID: ${manufacturer.id}`, manufacturer.description];
 

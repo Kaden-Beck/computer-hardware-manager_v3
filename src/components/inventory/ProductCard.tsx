@@ -44,7 +44,9 @@ export default function ProductCard({
         </div>
       </Link>
 
-      <CardFooter className={`flex-col items-start ${compact ? 'gap-1 p-2' : 'gap-3'}`}>
+      <CardFooter
+        className={`flex-col items-start ${compact ? 'gap-1 p-2' : 'gap-3'}`}
+      >
         <Link
           to="/dashboard/products/$prodId"
           params={{ prodId: product.id }}
@@ -56,7 +58,9 @@ export default function ProductCard({
               {category?.name ?? '—'}
             </CardDescription>
           )}
-          <p className={`font-semibold ${compact ? 'text-xs text-muted-foreground' : 'mt-1 text-sm'}`}>
+          <p
+            className={`font-semibold ${compact ? 'text-xs text-muted-foreground' : 'mt-1 text-sm'}`}
+          >
             ${product.msrp.toFixed(2)}
           </p>
         </Link>

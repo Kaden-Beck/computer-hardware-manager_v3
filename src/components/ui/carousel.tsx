@@ -32,7 +32,8 @@ const CarouselContext = React.createContext<CarouselContextProps | null>(null);
 
 function useCarousel() {
   const context = React.useContext(CarouselContext);
-  if (!context) throw new Error('useCarousel must be used within a <Carousel />');
+  if (!context)
+    throw new Error('useCarousel must be used within a <Carousel />');
   return context;
 }
 
@@ -63,8 +64,13 @@ function Carousel({
 
   const handleKeyDown = React.useCallback(
     (event: React.KeyboardEvent<HTMLDivElement>) => {
-      if (event.key === 'ArrowLeft') { event.preventDefault(); scrollPrev(); }
-      else if (event.key === 'ArrowRight') { event.preventDefault(); scrollNext(); }
+      if (event.key === 'ArrowLeft') {
+        event.preventDefault();
+        scrollPrev();
+      } else if (event.key === 'ArrowRight') {
+        event.preventDefault();
+        scrollNext();
+      }
     },
     [scrollPrev, scrollNext]
   );
@@ -79,12 +85,23 @@ function Carousel({
     onSelect(api);
     api.on('reInit', onSelect);
     api.on('select', onSelect);
-    return () => { api.off('select', onSelect); };
+    return () => {
+      api.off('select', onSelect);
+    };
   }, [api, onSelect]);
 
   return (
     <CarouselContext.Provider
-      value={{ carouselRef, api, opts, orientation, scrollPrev, scrollNext, canScrollPrev, canScrollNext }}
+      value={{
+        carouselRef,
+        api,
+        opts,
+        orientation,
+        scrollPrev,
+        scrollNext,
+        canScrollPrev,
+        canScrollNext,
+      }}
     >
       <div
         onKeyDownCapture={handleKeyDown}
