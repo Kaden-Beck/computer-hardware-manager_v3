@@ -13,10 +13,12 @@ import { categoryDetails } from '@/data/stub/categoryData';
 import type { Product } from '@/schema/Product';
 interface ProductCardProps {
   product: Product;
+  compact?: boolean;
 }
 
 export default function ProductCard({
   product,
+  compact = false,
 }: ProductCardProps): React.JSX.Element {
   // Find category in details array by id+
   const category = categoryDetails.find((c) => c.id === product.categoryId);
@@ -29,7 +31,9 @@ export default function ProductCard({
         params={{ prodId: product.id }}
         className="block"
       >
-        <div className="flex aspect-square items-center justify-center bg-muted overflow-hidden">
+        <div
+          className={`flex items-center justify-center bg-muted overflow-hidden ${compact ? 'h-24' : 'aspect-square'}`}
+        >
           <img
             src={`https://placehold.co/200x200/f3f4f6/6b7280?text=${encodeURIComponent(product.name)}`}
             alt={product.name}
@@ -40,41 +44,43 @@ export default function ProductCard({
         </div>
       </Link>
 
-      <CardFooter className="flex-col items-start gap-3">
+      <CardFooter className={`flex-col items-start ${compact ? 'gap-1 p-2' : 'gap-3'}`}>
         <Link
           to="/dashboard/products/$prodId"
           params={{ prodId: product.id }}
           className="block w-full hover:opacity-80"
         >
-          <CardTitle className="truncate text-sm">
-            {product.name}
-          </CardTitle>
-          <CardDescription className="mt-0.5">
-            {category?.name ?? '—'}
-          </CardDescription>
-          <p className="mt-1 text-sm font-semibold">
+          <CardTitle className="truncate text-sm">{product.name}</CardTitle>
+          {!compact && (
+            <CardDescription className="mt-0.5">
+              {category?.name ?? '—'}
+            </CardDescription>
+          )}
+          <p className={`font-semibold ${compact ? 'text-xs text-muted-foreground' : 'mt-1 text-sm'}`}>
             ${product.msrp.toFixed(2)}
           </p>
         </Link>
 
-        <div className="flex w-full gap-2">
-          <Button variant="outline" size="sm" className="flex-1" asChild>
-            <Link
-              to="/dashboard/products/$prodId"
-              params={{ prodId: product.id }}
-            >
-              View
-            </Link>
-          </Button>
-          <Button size="sm" className="flex-1" asChild>
-            <Link
-              to="/dashboard/products/$prodId/edit"
-              params={{ prodId: product.id }}
-            >
-              Edit
-            </Link>
-          </Button>
-        </div>
+        {!compact && (
+          <div className="flex w-full gap-2">
+            <Button variant="outline" size="sm" className="flex-1" asChild>
+              <Link
+                to="/dashboard/products/$prodId"
+                params={{ prodId: product.id }}
+              >
+                View
+              </Link>
+            </Button>
+            <Button size="sm" className="flex-1" asChild>
+              <Link
+                to="/dashboard/products/$prodId/edit"
+                params={{ prodId: product.id }}
+              >
+                Edit
+              </Link>
+            </Button>
+          </div>
+        )}
       </CardFooter>
     </Card>
   );
