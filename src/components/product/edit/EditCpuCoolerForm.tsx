@@ -84,9 +84,7 @@ export function CpuCoolerProductEditForm({
                 <Select
                   value={field.state.value}
                   onValueChange={(val) =>
-                    field.handleChange(
-                      val as CpuCoolerFormValues['coolerType']
-                    )
+                    field.handleChange(val as CpuCoolerFormValues['coolerType'])
                   }
                 >
                   <SelectTrigger

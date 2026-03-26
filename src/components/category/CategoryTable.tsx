@@ -169,7 +169,7 @@ export default function CategoryTable(): React.JSX.Element {
 
   return (
     <div>
-      <div className="flex items-center justify-between gap-4 mb-4">
+      <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
         <Input
           placeholder="Search categories..."
           value={globalFilter}
@@ -179,8 +179,8 @@ export default function CategoryTable(): React.JSX.Element {
         <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
           <SheetTrigger asChild>
             <Button size="sm">
-              <Plus className="h-4 w-4 mr-1" />
-              Add Category
+              <Plus className="h-4 w-4" />
+              <span className="hidden sm:inline ml-1">Add Category</span>
             </Button>
           </SheetTrigger>
           <SheetContent>
@@ -194,35 +194,96 @@ export default function CategoryTable(): React.JSX.Element {
           </SheetContent>
         </Sheet>
       </div>
-      <Table>
-        <TableHeader className="bg-muted/50">
-          {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
-                <TableHead key={header.id}>
-                  {header.isPlaceholder
-                    ? null
-                    : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
-                </TableHead>
-              ))}
-            </TableRow>
-          ))}
-        </TableHeader>
-        <TableBody>
-          {table.getRowModel().rows.map((row) => (
-            <TableRow key={row.id}>
-              {row.getVisibleCells().map((cell) => (
-                <TableCell key={cell.id}>
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </TableCell>
-              ))}
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+
+      {/* Mobile card list */}
+      <div className="md:hidden space-y-2">
+        {table.getRowModel().rows.map((row) => {
+          const c = row.original;
+          const parent = c.parentId
+            ? categoryDetails.find((cat) => cat.id === c.parentId)
+            : null;
+          return (
+            <div
+              key={row.id}
+              className="rounded-lg border bg-card p-3 flex items-start justify-between gap-3"
+            >
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <Link
+                    to="/dashboard/categories/$catId"
+                    params={{ catId: c.id }}
+                    className="font-medium underline hover:text-primary truncate"
+                  >
+                    {c.name}
+                  </Link>
+                  {c.isParent && (
+                    <span className="rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground shrink-0">
+                      Parent
+                    </span>
+                  )}
+                </div>
+                <p className="text-sm text-muted-foreground mt-0.5 line-clamp-2">
+                  {c.description}
+                </p>
+                {parent && (
+                  <p className="text-xs text-muted-foreground mt-1">
+                    Under:{' '}
+                    <Link
+                      to="/dashboard/categories/$catId"
+                      params={{ catId: parent.id }}
+                      className="underline hover:text-primary"
+                    >
+                      {parent.name}
+                    </Link>
+                  </p>
+                )}
+              </div>
+              <Button variant="outline" size="sm" asChild className="shrink-0">
+                <Link
+                  to="/dashboard/categories/$catId/edit"
+                  params={{ catId: c.id }}
+                >
+                  Edit
+                </Link>
+              </Button>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Desktop table */}
+      <div className="hidden md:block">
+        <Table>
+          <TableHeader className="bg-muted/50">
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <TableHead key={header.id}>
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                  </TableHead>
+                ))}
+              </TableRow>
+            ))}
+          </TableHeader>
+          <TableBody>
+            {table.getRowModel().rows.map((row) => (
+              <TableRow key={row.id}>
+                {row.getVisibleCells().map((cell) => (
+                  <TableCell key={cell.id}>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+
       <Pagination className="mt-4">
         <PaginationContent>
           <PaginationItem>

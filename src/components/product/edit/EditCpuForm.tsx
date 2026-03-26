@@ -27,8 +27,9 @@ export function CpuProductEditForm({
   onSuccess,
   onEdit,
 }: ProductSpecEditFormProps): React.JSX.Element {
-  const [pendingValues, setPendingValues] =
-    useState<CpuFormValues | null>(null);
+  const [pendingValues, setPendingValues] = useState<CpuFormValues | null>(
+    null
+  );
 
   const form = useCpuProductForm({
     categoryId: product.categoryId,

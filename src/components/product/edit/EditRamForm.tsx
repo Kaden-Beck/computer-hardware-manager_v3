@@ -26,8 +26,9 @@ export function RamProductEditForm({
   onSuccess,
   onEdit,
 }: ProductSpecEditFormProps): React.JSX.Element {
-  const [pendingValues, setPendingValues] =
-    useState<RamFormValues | null>(null);
+  const [pendingValues, setPendingValues] = useState<RamFormValues | null>(
+    null
+  );
 
   const form = useRamProductForm({
     categoryId: product.categoryId,

@@ -264,7 +264,7 @@ export default function UserTable(): React.JSX.Element {
 
   return (
     <div>
-      <div className="flex items-center justify-between gap-4 mb-4">
+      <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
         <Input
           placeholder="Search users..."
           value={globalFilter}
@@ -275,38 +275,96 @@ export default function UserTable(): React.JSX.Element {
         />
       </div>
 
-      <Table>
-        <TableHeader className="bg-muted/50">
-          {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
-                <TableHead key={header.id}>
-                  {header.isPlaceholder
-                    ? null
-                    : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
-                </TableHead>
-              ))}
-            </TableRow>
-          ))}
-        </TableHeader>
-        <TableBody>
-          {table.getRowModel().rows.map((row) => (
-            <TableRow
+      {/* Mobile card list */}
+      <div className="md:hidden space-y-2">
+        {table.getRowModel().rows.map((row) => {
+          const user = row.original;
+          return (
+            <div
               key={row.id}
-              className={row.original.revoked ? 'opacity-60' : ''}
+              className={cn(
+                'rounded-lg border bg-card p-3 flex items-start justify-between gap-3',
+                user.revoked && 'opacity-60'
+              )}
             >
-              {row.getVisibleCells().map((cell) => (
-                <TableCell key={cell.id}>
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </TableCell>
-              ))}
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <UserAvatar user={user} />
+                  <StatusBadge revoked={user.revoked} />
+                </div>
+                <p className="text-sm text-muted-foreground mt-1 truncate">
+                  {user.email}
+                </p>
+                <div className="flex flex-wrap gap-x-3 gap-y-0.5 mt-1 text-xs text-muted-foreground">
+                  <span className="capitalize">
+                    {user.provider === 'google.com'
+                      ? 'Google'
+                      : 'Email/Password'}
+                  </span>
+                  <span>Last sign-in: {formatDate(user.lastSignIn)}</span>
+                </div>
+              </div>
+              {!user.isCurrentUser && (
+                <div className="shrink-0">
+                  {user.revoked ? (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => handleRestore(user)}
+                    >
+                      Restore
+                    </Button>
+                  ) : (
+                    <Button
+                      variant="destructive"
+                      size="sm"
+                      onClick={() => handleRevoke(user)}
+                    >
+                      Revoke
+                    </Button>
+                  )}
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Desktop table */}
+      <div className="hidden md:block">
+        <Table>
+          <TableHeader className="bg-muted/50">
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <TableHead key={header.id}>
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                  </TableHead>
+                ))}
+              </TableRow>
+            ))}
+          </TableHeader>
+          <TableBody>
+            {table.getRowModel().rows.map((row) => (
+              <TableRow
+                key={row.id}
+                className={row.original.revoked ? 'opacity-60' : ''}
+              >
+                {row.getVisibleCells().map((cell) => (
+                  <TableCell key={cell.id}>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
 
       <Pagination className="mt-4">
         <PaginationContent>

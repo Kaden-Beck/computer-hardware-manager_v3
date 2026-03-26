@@ -146,7 +146,7 @@ export default function ManufacturerTable(): React.JSX.Element {
 
   return (
     <div>
-      <div className="flex items-center justify-between gap-4 mb-4">
+      <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
         <Input
           placeholder="Search manufacturers..."
           value={globalFilter}
@@ -156,8 +156,8 @@ export default function ManufacturerTable(): React.JSX.Element {
         <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
           <SheetTrigger asChild>
             <Button size="sm">
-              <Plus className="h-4 w-4 mr-1" />
-              Add Manufacturer
+              <Plus className="h-4 w-4" />
+              <span className="hidden sm:inline ml-1">Add Manufacturer</span>
             </Button>
           </SheetTrigger>
           <SheetContent>
@@ -171,35 +171,74 @@ export default function ManufacturerTable(): React.JSX.Element {
           </SheetContent>
         </Sheet>
       </div>
-      <Table>
-        <TableHeader className="bg-muted/50">
-          {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
-                <TableHead key={header.id}>
-                  {header.isPlaceholder
-                    ? null
-                    : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
-                </TableHead>
-              ))}
-            </TableRow>
-          ))}
-        </TableHeader>
-        <TableBody>
-          {table.getRowModel().rows.map((row) => (
-            <TableRow key={row.id}>
-              {row.getVisibleCells().map((cell) => (
-                <TableCell key={cell.id}>
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </TableCell>
-              ))}
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+
+      {/* Mobile card list */}
+      <div className="md:hidden space-y-2">
+        {table.getRowModel().rows.map((row) => {
+          const m = row.original;
+          return (
+            <div
+              key={row.id}
+              className="rounded-lg border bg-card p-3 flex items-start justify-between gap-3"
+            >
+              <div className="min-w-0 flex-1">
+                <Link
+                  to="/dashboard/manufacturers/$manId"
+                  params={{ manId: m.id }}
+                  className="font-medium underline hover:text-primary block truncate"
+                >
+                  {m.name}
+                </Link>
+                <p className="text-sm text-muted-foreground mt-0.5 line-clamp-2">
+                  {m.description}
+                </p>
+              </div>
+              <Button variant="outline" size="sm" asChild className="shrink-0">
+                <Link
+                  to="/dashboard/manufacturers/$manId/edit"
+                  params={{ manId: m.id }}
+                >
+                  Edit
+                </Link>
+              </Button>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Desktop table */}
+      <div className="hidden md:block">
+        <Table>
+          <TableHeader className="bg-muted/50">
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <TableHead key={header.id}>
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                  </TableHead>
+                ))}
+              </TableRow>
+            ))}
+          </TableHeader>
+          <TableBody>
+            {table.getRowModel().rows.map((row) => (
+              <TableRow key={row.id}>
+                {row.getVisibleCells().map((cell) => (
+                  <TableCell key={cell.id}>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+
       <Pagination className="mt-4">
         <PaginationContent>
           <PaginationItem>

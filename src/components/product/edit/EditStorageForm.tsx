@@ -33,8 +33,9 @@ export function StorageProductEditForm({
   onSuccess,
   onEdit,
 }: ProductSpecEditFormProps): React.JSX.Element {
-  const [pendingValues, setPendingValues] =
-    useState<StorageFormValues | null>(null);
+  const [pendingValues, setPendingValues] = useState<StorageFormValues | null>(
+    null
+  );
 
   const form = useStorageProductForm({
     categoryId: product.categoryId,
@@ -84,9 +85,7 @@ export function StorageProductEditForm({
                 <Select
                   value={field.state.value}
                   onValueChange={(val) =>
-                    field.handleChange(
-                      val as StorageFormValues['storageType']
-                    )
+                    field.handleChange(val as StorageFormValues['storageType'])
                   }
                 >
                   <SelectTrigger

@@ -224,7 +224,7 @@ export default function ProductTable(): React.JSX.Element {
 
   return (
     <div>
-      <div className="flex items-center justify-between gap-4 mb-4">
+      <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
         <Input
           placeholder="Search products..."
           value={globalFilter}
@@ -234,8 +234,8 @@ export default function ProductTable(): React.JSX.Element {
         <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
           <SheetTrigger asChild>
             <Button size="sm">
-              <Plus className="h-4 w-4 mr-1" />
-              Add Product
+              <Plus className="h-4 w-4" />
+              <span className="hidden sm:inline ml-1">Add Product</span>
             </Button>
           </SheetTrigger>
           <SheetContent>
@@ -251,35 +251,108 @@ export default function ProductTable(): React.JSX.Element {
           </SheetContent>
         </Sheet>
       </div>
-      <Table>
-        <TableHeader className="bg-muted/50">
-          {table.getHeaderGroups().map((headerGroup) => (
-            <TableRow key={headerGroup.id}>
-              {headerGroup.headers.map((header) => (
-                <TableHead key={header.id}>
-                  {header.isPlaceholder
-                    ? null
-                    : flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
-                </TableHead>
-              ))}
-            </TableRow>
-          ))}
-        </TableHeader>
-        <TableBody>
-          {table.getRowModel().rows.map((row) => (
-            <TableRow key={row.id}>
-              {row.getVisibleCells().map((cell) => (
-                <TableCell key={cell.id}>
-                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                </TableCell>
-              ))}
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+
+      {/* Mobile card list */}
+      <div className="md:hidden space-y-2">
+        {table.getRowModel().rows.map((row) => {
+          const p = row.original;
+          const manufacturer = manufacturerDetails.find(
+            (m) => m.id === p.manufacturerId
+          );
+          const category = categoryDetails.find((c) => c.id === p.categoryId);
+          return (
+            <div
+              key={row.id}
+              className="rounded-lg border bg-card p-3 flex items-start justify-between gap-3"
+            >
+              <div className="min-w-0 flex-1">
+                <Link
+                  to="/dashboard/products/$prodId"
+                  params={{ prodId: p.id }}
+                  className="font-medium underline hover:text-primary block truncate"
+                >
+                  {p.name}
+                </Link>
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  SKU: {p.sku}
+                </p>
+                <div className="flex flex-wrap gap-x-3 gap-y-0.5 mt-1 text-sm text-muted-foreground">
+                  {manufacturer && (
+                    <span>
+                      <Link
+                        to="/dashboard/manufacturers/$manId"
+                        params={{ manId: manufacturer.id }}
+                        className="underline hover:text-primary"
+                      >
+                        {manufacturer.name}
+                      </Link>
+                    </span>
+                  )}
+                  {category && (
+                    <span>
+                      <Link
+                        to="/dashboard/categories/$catId"
+                        params={{ catId: category.id }}
+                        className="underline hover:text-primary"
+                      >
+                        {category.name}
+                      </Link>
+                    </span>
+                  )}
+                </div>
+                <div className="flex gap-3 mt-1 text-sm">
+                  <span className="font-medium">${p.msrp.toFixed(2)}</span>
+                  <span className="text-muted-foreground">
+                    Qty: {p.quantity}
+                  </span>
+                </div>
+              </div>
+              <Button variant="outline" size="sm" asChild className="shrink-0">
+                <Link
+                  to="/dashboard/products/$prodId/edit"
+                  params={{ prodId: p.id }}
+                >
+                  Edit
+                </Link>
+              </Button>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Desktop table */}
+      <div className="hidden md:block">
+        <Table>
+          <TableHeader className="bg-muted/50">
+            {table.getHeaderGroups().map((headerGroup) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <TableHead key={header.id}>
+                    {header.isPlaceholder
+                      ? null
+                      : flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )}
+                  </TableHead>
+                ))}
+              </TableRow>
+            ))}
+          </TableHeader>
+          <TableBody>
+            {table.getRowModel().rows.map((row) => (
+              <TableRow key={row.id}>
+                {row.getVisibleCells().map((cell) => (
+                  <TableCell key={cell.id}>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                  </TableCell>
+                ))}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+
       <Pagination className="mt-4">
         <PaginationContent>
           <PaginationItem>
