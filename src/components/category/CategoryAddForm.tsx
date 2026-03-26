@@ -28,16 +28,19 @@ import {
   useAddCategoryForm,
   type AddCategoryFormValues,
 } from '@/hooks/form/useAddCategoryForm';
+import type { Category } from '@/schema/Category';
 
 // Stub Data
 import { categoryDetails } from '@/data/stub/categoryData';
 
 interface CategoryAddFormProps {
   onSuccess: () => void;
+  onAdd: (item: Category) => void;
 }
 
 export default function CategoryAddForm({
   onSuccess,
+  onAdd,
 }: CategoryAddFormProps): React.JSX.Element {
   const [pendingValues, setPendingValues] =
     useState<AddCategoryFormValues | null>(null);
@@ -51,11 +54,16 @@ export default function CategoryAddForm({
   });
 
   const handleConfirm = () => {
-    // TODO: wire up mutation
-    console.log('submit', pendingValues);
+    if (pendingValues) {
+      onAdd({
+        id: crypto.randomUUID(),
+        isParent: false,
+        ...pendingValues,
+      });
+    }
     setPendingValues(null);
     onSuccess();
-  }
+  };
 
   const parentName = (id: string) =>
     parentCategories.find((c) => c.id === id)?.name ?? id;
@@ -149,7 +157,11 @@ export default function CategoryAddForm({
 
           <form.Subscribe selector={(state) => state.canSubmit}>
             {(canSubmit) => (
-              <Button type="submit" disabled={!canSubmit} className="w-fit px-8">
+              <Button
+                type="submit"
+                disabled={!canSubmit}
+                className="w-fit px-8"
+              >
                 Save
               </Button>
             )}

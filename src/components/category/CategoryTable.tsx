@@ -187,7 +187,10 @@ export default function CategoryTable(): React.JSX.Element {
             <SheetHeader>
               <SheetTitle>Add Category</SheetTitle>
             </SheetHeader>
-            <CategoryAddForm onSuccess={() => setSheetOpen(false)} />
+            <CategoryAddForm
+              onSuccess={() => setSheetOpen(false)}
+              onAdd={(item) => setData((prev) => [...prev, item])}
+            />
           </SheetContent>
         </Sheet>
       </div>

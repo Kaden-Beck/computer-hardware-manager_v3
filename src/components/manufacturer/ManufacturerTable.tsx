@@ -164,7 +164,10 @@ export default function ManufacturerTable(): React.JSX.Element {
             <SheetHeader>
               <SheetTitle>Add Manufacturer</SheetTitle>
             </SheetHeader>
-            <ManufacturerAddForm onSuccess={() => setSheetOpen(false)} />
+            <ManufacturerAddForm
+              onSuccess={() => setSheetOpen(false)}
+              onAdd={(item) => setData((prev) => [...prev, item])}
+            />
           </SheetContent>
         </Sheet>
       </div>

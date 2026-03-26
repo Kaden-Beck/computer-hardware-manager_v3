@@ -21,13 +21,16 @@ import {
   useAddManufacturerForm,
   type ManufacturerFormValues,
 } from '@/hooks/form/useAddManufacturerForm';
+import type { Manufacturer } from '@/schema/Manufacturer';
 
 interface ManufacturerAddFormProps {
   onSuccess: () => void;
+  onAdd: (item: Manufacturer) => void;
 }
 
 export default function ManufacturerAddForm({
   onSuccess,
+  onAdd,
 }: ManufacturerAddFormProps): React.JSX.Element {
   const [pendingValues, setPendingValues] =
     useState<ManufacturerFormValues | null>(null);
@@ -39,8 +42,9 @@ export default function ManufacturerAddForm({
   });
 
   function handleConfirm() {
-    // TODO: wire up mutation
-    console.log('submit', pendingValues);
+    if (pendingValues) {
+      onAdd({ id: crypto.randomUUID(), ...pendingValues });
+    }
     setPendingValues(null);
     onSuccess();
   }
@@ -103,7 +107,11 @@ export default function ManufacturerAddForm({
 
           <form.Subscribe selector={(state) => state.canSubmit}>
             {(canSubmit) => (
-              <Button type="submit" disabled={!canSubmit} className="w-fit px-8">
+              <Button
+                type="submit"
+                disabled={!canSubmit}
+                className="w-fit px-8"
+              >
                 Save
               </Button>
             )}
@@ -143,7 +151,9 @@ export default function ManufacturerAddForm({
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={handleConfirm}>Confirm</AlertDialogAction>
+            <AlertDialogAction onClick={handleConfirm}>
+              Confirm
+            </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

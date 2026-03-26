@@ -208,22 +208,28 @@ export default function CategoryEditForm({
             <AlertDialogDescription asChild>
               <div className="space-y-1 text-sm">
                 {pendingValues &&
-                  buildSummary(pendingValues).map(({ label, value, changed }) => (
-                    <div key={label} className="flex gap-2">
-                      <span className="text-muted-foreground w-32 shrink-0">
-                        {label}
-                      </span>
-                      <span className={changed ? 'font-bold text-foreground' : ''}>
-                        {value}
-                      </span>
-                    </div>
-                  ))}
+                  buildSummary(pendingValues).map(
+                    ({ label, value, changed }) => (
+                      <div key={label} className="flex gap-2">
+                        <span className="text-muted-foreground w-32 shrink-0">
+                          {label}
+                        </span>
+                        <span
+                          className={changed ? 'font-bold text-foreground' : ''}
+                        >
+                          {value}
+                        </span>
+                      </div>
+                    )
+                  )}
               </div>
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={handleConfirm}>Confirm</AlertDialogAction>
+            <AlertDialogAction onClick={handleConfirm}>
+              Confirm
+            </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
