@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { optionalNumber, productBaseSchema } from './base';
+import { productBaseSchema } from './base';
 
 export const cpuProductSchema = productBaseSchema.extend({
   cores: z.number().min(1, 'Core count is required'),
@@ -8,8 +8,8 @@ export const cpuProductSchema = productBaseSchema.extend({
   tdp: z.number().min(1, 'TDP is required'),
   socketType: z.string().min(1, 'Socket type is required'),
   integratedGraphics: z.boolean(),
-  boostClockGHz: optionalNumber,
-  cacheMB: optionalNumber,
+  boostClockGHz: z.number().nullable(),
+  cacheMB: z.number().nullable(),
 });
 
-export type CpuProductFormValues = z.infer<typeof cpuProductSchema>;
+export type CpuFormValues = z.infer<typeof cpuProductSchema>;

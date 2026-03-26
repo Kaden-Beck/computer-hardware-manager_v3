@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { optionalNumber, productBaseSchema } from './base';
+import { productBaseSchema } from './base';
 
 export const cpuCoolerProductSchema = productBaseSchema.extend({
   coolerType: z.enum(['Air', 'AIO', 'Custom Loop']),
@@ -7,7 +7,7 @@ export const cpuCoolerProductSchema = productBaseSchema.extend({
   maxTDP: z.number().min(1, 'Max TDP is required'),
   socketCompatibility: z.string().min(1, 'Socket compatibility is required'),
   heightMM: z.number().min(1, 'Height is required'),
-  radiatorSizeMM: optionalNumber,
+  radiatorSizeMM: z.number().nullable(),
 });
 
-export type CpuCoolerProductFormValues = z.infer<typeof cpuCoolerProductSchema>;
+export type CpuCoolerFormValues = z.infer<typeof cpuCoolerProductSchema>;

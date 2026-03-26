@@ -8,4 +8,4 @@ export const psuProductSchema = productBaseSchema.extend({
   formFactor: z.string().min(1, 'Form factor is required'),
 });
 
-export type PsuProductFormValues = z.infer<typeof psuProductSchema>;
+export type PsuFormValues = z.infer<typeof psuProductSchema>;

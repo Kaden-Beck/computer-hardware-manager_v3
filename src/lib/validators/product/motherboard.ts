@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { optionalNumber, productBaseSchema } from './base';
+import { productBaseSchema } from './base';
 
 export const motherboardProductSchema = productBaseSchema.extend({
   socketType: z.string().min(1, 'Socket type is required'),
@@ -8,11 +8,9 @@ export const motherboardProductSchema = productBaseSchema.extend({
   memoryType: z.string().min(1, 'Memory type is required'),
   memorySlots: z.number().min(1, 'Memory slots is required'),
   maxMemoryGB: z.number().min(1, 'Max memory is required'),
-  m2Slots: optionalNumber,
-  sataSlots: optionalNumber,
-  pciSlots: optionalNumber,
+  m2Slots: z.number().nullable(),
+  sataSlots: z.number().nullable(),
+  pciSlots: z.number().nullable(),
 });
 
-export type MotherboardProductFormValues = z.infer<
-  typeof motherboardProductSchema
->;
+export type MotherboardFormValues = z.infer<typeof motherboardProductSchema>;
