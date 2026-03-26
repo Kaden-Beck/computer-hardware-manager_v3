@@ -20,6 +20,7 @@ import {
   type GpuFormValues,
 } from '@/hooks/form/useAddGpuProductForm';
 import { manufacturerDetails } from '@/data/stub/manufacturerData';
+import { ArrowLeft } from 'lucide-react';
 
 export function GpuProductForm({
   onSuccess,
@@ -55,6 +56,16 @@ export function GpuProductForm({
 
   return (
     <>
+      <Button
+        type="button"
+        variant="ghost"
+        size="sm"
+        onClick={onBack}
+        className="flex items-center gap-1 mt-3 mx-2 text-muted-foreground"
+      >
+        <ArrowLeft className="h-3 w-3" />
+        Change category
+      </Button>
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -291,7 +302,7 @@ export function GpuProductForm({
           </form.Field>
         </FieldGroup>
 
-        <div className="flex gap-3">
+        <div className="flex gap-3 mb-6">
           <Button type="button" variant="outline" onClick={onBack}>
             Back
           </Button>

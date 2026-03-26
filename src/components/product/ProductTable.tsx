@@ -242,10 +242,12 @@ export default function ProductTable(): React.JSX.Element {
             <SheetHeader>
               <SheetTitle>Add Product</SheetTitle>
             </SheetHeader>
-            <ProductAddForm
-              onSuccess={() => setSheetOpen(false)}
-              onAdd={(item) => setData((prev) => [...prev, item])}
-            />
+            <div className="flex-1 min-h-0 overflow-y-auto">
+              <ProductAddForm
+                onSuccess={() => setSheetOpen(false)}
+                onAdd={(item) => setData((prev) => [...prev, item])}
+              />
+            </div>
           </SheetContent>
         </Sheet>
       </div>

@@ -25,6 +25,7 @@ import {
 
 // Stub Data
 import { manufacturerDetails } from '@/data/stub/manufacturerData';
+import { ArrowLeft } from 'lucide-react';
 
 export function CaseProductForm({
   onSuccess,
@@ -59,6 +60,16 @@ export function CaseProductForm({
 
   return (
     <React.Fragment>
+      <Button
+        type="button"
+        variant="ghost"
+        size="sm"
+        onClick={onBack}
+        className="flex items-center gap-1 mt-3 mx-2 text-muted-foreground"
+      >
+        <ArrowLeft className="h-3 w-3" />
+        Change category
+      </Button>
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -131,7 +142,7 @@ export function CaseProductForm({
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                     field.handleChange(
                       e.target.value === ''
-                        ? undefined
+                        ? null
                         : parseInt(e.target.value, 10)
                     )
                   }
@@ -158,7 +169,7 @@ export function CaseProductForm({
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                     field.handleChange(
                       e.target.value === ''
-                        ? undefined
+                        ? null
                         : parseInt(e.target.value, 10)
                     )
                   }
@@ -185,7 +196,7 @@ export function CaseProductForm({
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                     field.handleChange(
                       e.target.value === ''
-                        ? undefined
+                        ? null
                         : parseInt(e.target.value, 10)
                     )
                   }
@@ -212,7 +223,7 @@ export function CaseProductForm({
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                     field.handleChange(
                       e.target.value === ''
-                        ? undefined
+                        ? null
                         : parseInt(e.target.value, 10)
                     )
                   }
@@ -239,7 +250,7 @@ export function CaseProductForm({
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                     field.handleChange(
                       e.target.value === ''
-                        ? undefined
+                        ? null
                         : parseInt(e.target.value, 10)
                     )
                   }
@@ -266,7 +277,7 @@ export function CaseProductForm({
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                     field.handleChange(
                       e.target.value === ''
-                        ? undefined
+                        ? null
                         : parseInt(e.target.value, 10)
                     )
                   }
@@ -299,7 +310,7 @@ export function CaseProductForm({
           </form.Field>
         </FieldGroup>
 
-        <div className="flex gap-3">
+        <div className="flex gap-3 mb-6">
           <Button type="button" variant="outline" onClick={onBack}>
             Back
           </Button>
