@@ -207,7 +207,6 @@ export default function CategoryTable(): React.JSX.Element {
   return (
     <div>
       <div className="flex items-center justify-between gap-4 mb-4">
-        ∏
         <Input
           placeholder="Search categories..."
           value={globalFilter}
