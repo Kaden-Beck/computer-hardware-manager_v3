@@ -1,10 +1,6 @@
 import React, { useState } from 'react';
 // Shadcn
-import {
-  Field,
-  FieldError,
-  FieldGroup,
-} from '@/components/ui/field';
+import { Field, FieldError, FieldGroup } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
@@ -29,7 +25,10 @@ import {
 import { LabelWithTooltip } from '@/components/ui/label-with-tooltip';
 
 // Tanstack Form hook
-import { useCategoryForm, type CategoryFormValues } from '@/hooks/form/useCategoryForm';
+import {
+  useCategoryForm,
+  type CategoryFormValues,
+} from '@/hooks/form/useCategoryForm';
 
 // Stub Data
 import { categoryDetails } from '@/data/stub/categoryData';
@@ -46,11 +45,12 @@ interface CategoryEditFormProps {
   };
 }
 
-
 export default function CategoryEditForm({
   category,
 }: CategoryEditFormProps): React.JSX.Element {
-  const [pendingValues, setPendingValues] = useState<CategoryFormValues | null>(null);
+  const [pendingValues, setPendingValues] = useState<CategoryFormValues | null>(
+    null
+  );
 
   const parentCategories = categoryDetails.filter(
     (c) => c.isParent && c.id !== category.id
@@ -186,7 +186,8 @@ export default function CategoryEditForm({
                     checked={field.state.value}
                     onCheckedChange={(checked) => {
                       field.handleChange(checked);
-                      if (checked) form.setFieldValue('parentId', category.parentId);
+                      if (checked)
+                        form.setFieldValue('parentId', category.parentId);
                     }}
                     onBlur={field.handleBlur}
                   />
@@ -261,7 +262,11 @@ export default function CategoryEditForm({
 
           <form.Subscribe selector={(state) => state.canSubmit}>
             {(canSubmit) => (
-              <Button type="submit" disabled={!canSubmit} className="w-fit px-8">
+              <Button
+                type="submit"
+                disabled={!canSubmit}
+                className="w-fit px-8"
+              >
                 Save Changes
               </Button>
             )}
@@ -269,25 +274,40 @@ export default function CategoryEditForm({
         </FieldGroup>
       </form>
 
-      <AlertDialog open={!!pendingValues} onOpenChange={(open) => { if (!open) setPendingValues(null); }}>
+      <AlertDialog
+        open={!!pendingValues}
+        onOpenChange={(open) => {
+          if (!open) setPendingValues(null);
+        }}
+      >
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Confirm Changes</AlertDialogTitle>
             <AlertDialogDescription asChild>
               <div className="space-y-1 text-sm">
                 {pendingValues &&
-                  buildSummary(pendingValues).map(({ label, value, changed }) => (
-                    <div key={label} className="flex gap-2">
-                      <span className="text-muted-foreground w-32 shrink-0">{label}</span>
-                      <span className={changed ? 'font-bold text-foreground' : ''}>{value}</span>
-                    </div>
-                  ))}
+                  buildSummary(pendingValues).map(
+                    ({ label, value, changed }) => (
+                      <div key={label} className="flex gap-2">
+                        <span className="text-muted-foreground w-32 shrink-0">
+                          {label}
+                        </span>
+                        <span
+                          className={changed ? 'font-bold text-foreground' : ''}
+                        >
+                          {value}
+                        </span>
+                      </div>
+                    )
+                  )}
               </div>
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={handleConfirm}>Confirm</AlertDialogAction>
+            <AlertDialogAction onClick={handleConfirm}>
+              Confirm
+            </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

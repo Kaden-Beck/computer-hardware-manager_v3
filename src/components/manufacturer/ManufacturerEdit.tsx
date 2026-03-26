@@ -5,7 +5,6 @@ import { useParams } from '@tanstack/react-router';
 import { manufacturerDetails } from '@/data/stub/manufacturerData';
 import ManufacturerEditForm from './ManufacturerEditForm';
 
-
 export default function ManufacturerEditComponent(): React.JSX.Element {
   const { manId } = useParams({
     from: '/dashboard/manufacturers/$manId/edit',
@@ -16,5 +15,3 @@ export default function ManufacturerEditComponent(): React.JSX.Element {
 
   return <ManufacturerEditForm manufacturer={manufacturer} />;
 }
-
-

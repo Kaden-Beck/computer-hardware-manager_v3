@@ -14,7 +14,11 @@ interface LabelWithTooltipProps {
   tip: string;
 }
 
-export function LabelWithTooltip({ htmlFor, label, tip }: LabelWithTooltipProps) {
+export function LabelWithTooltip({
+  htmlFor,
+  label,
+  tip,
+}: LabelWithTooltipProps) {
   return (
     <div className="flex items-center gap-1.5">
       <FieldLabel htmlFor={htmlFor}>{label}</FieldLabel>
