@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import { ProductCategoryStep } from './ProductCategoryStep';
-import { GpuProductForm } from './GpuProductForm';
-import { CpuProductForm } from './CpuProductForm';
-import { MotherboardProductForm } from './MotherboardProductForm';
-import { RamProductForm } from './RamProductForm';
-import { StorageProductForm } from './StorageProductForm';
-import { PsuProductForm } from './PsuProductForm';
-import { CaseProductForm } from './CaseProductForm';
-import { CpuCoolerProductForm } from './CpuCoolerProductForm';
+import { ProductCategoryStep } from './AddBaseProductCategoryStep';
+import { GpuProductForm } from './AddGpuForm';
+import { CpuProductForm } from './AddCpuForm';
+import { MotherboardProductForm } from './AddMotherboardForm';
+import { RamProductForm } from './AddRamForm';
+import { StorageProductForm } from './AddStorageForm';
+import { PsuProductForm } from './AddPsuForm';
+import { CaseProductForm } from './AddCaseForm';
+import { CpuCoolerProductForm } from './AddCpuCoolerForm';
 import { getProductSpecType, type ProductSpecType } from '@/lib/productFormMap';
 import type { Product } from '@/schema/Product';
 
@@ -46,7 +46,11 @@ export default function ProductAddForm({
     onSuccess,
     onBack: handleBack,
     onAdd: (base: Omit<Product, 'id' | 'categoryId'>) =>
-      onAdd({ id: crypto.randomUUID(), categoryId: selectedCategoryId!, ...base }),
+      onAdd({
+        id: crypto.randomUUID(),
+        categoryId: selectedCategoryId!,
+        ...base,
+      }),
   };
 
   switch (specType) {

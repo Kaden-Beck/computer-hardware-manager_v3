@@ -1,7 +1,13 @@
 import React, { useState } from 'react';
 import { Field, FieldError, FieldGroup } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
-import { Switch } from '@/components/ui/switch';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import {
   AlertDialog,
@@ -14,25 +20,25 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { LabelWithTooltip } from '@/components/ui/label-with-tooltip';
-import { ProductBaseFields } from './ProductBaseFields';
-import type { ProductSpecFormProps } from './ProductAddForm';
+import { ProductBaseFields } from '../ProductBaseFields';
+import type { ProductSpecEditFormProps } from './EditBaseProductForm';
 import {
-  useAddCpuForm,
-  type CpuFormValues,
-} from '@/hooks/form/useAddCpuProductForm';
+  useStorageProductForm,
+  type StorageProductFormValues,
+} from '@/hooks/form/product/useStorageProductForm';
 import { manufacturerDetails } from '@/data/stub/manufacturerData';
-import { ArrowLeft } from 'lucide-react';
 
-export function CpuProductForm({
+export function StorageProductEditForm({
+  product,
   onSuccess,
-  onBack,
-  onAdd,
-}: ProductSpecFormProps): React.JSX.Element {
-  const [pendingValues, setPendingValues] = useState<CpuFormValues | null>(
-    null
-  );
+  onEdit,
+}: ProductSpecEditFormProps): React.JSX.Element {
+  const [pendingValues, setPendingValues] =
+    useState<StorageProductFormValues | null>(null);
 
-  const form = useAddCpuForm({
+  const form = useStorageProductForm({
+    categoryId: product.categoryId,
+    defaultValues: product,
     onSubmit: async (values) => {
       setPendingValues(values);
     },
@@ -40,7 +46,7 @@ export function CpuProductForm({
 
   function handleConfirm() {
     if (pendingValues) {
-      onAdd({
+      onEdit({
         name: pendingValues.name,
         sku: pendingValues.sku,
         description: pendingValues.description,
@@ -57,16 +63,6 @@ export function CpuProductForm({
 
   return (
     <>
-      <Button
-        type="button"
-        variant="ghost"
-        size="sm"
-        onClick={onBack}
-        className="flex items-center gap-1 mt-3 mx-2 text-muted-foreground"
-      >
-        <ArrowLeft className="h-3 w-3" />
-        Change category
-      </Button>
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -77,13 +73,71 @@ export function CpuProductForm({
         <ProductBaseFields form={form} manufacturers={manufacturerDetails} />
 
         <FieldGroup>
-          <form.Field name="socketType">
+          <form.Field name="storageType">
             {(field) => (
               <Field>
                 <LabelWithTooltip
                   htmlFor={field.name}
-                  label="Socket Type"
-                  tip="CPU socket (e.g. LGA1700, AM5)."
+                  label="Storage Type"
+                  tip="Drive technology type."
+                />
+                <Select
+                  value={field.state.value}
+                  onValueChange={(val) =>
+                    field.handleChange(
+                      val as StorageProductFormValues['storageType']
+                    )
+                  }
+                >
+                  <SelectTrigger
+                    id={field.name}
+                    aria-invalid={field.state.meta.errors.length > 0}
+                  >
+                    <SelectValue placeholder="Select type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="SSD">SSD</SelectItem>
+                    <SelectItem value="HDD">HDD</SelectItem>
+                    <SelectItem value="NVMe">NVMe</SelectItem>
+                  </SelectContent>
+                </Select>
+                <FieldError errors={field.state.meta.errors} />
+              </Field>
+            )}
+          </form.Field>
+
+          <form.Field name="capacityGB">
+            {(field) => (
+              <Field>
+                <LabelWithTooltip
+                  htmlFor={field.name}
+                  label="Capacity (GB)"
+                  tip="Storage capacity in gigabytes."
+                />
+                <Input
+                  id={field.name}
+                  type="number"
+                  min={1}
+                  value={field.state.value}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    field.handleChange(parseInt(e.target.value, 10) || 0)
+                  }
+                  onBlur={field.handleBlur}
+                  aria-invalid={field.state.meta.errors.length > 0}
+                  placeholder="e.g. 2000"
+                />
+                <FieldError errors={field.state.meta.errors} />
+              </Field>
+            )}
+          </form.Field>
+
+          <form.Field name="interface">
+            {(field) => (
+              <Field>
+                <LabelWithTooltip
+                  htmlFor={field.name}
+                  label="Interface"
+                  tip="Connection interface (e.g. PCIe 5.0 x4, SATA III)."
                 />
                 <Input
                   id={field.name}
@@ -93,147 +147,43 @@ export function CpuProductForm({
                   }
                   onBlur={field.handleBlur}
                   aria-invalid={field.state.meta.errors.length > 0}
-                  placeholder="e.g. LGA1700"
+                  placeholder="e.g. PCIe 5.0 x4"
                 />
                 <FieldError errors={field.state.meta.errors} />
               </Field>
             )}
           </form.Field>
 
-          <form.Field name="cores">
+          <form.Field name="formFactor">
             {(field) => (
               <Field>
                 <LabelWithTooltip
                   htmlFor={field.name}
-                  label="Cores"
-                  tip="Total number of CPU cores."
+                  label="Form Factor"
+                  tip='Physical form factor (e.g. M.2 2280, 2.5")'
                 />
                 <Input
                   id={field.name}
-                  type="number"
-                  min={1}
                   value={field.state.value}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    field.handleChange(parseInt(e.target.value, 10) || 0)
+                    field.handleChange(e.target.value)
                   }
                   onBlur={field.handleBlur}
                   aria-invalid={field.state.meta.errors.length > 0}
-                  placeholder="e.g. 24"
+                  placeholder="e.g. M.2 2280"
                 />
                 <FieldError errors={field.state.meta.errors} />
               </Field>
             )}
           </form.Field>
 
-          <form.Field name="threads">
+          <form.Field name="readSpeedMBps">
             {(field) => (
               <Field>
                 <LabelWithTooltip
                   htmlFor={field.name}
-                  label="Threads"
-                  tip="Total number of CPU threads."
-                />
-                <Input
-                  id={field.name}
-                  type="number"
-                  min={1}
-                  value={field.state.value}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    field.handleChange(parseInt(e.target.value, 10) || 0)
-                  }
-                  onBlur={field.handleBlur}
-                  aria-invalid={field.state.meta.errors.length > 0}
-                  placeholder="e.g. 32"
-                />
-                <FieldError errors={field.state.meta.errors} />
-              </Field>
-            )}
-          </form.Field>
-
-          <form.Field name="baseClockGHz">
-            {(field) => (
-              <Field>
-                <LabelWithTooltip
-                  htmlFor={field.name}
-                  label="Base Clock (GHz)"
-                  tip="Base CPU clock speed in gigahertz."
-                />
-                <Input
-                  id={field.name}
-                  type="number"
-                  min={0.1}
-                  step={0.1}
-                  value={field.state.value}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    field.handleChange(parseFloat(e.target.value) || 0)
-                  }
-                  onBlur={field.handleBlur}
-                  aria-invalid={field.state.meta.errors.length > 0}
-                  placeholder="e.g. 3.4"
-                />
-                <FieldError errors={field.state.meta.errors} />
-              </Field>
-            )}
-          </form.Field>
-
-          <form.Field name="boostClockGHz">
-            {(field) => (
-              <Field>
-                <LabelWithTooltip
-                  htmlFor={field.name}
-                  label="Boost Clock (GHz)"
-                  tip="Maximum boost clock speed in gigahertz (optional)."
-                />
-                <Input
-                  id={field.name}
-                  type="number"
-                  min={0.1}
-                  step={0.1}
-                  value={field.state.value ?? ''}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    field.handleChange(
-                      e.target.value === '' ? null : parseFloat(e.target.value)
-                    )
-                  }
-                  onBlur={field.handleBlur}
-                  placeholder="e.g. 5.8"
-                />
-              </Field>
-            )}
-          </form.Field>
-
-          <form.Field name="tdp">
-            {(field) => (
-              <Field>
-                <LabelWithTooltip
-                  htmlFor={field.name}
-                  label="TDP (W)"
-                  tip="Thermal design power in watts."
-                />
-                <Input
-                  id={field.name}
-                  type="number"
-                  min={1}
-                  value={field.state.value}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    field.handleChange(parseInt(e.target.value, 10) || 0)
-                  }
-                  onBlur={field.handleBlur}
-                  aria-invalid={field.state.meta.errors.length > 0}
-                  placeholder="e.g. 125"
-                />
-                <FieldError errors={field.state.meta.errors} />
-              </Field>
-            )}
-          </form.Field>
-
-          <form.Field name="cacheMB">
-            {(field) => (
-              <Field>
-                <LabelWithTooltip
-                  htmlFor={field.name}
-                  label="Cache (MB)"
-                  tip="Total cache size in megabytes (optional)."
+                  label="Read Speed (MB/s)"
+                  tip="Sequential read speed in MB/s (optional)."
                 />
                 <Input
                   id={field.name}
@@ -243,45 +193,50 @@ export function CpuProductForm({
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                     field.handleChange(
                       e.target.value === ''
-                        ? undefined
+                        ? null
                         : parseInt(e.target.value, 10)
                     )
                   }
                   onBlur={field.handleBlur}
-                  placeholder="e.g. 36"
+                  placeholder="e.g. 14900"
                 />
               </Field>
             )}
           </form.Field>
 
-          <form.Field name="integratedGraphics">
+          <form.Field name="writeSpeedMBps">
             {(field) => (
               <Field>
-                <div className="flex items-center gap-3">
-                  <Switch
-                    id={field.name}
-                    checked={field.state.value}
-                    onCheckedChange={(checked) => field.handleChange(checked)}
-                  />
-                  <LabelWithTooltip
-                    htmlFor={field.name}
-                    label="Integrated Graphics"
-                    tip="Whether the CPU includes an integrated GPU."
-                  />
-                </div>
+                <LabelWithTooltip
+                  htmlFor={field.name}
+                  label="Write Speed (MB/s)"
+                  tip="Sequential write speed in MB/s (optional)."
+                />
+                <Input
+                  id={field.name}
+                  type="number"
+                  min={1}
+                  value={field.state.value ?? ''}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    field.handleChange(
+                      e.target.value === ''
+                        ? null
+                        : parseInt(e.target.value, 10)
+                    )
+                  }
+                  onBlur={field.handleBlur}
+                  placeholder="e.g. 12000"
+                />
               </Field>
             )}
           </form.Field>
         </FieldGroup>
 
         <div className="flex gap-3 mb-6">
-          <Button type="button" variant="outline" onClick={onBack}>
-            Back
-          </Button>
           <form.Subscribe selector={(state) => state.canSubmit}>
             {(canSubmit) => (
               <Button type="submit" disabled={!canSubmit} className="px-8">
-                Save
+                Save Changes
               </Button>
             )}
           </form.Subscribe>
@@ -296,7 +251,7 @@ export function CpuProductForm({
       >
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Confirm New CPU</AlertDialogTitle>
+            <AlertDialogTitle>Confirm Changes to Storage</AlertDialogTitle>
             <AlertDialogDescription asChild>
               <div className="space-y-1 text-sm">
                 {pendingValues && (
@@ -315,37 +270,27 @@ export function CpuProductForm({
                     </div>
                     <div className="flex gap-2">
                       <span className="text-muted-foreground w-32 shrink-0">
-                        Socket
+                        Type
                       </span>
-                      <span>{pendingValues.socketType}</span>
+                      <span>{pendingValues.storageType}</span>
                     </div>
                     <div className="flex gap-2">
                       <span className="text-muted-foreground w-32 shrink-0">
-                        Cores / Threads
+                        Capacity
                       </span>
-                      <span>
-                        {pendingValues.cores} / {pendingValues.threads}
-                      </span>
+                      <span>{pendingValues.capacityGB} GB</span>
                     </div>
                     <div className="flex gap-2">
                       <span className="text-muted-foreground w-32 shrink-0">
-                        Base Clock
+                        Interface
                       </span>
-                      <span>{pendingValues.baseClockGHz} GHz</span>
+                      <span>{pendingValues.interface}</span>
                     </div>
                     <div className="flex gap-2">
                       <span className="text-muted-foreground w-32 shrink-0">
-                        TDP
+                        Form Factor
                       </span>
-                      <span>{pendingValues.tdp} W</span>
-                    </div>
-                    <div className="flex gap-2">
-                      <span className="text-muted-foreground w-32 shrink-0">
-                        iGPU
-                      </span>
-                      <span>
-                        {pendingValues.integratedGraphics ? 'Yes' : 'No'}
-                      </span>
+                      <span>{pendingValues.formFactor}</span>
                     </div>
                     <div className="flex gap-2">
                       <span className="text-muted-foreground w-32 shrink-0">

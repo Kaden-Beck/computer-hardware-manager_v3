@@ -1,6 +1,13 @@
 import React, { useState } from 'react';
 import { Field, FieldError, FieldGroup } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import {
   AlertDialog,
@@ -13,24 +20,25 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { LabelWithTooltip } from '@/components/ui/label-with-tooltip';
-import { ProductBaseFields } from './ProductBaseFields';
-import type { ProductSpecFormProps } from './ProductAddForm';
+import { ProductBaseFields } from '../ProductBaseFields';
+import type { ProductSpecEditFormProps } from './EditBaseProductForm';
 import {
-  useAddMotherboardForm,
-  type MotherboardFormValues,
-} from '@/hooks/form/useAddMotherboardProductForm';
+  useCpuCoolerProductForm,
+  type CpuCoolerProductFormValues,
+} from '@/hooks/form/product/useCpuCoolerProductForm';
 import { manufacturerDetails } from '@/data/stub/manufacturerData';
-import { ArrowLeft } from 'lucide-react';
 
-export function MotherboardProductForm({
+export function CpuCoolerProductEditForm({
+  product,
   onSuccess,
-  onBack,
-  onAdd,
-}: ProductSpecFormProps): React.JSX.Element {
+  onEdit,
+}: ProductSpecEditFormProps): React.JSX.Element {
   const [pendingValues, setPendingValues] =
-    useState<MotherboardFormValues | null>(null);
+    useState<CpuCoolerProductFormValues | null>(null);
 
-  const form = useAddMotherboardForm({
+  const form = useCpuCoolerProductForm({
+    categoryId: product.categoryId,
+    defaultValues: product,
     onSubmit: async (values) => {
       setPendingValues(values);
     },
@@ -38,7 +46,7 @@ export function MotherboardProductForm({
 
   function handleConfirm() {
     if (pendingValues) {
-      onAdd({
+      onEdit({
         name: pendingValues.name,
         sku: pendingValues.sku,
         description: pendingValues.description,
@@ -55,16 +63,6 @@ export function MotherboardProductForm({
 
   return (
     <>
-      <Button
-        type="button"
-        variant="ghost"
-        size="sm"
-        onClick={onBack}
-        className="flex items-center gap-1 mt-3 mx-2 text-muted-foreground"
-      >
-        <ArrowLeft className="h-3 w-3" />
-        Change category
-      </Button>
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -75,105 +73,46 @@ export function MotherboardProductForm({
         <ProductBaseFields form={form} manufacturers={manufacturerDetails} />
 
         <FieldGroup>
-          <form.Field name="socketType">
+          <form.Field name="coolerType">
             {(field) => (
               <Field>
                 <LabelWithTooltip
                   htmlFor={field.name}
-                  label="Socket Type"
-                  tip="CPU socket supported (e.g. LGA1700, AM5)."
+                  label="Cooler Type"
+                  tip="Cooling method used."
                 />
-                <Input
-                  id={field.name}
+                <Select
                   value={field.state.value}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    field.handleChange(e.target.value)
+                  onValueChange={(val) =>
+                    field.handleChange(
+                      val as CpuCoolerProductFormValues['coolerType']
+                    )
                   }
-                  onBlur={field.handleBlur}
-                  aria-invalid={field.state.meta.errors.length > 0}
-                  placeholder="e.g. LGA1700"
-                />
+                >
+                  <SelectTrigger
+                    id={field.name}
+                    aria-invalid={field.state.meta.errors.length > 0}
+                  >
+                    <SelectValue placeholder="Select type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="Air">Air</SelectItem>
+                    <SelectItem value="AIO">AIO</SelectItem>
+                    <SelectItem value="Custom Loop">Custom Loop</SelectItem>
+                  </SelectContent>
+                </Select>
                 <FieldError errors={field.state.meta.errors} />
               </Field>
             )}
           </form.Field>
 
-          <form.Field name="chipset">
+          <form.Field name="fanSizeMM">
             {(field) => (
               <Field>
                 <LabelWithTooltip
                   htmlFor={field.name}
-                  label="Chipset"
-                  tip="Motherboard chipset (e.g. Z790, X670E)."
-                />
-                <Input
-                  id={field.name}
-                  value={field.state.value}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    field.handleChange(e.target.value)
-                  }
-                  onBlur={field.handleBlur}
-                  aria-invalid={field.state.meta.errors.length > 0}
-                  placeholder="e.g. Z790"
-                />
-                <FieldError errors={field.state.meta.errors} />
-              </Field>
-            )}
-          </form.Field>
-
-          <form.Field name="formFactor">
-            {(field) => (
-              <Field>
-                <LabelWithTooltip
-                  htmlFor={field.name}
-                  label="Form Factor"
-                  tip="Board form factor (e.g. ATX, Micro-ATX, Mini-ITX)."
-                />
-                <Input
-                  id={field.name}
-                  value={field.state.value}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    field.handleChange(e.target.value)
-                  }
-                  onBlur={field.handleBlur}
-                  aria-invalid={field.state.meta.errors.length > 0}
-                  placeholder="e.g. ATX"
-                />
-                <FieldError errors={field.state.meta.errors} />
-              </Field>
-            )}
-          </form.Field>
-
-          <form.Field name="memoryType">
-            {(field) => (
-              <Field>
-                <LabelWithTooltip
-                  htmlFor={field.name}
-                  label="Memory Type"
-                  tip="Supported RAM type (e.g. DDR5, DDR4)."
-                />
-                <Input
-                  id={field.name}
-                  value={field.state.value}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    field.handleChange(e.target.value)
-                  }
-                  onBlur={field.handleBlur}
-                  aria-invalid={field.state.meta.errors.length > 0}
-                  placeholder="e.g. DDR5"
-                />
-                <FieldError errors={field.state.meta.errors} />
-              </Field>
-            )}
-          </form.Field>
-
-          <form.Field name="memorySlots">
-            {(field) => (
-              <Field>
-                <LabelWithTooltip
-                  htmlFor={field.name}
-                  label="Memory Slots"
-                  tip="Number of DIMM slots."
+                  label="Fan Size (mm)"
+                  tip="Primary fan diameter in millimeters."
                 />
                 <Input
                   id={field.name}
@@ -185,20 +124,20 @@ export function MotherboardProductForm({
                   }
                   onBlur={field.handleBlur}
                   aria-invalid={field.state.meta.errors.length > 0}
-                  placeholder="e.g. 4"
+                  placeholder="e.g. 120"
                 />
                 <FieldError errors={field.state.meta.errors} />
               </Field>
             )}
           </form.Field>
 
-          <form.Field name="maxMemoryGB">
+          <form.Field name="maxTDP">
             {(field) => (
               <Field>
                 <LabelWithTooltip
                   htmlFor={field.name}
-                  label="Max Memory (GB)"
-                  tip="Maximum supported RAM in gigabytes."
+                  label="Max TDP (W)"
+                  tip="Maximum CPU TDP this cooler can handle."
                 />
                 <Input
                   id={field.name}
@@ -210,79 +149,73 @@ export function MotherboardProductForm({
                   }
                   onBlur={field.handleBlur}
                   aria-invalid={field.state.meta.errors.length > 0}
-                  placeholder="e.g. 192"
+                  placeholder="e.g. 250"
                 />
                 <FieldError errors={field.state.meta.errors} />
               </Field>
             )}
           </form.Field>
 
-          <form.Field name="m2Slots">
+          <form.Field name="socketCompatibility">
             {(field) => (
               <Field>
                 <LabelWithTooltip
                   htmlFor={field.name}
-                  label="M.2 Slots"
-                  tip="Number of M.2 slots (optional)."
+                  label="Socket Compatibility"
+                  tip="Supported CPU sockets (e.g. LGA1700, AM5, AM4)."
                 />
                 <Input
                   id={field.name}
-                  type="number"
-                  min={0}
-                  value={field.state.value ?? ''}
+                  value={field.state.value}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    field.handleChange(
-                      e.target.value === ''
-                        ? null
-                        : parseInt(e.target.value, 10)
-                    )
+                    field.handleChange(e.target.value)
                   }
                   onBlur={field.handleBlur}
-                  placeholder="e.g. 5"
+                  aria-invalid={field.state.meta.errors.length > 0}
+                  placeholder="e.g. LGA1700, AM5, AM4"
                 />
+                <FieldError errors={field.state.meta.errors} />
               </Field>
             )}
           </form.Field>
 
-          <form.Field name="sataSlots">
+          <form.Field name="heightMM">
             {(field) => (
               <Field>
                 <LabelWithTooltip
                   htmlFor={field.name}
-                  label="SATA Slots"
-                  tip="Number of SATA ports (optional)."
+                  label="Height (mm)"
+                  tip="Total cooler height in millimeters."
                 />
                 <Input
                   id={field.name}
                   type="number"
-                  min={0}
-                  value={field.state.value ?? ''}
+                  min={1}
+                  value={field.state.value}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    field.handleChange(
-                      e.target.value === ''
-                        ? null
-                        : parseInt(e.target.value, 10)
-                    )
+                    field.handleChange(parseInt(e.target.value, 10) || 0)
                   }
                   onBlur={field.handleBlur}
-                  placeholder="e.g. 6"
+                  aria-invalid={field.state.meta.errors.length > 0}
+                  placeholder="e.g. 158"
                 />
+                <FieldError errors={field.state.meta.errors} />
               </Field>
             )}
           </form.Field>
 
-          <form.Field name="pciSlots">
+          <form.Field name="radiatorSizeMM">
             {(field) => (
               <Field>
                 <LabelWithTooltip
                   htmlFor={field.name}
-                  label="PCIe Slots"
-                  tip="Number of PCIe expansion slots (optional)."
+                  label="Radiator Size (mm)"
+                  tip="Radiator size for AIO/custom loop coolers (optional)."
                 />
                 <Input
                   id={field.name}
                   type="number"
-                  min={0}
+                  min={1}
                   value={field.state.value ?? ''}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                     field.handleChange(
@@ -292,7 +225,7 @@ export function MotherboardProductForm({
                     )
                   }
                   onBlur={field.handleBlur}
-                  placeholder="e.g. 3"
+                  placeholder="e.g. 360"
                 />
               </Field>
             )}
@@ -300,13 +233,10 @@ export function MotherboardProductForm({
         </FieldGroup>
 
         <div className="flex gap-3 mb-6">
-          <Button type="button" variant="outline" onClick={onBack}>
-            Back
-          </Button>
           <form.Subscribe selector={(state) => state.canSubmit}>
             {(canSubmit) => (
               <Button type="submit" disabled={!canSubmit} className="px-8">
-                Save
+                Save Changes
               </Button>
             )}
           </form.Subscribe>
@@ -321,7 +251,7 @@ export function MotherboardProductForm({
       >
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Confirm New Motherboard</AlertDialogTitle>
+            <AlertDialogTitle>Confirm Changes to CPU Cooler</AlertDialogTitle>
             <AlertDialogDescription asChild>
               <div className="space-y-1 text-sm">
                 {pendingValues && (
@@ -340,30 +270,27 @@ export function MotherboardProductForm({
                     </div>
                     <div className="flex gap-2">
                       <span className="text-muted-foreground w-32 shrink-0">
-                        Socket
+                        Type
                       </span>
-                      <span>{pendingValues.socketType}</span>
+                      <span>{pendingValues.coolerType}</span>
                     </div>
                     <div className="flex gap-2">
                       <span className="text-muted-foreground w-32 shrink-0">
-                        Chipset
+                        Max TDP
                       </span>
-                      <span>{pendingValues.chipset}</span>
+                      <span>{pendingValues.maxTDP} W</span>
                     </div>
                     <div className="flex gap-2">
                       <span className="text-muted-foreground w-32 shrink-0">
-                        Form Factor
+                        Sockets
                       </span>
-                      <span>{pendingValues.formFactor}</span>
+                      <span>{pendingValues.socketCompatibility}</span>
                     </div>
                     <div className="flex gap-2">
                       <span className="text-muted-foreground w-32 shrink-0">
-                        Memory
+                        Height
                       </span>
-                      <span>
-                        {pendingValues.memoryType} · {pendingValues.memorySlots}{' '}
-                        slots · {pendingValues.maxMemoryGB} GB max
-                      </span>
+                      <span>{pendingValues.heightMM} mm</span>
                     </div>
                     <div className="flex gap-2">
                       <span className="text-muted-foreground w-32 shrink-0">

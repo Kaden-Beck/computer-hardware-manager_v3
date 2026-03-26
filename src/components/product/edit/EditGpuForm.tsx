@@ -1,13 +1,6 @@
 import React, { useState } from 'react';
 import { Field, FieldError, FieldGroup } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
 import { Button } from '@/components/ui/button';
 import {
   AlertDialog,
@@ -20,25 +13,25 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { LabelWithTooltip } from '@/components/ui/label-with-tooltip';
-import { ProductBaseFields } from './ProductBaseFields';
-import type { ProductSpecFormProps } from './ProductAddForm';
+import { ProductBaseFields } from '../ProductBaseFields';
+import type { ProductSpecEditFormProps } from './EditBaseProductForm';
 import {
-  useAddStorageForm,
-  type StorageFormValues,
-} from '@/hooks/form/useAddStorageProductForm';
+  useGpuProductForm,
+  type GpuProductFormValues,
+} from '@/hooks/form/product/useGpuProductForm';
 import { manufacturerDetails } from '@/data/stub/manufacturerData';
-import { ArrowLeft } from 'lucide-react';
 
-export function StorageProductForm({
+export function GpuProductEditForm({
+  product,
   onSuccess,
-  onBack,
-  onAdd,
-}: ProductSpecFormProps): React.JSX.Element {
-  const [pendingValues, setPendingValues] = useState<StorageFormValues | null>(
-    null
-  );
+  onEdit,
+}: ProductSpecEditFormProps): React.JSX.Element {
+  const [pendingValues, setPendingValues] =
+    useState<GpuProductFormValues | null>(null);
 
-  const form = useAddStorageForm({
+  const form = useGpuProductForm({
+    categoryId: product.categoryId,
+    defaultValues: product,
     onSubmit: async (values) => {
       setPendingValues(values);
     },
@@ -46,7 +39,7 @@ export function StorageProductForm({
 
   function handleConfirm() {
     if (pendingValues) {
-      onAdd({
+      onEdit({
         name: pendingValues.name,
         sku: pendingValues.sku,
         description: pendingValues.description,
@@ -63,16 +56,6 @@ export function StorageProductForm({
 
   return (
     <>
-      <Button
-        type="button"
-        variant="ghost"
-        size="sm"
-        onClick={onBack}
-        className="flex items-center gap-1 mt-3 mx-2 text-muted-foreground"
-      >
-        <ArrowLeft className="h-3 w-3" />
-        Change category
-      </Button>
       <form
         onSubmit={(e) => {
           e.preventDefault();
@@ -83,44 +66,36 @@ export function StorageProductForm({
         <ProductBaseFields form={form} manufacturers={manufacturerDetails} />
 
         <FieldGroup>
-          <form.Field name="storageType">
+          <form.Field name="chipset">
             {(field) => (
               <Field>
                 <LabelWithTooltip
                   htmlFor={field.name}
-                  label="Storage Type"
-                  tip="Drive technology type."
+                  label="Chipset"
+                  tip="The GPU chipset (e.g. AD102, GCD-01)."
                 />
-                <Select
+                <Input
+                  id={field.name}
                   value={field.state.value}
-                  onValueChange={(val) =>
-                    field.handleChange(val as StorageFormValues['storageType'])
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    field.handleChange(e.target.value)
                   }
-                >
-                  <SelectTrigger
-                    id={field.name}
-                    aria-invalid={field.state.meta.errors.length > 0}
-                  >
-                    <SelectValue placeholder="Select type" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="SSD">SSD</SelectItem>
-                    <SelectItem value="HDD">HDD</SelectItem>
-                    <SelectItem value="NVMe">NVMe</SelectItem>
-                  </SelectContent>
-                </Select>
+                  onBlur={field.handleBlur}
+                  aria-invalid={field.state.meta.errors.length > 0}
+                  placeholder="e.g. AD102"
+                />
                 <FieldError errors={field.state.meta.errors} />
               </Field>
             )}
           </form.Field>
 
-          <form.Field name="capacityGB">
+          <form.Field name="vramGB">
             {(field) => (
               <Field>
                 <LabelWithTooltip
                   htmlFor={field.name}
-                  label="Capacity (GB)"
-                  tip="Storage capacity in gigabytes."
+                  label="VRAM (GB)"
+                  tip="Total video memory in gigabytes."
                 />
                 <Input
                   id={field.name}
@@ -132,20 +107,20 @@ export function StorageProductForm({
                   }
                   onBlur={field.handleBlur}
                   aria-invalid={field.state.meta.errors.length > 0}
-                  placeholder="e.g. 2000"
+                  placeholder="e.g. 24"
                 />
                 <FieldError errors={field.state.meta.errors} />
               </Field>
             )}
           </form.Field>
 
-          <form.Field name="interface">
+          <form.Field name="vramType">
             {(field) => (
               <Field>
                 <LabelWithTooltip
                   htmlFor={field.name}
-                  label="Interface"
-                  tip="Connection interface (e.g. PCIe 5.0 x4, SATA III)."
+                  label="VRAM Type"
+                  tip="Memory type (e.g. GDDR6X, HBM3)."
                 />
                 <Input
                   id={field.name}
@@ -155,43 +130,45 @@ export function StorageProductForm({
                   }
                   onBlur={field.handleBlur}
                   aria-invalid={field.state.meta.errors.length > 0}
-                  placeholder="e.g. PCIe 5.0 x4"
+                  placeholder="e.g. GDDR6X"
                 />
                 <FieldError errors={field.state.meta.errors} />
               </Field>
             )}
           </form.Field>
 
-          <form.Field name="formFactor">
+          <form.Field name="tdp">
             {(field) => (
               <Field>
                 <LabelWithTooltip
                   htmlFor={field.name}
-                  label="Form Factor"
-                  tip="Physical form factor (e.g. M.2 2280, 2.5\"
+                  label="TDP (W)"
+                  tip="Thermal design power in watts."
                 />
                 <Input
                   id={field.name}
+                  type="number"
+                  min={1}
                   value={field.state.value}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    field.handleChange(e.target.value)
+                    field.handleChange(parseInt(e.target.value, 10) || 0)
                   }
                   onBlur={field.handleBlur}
                   aria-invalid={field.state.meta.errors.length > 0}
-                  placeholder="e.g. M.2 2280"
+                  placeholder="e.g. 450"
                 />
                 <FieldError errors={field.state.meta.errors} />
               </Field>
             )}
           </form.Field>
 
-          <form.Field name="readSpeedMBps">
+          <form.Field name="coreCount">
             {(field) => (
               <Field>
                 <LabelWithTooltip
                   htmlFor={field.name}
-                  label="Read Speed (MB/s)"
-                  tip="Sequential read speed in MB/s (optional)."
+                  label="Core Count"
+                  tip="Number of shader cores (optional)."
                 />
                 <Input
                   id={field.name}
@@ -206,19 +183,19 @@ export function StorageProductForm({
                     )
                   }
                   onBlur={field.handleBlur}
-                  placeholder="e.g. 14900"
+                  placeholder="e.g. 16384"
                 />
               </Field>
             )}
           </form.Field>
 
-          <form.Field name="writeSpeedMBps">
+          <form.Field name="baseClockMHz">
             {(field) => (
               <Field>
                 <LabelWithTooltip
                   htmlFor={field.name}
-                  label="Write Speed (MB/s)"
-                  tip="Sequential write speed in MB/s (optional)."
+                  label="Base Clock (MHz)"
+                  tip="Base GPU clock speed in megahertz (optional)."
                 />
                 <Input
                   id={field.name}
@@ -233,7 +210,82 @@ export function StorageProductForm({
                     )
                   }
                   onBlur={field.handleBlur}
-                  placeholder="e.g. 12000"
+                  placeholder="e.g. 2230"
+                />
+              </Field>
+            )}
+          </form.Field>
+
+          <form.Field name="boostClockMHz">
+            {(field) => (
+              <Field>
+                <LabelWithTooltip
+                  htmlFor={field.name}
+                  label="Boost Clock (MHz)"
+                  tip="Maximum boost clock speed in megahertz (optional)."
+                />
+                <Input
+                  id={field.name}
+                  type="number"
+                  min={1}
+                  value={field.state.value ?? ''}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    field.handleChange(
+                      e.target.value === ''
+                        ? null
+                        : parseInt(e.target.value, 10)
+                    )
+                  }
+                  onBlur={field.handleBlur}
+                  placeholder="e.g. 2610"
+                />
+              </Field>
+            )}
+          </form.Field>
+
+          <form.Field name="lengthMM">
+            {(field) => (
+              <Field>
+                <LabelWithTooltip
+                  htmlFor={field.name}
+                  label="Card Length (mm)"
+                  tip="Physical length of the card in millimeters (optional)."
+                />
+                <Input
+                  id={field.name}
+                  type="number"
+                  min={1}
+                  value={field.state.value ?? ''}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    field.handleChange(
+                      e.target.value === ''
+                        ? null
+                        : parseInt(e.target.value, 10)
+                    )
+                  }
+                  onBlur={field.handleBlur}
+                  placeholder="e.g. 336"
+                />
+              </Field>
+            )}
+          </form.Field>
+
+          <form.Field name="powerConnectors">
+            {(field) => (
+              <Field>
+                <LabelWithTooltip
+                  htmlFor={field.name}
+                  label="Power Connectors"
+                  tip="Required power connectors (e.g. 1x 16-pin)."
+                />
+                <Input
+                  id={field.name}
+                  value={field.state.value}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    field.handleChange(e.target.value)
+                  }
+                  onBlur={field.handleBlur}
+                  placeholder="e.g. 1x 16-pin"
                 />
               </Field>
             )}
@@ -241,13 +293,10 @@ export function StorageProductForm({
         </FieldGroup>
 
         <div className="flex gap-3 mb-6">
-          <Button type="button" variant="outline" onClick={onBack}>
-            Back
-          </Button>
           <form.Subscribe selector={(state) => state.canSubmit}>
             {(canSubmit) => (
               <Button type="submit" disabled={!canSubmit} className="px-8">
-                Save
+                Save Changes
               </Button>
             )}
           </form.Subscribe>
@@ -262,7 +311,7 @@ export function StorageProductForm({
       >
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Confirm New Storage</AlertDialogTitle>
+            <AlertDialogTitle>Confirm Changes to GPU</AlertDialogTitle>
             <AlertDialogDescription asChild>
               <div className="space-y-1 text-sm">
                 {pendingValues && (
@@ -281,27 +330,23 @@ export function StorageProductForm({
                     </div>
                     <div className="flex gap-2">
                       <span className="text-muted-foreground w-32 shrink-0">
-                        Type
+                        Chipset
                       </span>
-                      <span>{pendingValues.storageType}</span>
+                      <span>{pendingValues.chipset}</span>
                     </div>
                     <div className="flex gap-2">
                       <span className="text-muted-foreground w-32 shrink-0">
-                        Capacity
+                        VRAM
                       </span>
-                      <span>{pendingValues.capacityGB} GB</span>
+                      <span>
+                        {pendingValues.vramGB} GB {pendingValues.vramType}
+                      </span>
                     </div>
                     <div className="flex gap-2">
                       <span className="text-muted-foreground w-32 shrink-0">
-                        Interface
+                        TDP
                       </span>
-                      <span>{pendingValues.interface}</span>
-                    </div>
-                    <div className="flex gap-2">
-                      <span className="text-muted-foreground w-32 shrink-0">
-                        Form Factor
-                      </span>
-                      <span>{pendingValues.formFactor}</span>
+                      <span>{pendingValues.tdp} W</span>
                     </div>
                     <div className="flex gap-2">
                       <span className="text-muted-foreground w-32 shrink-0">

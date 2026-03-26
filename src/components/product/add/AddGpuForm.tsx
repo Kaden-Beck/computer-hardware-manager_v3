@@ -1,5 +1,4 @@
-import React from 'react';
-// Shadcn
+import React, { useState } from 'react';
 import { Field, FieldError, FieldGroup } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -14,28 +13,25 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { LabelWithTooltip } from '@/components/ui/label-with-tooltip';
-
-// Form Hook Utilities & Types
-import { ProductBaseFields } from './ProductBaseFields';
-import type { ProductSpecFormProps } from './ProductAddForm';
+import { ProductBaseFields } from '../ProductBaseFields';
+import type { ProductSpecFormProps } from './AddBaseProductForm';
 import {
-  useAddCaseForm,
-  type CaseFormValues,
-} from '@/hooks/form/useAddCaseProductForm';
-
-// Stub Data
+  useAddGpuForm,
+  type GpuFormValues,
+} from '@/hooks/form/useAddGpuProductForm';
 import { manufacturerDetails } from '@/data/stub/manufacturerData';
 import { ArrowLeft } from 'lucide-react';
 
-export function CaseProductForm({
+export function GpuProductForm({
   onSuccess,
   onBack,
   onAdd,
 }: ProductSpecFormProps): React.JSX.Element {
-  const [pendingValues, setPendingValues] =
-    React.useState<CaseFormValues | null>(null);
+  const [pendingValues, setPendingValues] = useState<GpuFormValues | null>(
+    null
+  );
 
-  const form = useAddCaseForm({
+  const form = useAddGpuForm({
     onSubmit: async (values) => {
       setPendingValues(values);
     },
@@ -59,7 +55,7 @@ export function CaseProductForm({
   }
 
   return (
-    <React.Fragment>
+    <>
       <Button
         type="button"
         variant="ghost"
@@ -80,13 +76,13 @@ export function CaseProductForm({
         <ProductBaseFields form={form} manufacturers={manufacturerDetails} />
 
         <FieldGroup>
-          <form.Field name="formFactor">
+          <form.Field name="chipset">
             {(field) => (
               <Field>
                 <LabelWithTooltip
                   htmlFor={field.name}
-                  label="Form Factor"
-                  tip="Case size category (e.g. Full Tower, Mid Tower, Mini-ITX)."
+                  label="Chipset"
+                  tip="The GPU chipset (e.g. AD102, GCD-01)."
                 />
                 <Input
                   id={field.name}
@@ -96,20 +92,45 @@ export function CaseProductForm({
                   }
                   onBlur={field.handleBlur}
                   aria-invalid={field.state.meta.errors.length > 0}
-                  placeholder="e.g. Mid Tower"
+                  placeholder="e.g. AD102"
                 />
                 <FieldError errors={field.state.meta.errors} />
               </Field>
             )}
           </form.Field>
 
-          <form.Field name="moboSupport">
+          <form.Field name="vramGB">
             {(field) => (
               <Field>
                 <LabelWithTooltip
                   htmlFor={field.name}
-                  label="Motherboard Support"
-                  tip="Supported motherboard sizes (e.g. ATX, Micro-ATX, Mini-ITX)."
+                  label="VRAM (GB)"
+                  tip="Total video memory in gigabytes."
+                />
+                <Input
+                  id={field.name}
+                  type="number"
+                  min={1}
+                  value={field.state.value}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    field.handleChange(parseInt(e.target.value, 10) || 0)
+                  }
+                  onBlur={field.handleBlur}
+                  aria-invalid={field.state.meta.errors.length > 0}
+                  placeholder="e.g. 24"
+                />
+                <FieldError errors={field.state.meta.errors} />
+              </Field>
+            )}
+          </form.Field>
+
+          <form.Field name="vramType">
+            {(field) => (
+              <Field>
+                <LabelWithTooltip
+                  htmlFor={field.name}
+                  label="VRAM Type"
+                  tip="Memory type (e.g. GDDR6X, HBM3)."
                 />
                 <Input
                   id={field.name}
@@ -119,20 +140,45 @@ export function CaseProductForm({
                   }
                   onBlur={field.handleBlur}
                   aria-invalid={field.state.meta.errors.length > 0}
-                  placeholder="e.g. ATX, Micro-ATX, Mini-ITX"
+                  placeholder="e.g. GDDR6X"
                 />
                 <FieldError errors={field.state.meta.errors} />
               </Field>
             )}
           </form.Field>
 
-          <form.Field name="maxGPULengthMM">
+          <form.Field name="tdp">
             {(field) => (
               <Field>
                 <LabelWithTooltip
                   htmlFor={field.name}
-                  label="Max GPU Length (mm)"
-                  tip="Maximum supported GPU card length (optional)."
+                  label="TDP (W)"
+                  tip="Thermal design power in watts."
+                />
+                <Input
+                  id={field.name}
+                  type="number"
+                  min={1}
+                  value={field.state.value}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    field.handleChange(parseInt(e.target.value, 10) || 0)
+                  }
+                  onBlur={field.handleBlur}
+                  aria-invalid={field.state.meta.errors.length > 0}
+                  placeholder="e.g. 450"
+                />
+                <FieldError errors={field.state.meta.errors} />
+              </Field>
+            )}
+          </form.Field>
+
+          <form.Field name="coreCount">
+            {(field) => (
+              <Field>
+                <LabelWithTooltip
+                  htmlFor={field.name}
+                  label="Core Count"
+                  tip="Number of shader cores (optional)."
                 />
                 <Input
                   id={field.name}
@@ -147,19 +193,19 @@ export function CaseProductForm({
                     )
                   }
                   onBlur={field.handleBlur}
-                  placeholder="e.g. 420"
+                  placeholder="e.g. 16384"
                 />
               </Field>
             )}
           </form.Field>
 
-          <form.Field name="maxCPUCoolerHeightMM">
+          <form.Field name="baseClockMHz">
             {(field) => (
               <Field>
                 <LabelWithTooltip
                   htmlFor={field.name}
-                  label="Max CPU Cooler Height (mm)"
-                  tip="Maximum CPU cooler height clearance (optional)."
+                  label="Base Clock (MHz)"
+                  tip="Base GPU clock speed in megahertz (optional)."
                 />
                 <Input
                   id={field.name}
@@ -174,19 +220,19 @@ export function CaseProductForm({
                     )
                   }
                   onBlur={field.handleBlur}
-                  placeholder="e.g. 185"
+                  placeholder="e.g. 2230"
                 />
               </Field>
             )}
           </form.Field>
 
-          <form.Field name="maxPSULengthMM">
+          <form.Field name="boostClockMHz">
             {(field) => (
               <Field>
                 <LabelWithTooltip
                   htmlFor={field.name}
-                  label="Max PSU Length (mm)"
-                  tip="Maximum PSU length supported (optional)."
+                  label="Boost Clock (MHz)"
+                  tip="Maximum boost clock speed in megahertz (optional)."
                 />
                 <Input
                   id={field.name}
@@ -201,24 +247,24 @@ export function CaseProductForm({
                     )
                   }
                   onBlur={field.handleBlur}
-                  placeholder="e.g. 200"
+                  placeholder="e.g. 2610"
                 />
               </Field>
             )}
           </form.Field>
 
-          <form.Field name="driveSlotsTwoHalf">
+          <form.Field name="lengthMM">
             {(field) => (
               <Field>
                 <LabelWithTooltip
                   htmlFor={field.name}
-                  label='2.5" Drive Slots'
-                  tip='Number of 2.5" drive bays (optional).'
+                  label="Card Length (mm)"
+                  tip="Physical length of the card in millimeters (optional)."
                 />
                 <Input
                   id={field.name}
                   type="number"
-                  min={0}
+                  min={1}
                   value={field.state.value ?? ''}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                     field.handleChange(
@@ -228,73 +274,19 @@ export function CaseProductForm({
                     )
                   }
                   onBlur={field.handleBlur}
-                  placeholder="e.g. 4"
+                  placeholder="e.g. 336"
                 />
               </Field>
             )}
           </form.Field>
 
-          <form.Field name="driveSlotsThreeHalf">
+          <form.Field name="powerConnectors">
             {(field) => (
               <Field>
                 <LabelWithTooltip
                   htmlFor={field.name}
-                  label='3.5" Drive Slots'
-                  tip='Number of 3.5" drive bays (optional).'
-                />
-                <Input
-                  id={field.name}
-                  type="number"
-                  min={0}
-                  value={field.state.value ?? ''}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    field.handleChange(
-                      e.target.value === ''
-                        ? null
-                        : parseInt(e.target.value, 10)
-                    )
-                  }
-                  onBlur={field.handleBlur}
-                  placeholder="e.g. 2"
-                />
-              </Field>
-            )}
-          </form.Field>
-
-          <form.Field name="fanSlots">
-            {(field) => (
-              <Field>
-                <LabelWithTooltip
-                  htmlFor={field.name}
-                  label="Fan Slots"
-                  tip="Total number of fan mounting positions (optional)."
-                />
-                <Input
-                  id={field.name}
-                  type="number"
-                  min={0}
-                  value={field.state.value ?? ''}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    field.handleChange(
-                      e.target.value === ''
-                        ? null
-                        : parseInt(e.target.value, 10)
-                    )
-                  }
-                  onBlur={field.handleBlur}
-                  placeholder="e.g. 9"
-                />
-              </Field>
-            )}
-          </form.Field>
-
-          <form.Field name="radiatorSupport">
-            {(field) => (
-              <Field>
-                <LabelWithTooltip
-                  htmlFor={field.name}
-                  label="Radiator Support"
-                  tip="Supported radiator sizes (e.g. 360mm, 420mm)."
+                  label="Power Connectors"
+                  tip="Required power connectors (e.g. 1x 16-pin)."
                 />
                 <Input
                   id={field.name}
@@ -303,7 +295,7 @@ export function CaseProductForm({
                     field.handleChange(e.target.value)
                   }
                   onBlur={field.handleBlur}
-                  placeholder="e.g. Up to 420mm"
+                  placeholder="e.g. 1x 16-pin"
                 />
               </Field>
             )}
@@ -332,7 +324,7 @@ export function CaseProductForm({
       >
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Confirm New Case</AlertDialogTitle>
+            <AlertDialogTitle>Confirm New GPU</AlertDialogTitle>
             <AlertDialogDescription asChild>
               <div className="space-y-1 text-sm">
                 {pendingValues && (
@@ -351,15 +343,23 @@ export function CaseProductForm({
                     </div>
                     <div className="flex gap-2">
                       <span className="text-muted-foreground w-32 shrink-0">
-                        Form Factor
+                        Chipset
                       </span>
-                      <span>{pendingValues.formFactor}</span>
+                      <span>{pendingValues.chipset}</span>
                     </div>
                     <div className="flex gap-2">
                       <span className="text-muted-foreground w-32 shrink-0">
-                        Mobo Support
+                        VRAM
                       </span>
-                      <span>{pendingValues.moboSupport}</span>
+                      <span>
+                        {pendingValues.vramGB} GB {pendingValues.vramType}
+                      </span>
+                    </div>
+                    <div className="flex gap-2">
+                      <span className="text-muted-foreground w-32 shrink-0">
+                        TDP
+                      </span>
+                      <span>{pendingValues.tdp} W</span>
                     </div>
                     <div className="flex gap-2">
                       <span className="text-muted-foreground w-32 shrink-0">
@@ -386,6 +386,6 @@ export function CaseProductForm({
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-    </React.Fragment>
+    </>
   );
 }

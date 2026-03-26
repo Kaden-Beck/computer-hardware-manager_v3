@@ -13,25 +13,25 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { LabelWithTooltip } from '@/components/ui/label-with-tooltip';
-import { ProductBaseFields } from './ProductBaseFields';
-import type { ProductSpecFormProps } from './ProductAddForm';
+import { ProductBaseFields } from '../ProductBaseFields';
+import type { ProductSpecFormProps } from './AddBaseProductForm';
 import {
-  useAddGpuForm,
-  type GpuFormValues,
-} from '@/hooks/form/useAddGpuProductForm';
+  useAddRamForm,
+  type RamFormValues,
+} from '@/hooks/form/useAddRamProductForm';
 import { manufacturerDetails } from '@/data/stub/manufacturerData';
 import { ArrowLeft } from 'lucide-react';
 
-export function GpuProductForm({
+export function RamProductForm({
   onSuccess,
   onBack,
   onAdd,
 }: ProductSpecFormProps): React.JSX.Element {
-  const [pendingValues, setPendingValues] = useState<GpuFormValues | null>(
+  const [pendingValues, setPendingValues] = useState<RamFormValues | null>(
     null
   );
 
-  const form = useAddGpuForm({
+  const form = useAddRamForm({
     onSubmit: async (values) => {
       setPendingValues(values);
     },
@@ -76,13 +76,13 @@ export function GpuProductForm({
         <ProductBaseFields form={form} manufacturers={manufacturerDetails} />
 
         <FieldGroup>
-          <form.Field name="chipset">
+          <form.Field name="memoryType">
             {(field) => (
               <Field>
                 <LabelWithTooltip
                   htmlFor={field.name}
-                  label="Chipset"
-                  tip="The GPU chipset (e.g. AD102, GCD-01)."
+                  label="Memory Type"
+                  tip="RAM type (e.g. DDR5, DDR4)."
                 />
                 <Input
                   id={field.name}
@@ -92,20 +92,20 @@ export function GpuProductForm({
                   }
                   onBlur={field.handleBlur}
                   aria-invalid={field.state.meta.errors.length > 0}
-                  placeholder="e.g. AD102"
+                  placeholder="e.g. DDR5"
                 />
                 <FieldError errors={field.state.meta.errors} />
               </Field>
             )}
           </form.Field>
 
-          <form.Field name="vramGB">
+          <form.Field name="speedMHz">
             {(field) => (
               <Field>
                 <LabelWithTooltip
                   htmlFor={field.name}
-                  label="VRAM (GB)"
-                  tip="Total video memory in gigabytes."
+                  label="Speed (MHz)"
+                  tip="RAM speed in megahertz."
                 />
                 <Input
                   id={field.name}
@@ -117,43 +117,20 @@ export function GpuProductForm({
                   }
                   onBlur={field.handleBlur}
                   aria-invalid={field.state.meta.errors.length > 0}
-                  placeholder="e.g. 24"
+                  placeholder="e.g. 6000"
                 />
                 <FieldError errors={field.state.meta.errors} />
               </Field>
             )}
           </form.Field>
 
-          <form.Field name="vramType">
+          <form.Field name="capacityGB">
             {(field) => (
               <Field>
                 <LabelWithTooltip
                   htmlFor={field.name}
-                  label="VRAM Type"
-                  tip="Memory type (e.g. GDDR6X, HBM3)."
-                />
-                <Input
-                  id={field.name}
-                  value={field.state.value}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    field.handleChange(e.target.value)
-                  }
-                  onBlur={field.handleBlur}
-                  aria-invalid={field.state.meta.errors.length > 0}
-                  placeholder="e.g. GDDR6X"
-                />
-                <FieldError errors={field.state.meta.errors} />
-              </Field>
-            )}
-          </form.Field>
-
-          <form.Field name="tdp">
-            {(field) => (
-              <Field>
-                <LabelWithTooltip
-                  htmlFor={field.name}
-                  label="TDP (W)"
-                  tip="Thermal design power in watts."
+                  label="Capacity (GB)"
+                  tip="Total capacity in gigabytes."
                 />
                 <Input
                   id={field.name}
@@ -165,137 +142,86 @@ export function GpuProductForm({
                   }
                   onBlur={field.handleBlur}
                   aria-invalid={field.state.meta.errors.length > 0}
-                  placeholder="e.g. 450"
+                  placeholder="e.g. 32"
                 />
                 <FieldError errors={field.state.meta.errors} />
               </Field>
             )}
           </form.Field>
 
-          <form.Field name="coreCount">
+          <form.Field name="modules">
             {(field) => (
               <Field>
                 <LabelWithTooltip
                   htmlFor={field.name}
-                  label="Core Count"
-                  tip="Number of shader cores (optional)."
+                  label="Modules"
+                  tip="Number of sticks in the kit."
                 />
                 <Input
                   id={field.name}
                   type="number"
                   min={1}
-                  value={field.state.value ?? ''}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    field.handleChange(
-                      e.target.value === ''
-                        ? null
-                        : parseInt(e.target.value, 10)
-                    )
-                  }
-                  onBlur={field.handleBlur}
-                  placeholder="e.g. 16384"
-                />
-              </Field>
-            )}
-          </form.Field>
-
-          <form.Field name="baseClockMHz">
-            {(field) => (
-              <Field>
-                <LabelWithTooltip
-                  htmlFor={field.name}
-                  label="Base Clock (MHz)"
-                  tip="Base GPU clock speed in megahertz (optional)."
-                />
-                <Input
-                  id={field.name}
-                  type="number"
-                  min={1}
-                  value={field.state.value ?? ''}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    field.handleChange(
-                      e.target.value === ''
-                        ? null
-                        : parseInt(e.target.value, 10)
-                    )
-                  }
-                  onBlur={field.handleBlur}
-                  placeholder="e.g. 2230"
-                />
-              </Field>
-            )}
-          </form.Field>
-
-          <form.Field name="boostClockMHz">
-            {(field) => (
-              <Field>
-                <LabelWithTooltip
-                  htmlFor={field.name}
-                  label="Boost Clock (MHz)"
-                  tip="Maximum boost clock speed in megahertz (optional)."
-                />
-                <Input
-                  id={field.name}
-                  type="number"
-                  min={1}
-                  value={field.state.value ?? ''}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    field.handleChange(
-                      e.target.value === ''
-                        ? null
-                        : parseInt(e.target.value, 10)
-                    )
-                  }
-                  onBlur={field.handleBlur}
-                  placeholder="e.g. 2610"
-                />
-              </Field>
-            )}
-          </form.Field>
-
-          <form.Field name="lengthMM">
-            {(field) => (
-              <Field>
-                <LabelWithTooltip
-                  htmlFor={field.name}
-                  label="Card Length (mm)"
-                  tip="Physical length of the card in millimeters (optional)."
-                />
-                <Input
-                  id={field.name}
-                  type="number"
-                  min={1}
-                  value={field.state.value ?? ''}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    field.handleChange(
-                      e.target.value === ''
-                        ? null
-                        : parseInt(e.target.value, 10)
-                    )
-                  }
-                  onBlur={field.handleBlur}
-                  placeholder="e.g. 336"
-                />
-              </Field>
-            )}
-          </form.Field>
-
-          <form.Field name="powerConnectors">
-            {(field) => (
-              <Field>
-                <LabelWithTooltip
-                  htmlFor={field.name}
-                  label="Power Connectors"
-                  tip="Required power connectors (e.g. 1x 16-pin)."
-                />
-                <Input
-                  id={field.name}
                   value={field.state.value}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    field.handleChange(e.target.value)
+                    field.handleChange(parseInt(e.target.value, 10) || 0)
                   }
                   onBlur={field.handleBlur}
-                  placeholder="e.g. 1x 16-pin"
+                  aria-invalid={field.state.meta.errors.length > 0}
+                  placeholder="e.g. 2"
+                />
+                <FieldError errors={field.state.meta.errors} />
+              </Field>
+            )}
+          </form.Field>
+
+          <form.Field name="casLatency">
+            {(field) => (
+              <Field>
+                <LabelWithTooltip
+                  htmlFor={field.name}
+                  label="CAS Latency"
+                  tip="CAS latency (CL) value (optional)."
+                />
+                <Input
+                  id={field.name}
+                  type="number"
+                  min={1}
+                  value={field.state.value ?? ''}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    field.handleChange(
+                      e.target.value === ''
+                        ? null
+                        : parseInt(e.target.value, 10)
+                    )
+                  }
+                  onBlur={field.handleBlur}
+                  placeholder="e.g. 36"
+                />
+              </Field>
+            )}
+          </form.Field>
+
+          <form.Field name="voltage">
+            {(field) => (
+              <Field>
+                <LabelWithTooltip
+                  htmlFor={field.name}
+                  label="Voltage (V)"
+                  tip="Operating voltage (optional)."
+                />
+                <Input
+                  id={field.name}
+                  type="number"
+                  min={0.1}
+                  step={0.1}
+                  value={field.state.value ?? ''}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    field.handleChange(
+                      e.target.value === '' ? null : parseFloat(e.target.value)
+                    )
+                  }
+                  onBlur={field.handleBlur}
+                  placeholder="e.g. 1.1"
                 />
               </Field>
             )}
@@ -324,7 +250,7 @@ export function GpuProductForm({
       >
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Confirm New GPU</AlertDialogTitle>
+            <AlertDialogTitle>Confirm New RAM</AlertDialogTitle>
             <AlertDialogDescription asChild>
               <div className="space-y-1 text-sm">
                 {pendingValues && (
@@ -343,23 +269,19 @@ export function GpuProductForm({
                     </div>
                     <div className="flex gap-2">
                       <span className="text-muted-foreground w-32 shrink-0">
-                        Chipset
-                      </span>
-                      <span>{pendingValues.chipset}</span>
-                    </div>
-                    <div className="flex gap-2">
-                      <span className="text-muted-foreground w-32 shrink-0">
-                        VRAM
+                        Type / Speed
                       </span>
                       <span>
-                        {pendingValues.vramGB} GB {pendingValues.vramType}
+                        {pendingValues.memoryType} {pendingValues.speedMHz} MHz
                       </span>
                     </div>
                     <div className="flex gap-2">
                       <span className="text-muted-foreground w-32 shrink-0">
-                        TDP
+                        Capacity
                       </span>
-                      <span>{pendingValues.tdp} W</span>
+                      <span>
+                        {pendingValues.capacityGB} GB ({pendingValues.modules}x)
+                      </span>
                     </div>
                     <div className="flex gap-2">
                       <span className="text-muted-foreground w-32 shrink-0">

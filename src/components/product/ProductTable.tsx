@@ -46,7 +46,7 @@ import { productDetails } from '@/data/stub/productData';
 import { manufacturerDetails } from '@/data/stub/manufacturerData';
 import { categoryDetails } from '@/data/stub/categoryData';
 import type { Product } from '@/schema/Product';
-import ProductAddForm from './ProductAddForm';
+import ProductAddForm from './add/AddBaseProductForm';
 
 // Table Helpers
 const columnHelper = createColumnHelper<Product>();

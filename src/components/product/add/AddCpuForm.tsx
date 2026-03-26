@@ -1,13 +1,7 @@
 import React, { useState } from 'react';
 import { Field, FieldError, FieldGroup } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
+import { Switch } from '@/components/ui/switch';
 import { Button } from '@/components/ui/button';
 import {
   AlertDialog,
@@ -20,25 +14,25 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { LabelWithTooltip } from '@/components/ui/label-with-tooltip';
-import { ProductBaseFields } from './ProductBaseFields';
-import type { ProductSpecFormProps } from './ProductAddForm';
+import { ProductBaseFields } from '../ProductBaseFields';
+import type { ProductSpecFormProps } from './AddBaseProductForm';
 import {
-  useAddPsuForm,
-  type PsuFormValues,
-} from '@/hooks/form/useAddPsuProductForm';
+  useAddCpuForm,
+  type CpuFormValues,
+} from '@/hooks/form/useAddCpuProductForm';
 import { manufacturerDetails } from '@/data/stub/manufacturerData';
 import { ArrowLeft } from 'lucide-react';
 
-export function PsuProductForm({
+export function CpuProductForm({
   onSuccess,
   onBack,
   onAdd,
 }: ProductSpecFormProps): React.JSX.Element {
-  const [pendingValues, setPendingValues] = useState<PsuFormValues | null>(
+  const [pendingValues, setPendingValues] = useState<CpuFormValues | null>(
     null
   );
 
-  const form = useAddPsuForm({
+  const form = useAddCpuForm({
     onSubmit: async (values) => {
       setPendingValues(values);
     },
@@ -83,13 +77,36 @@ export function PsuProductForm({
         <ProductBaseFields form={form} manufacturers={manufacturerDetails} />
 
         <FieldGroup>
-          <form.Field name="wattage">
+          <form.Field name="socketType">
             {(field) => (
               <Field>
                 <LabelWithTooltip
                   htmlFor={field.name}
-                  label="Wattage (W)"
-                  tip="Maximum output power in watts."
+                  label="Socket Type"
+                  tip="CPU socket (e.g. LGA1700, AM5)."
+                />
+                <Input
+                  id={field.name}
+                  value={field.state.value}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    field.handleChange(e.target.value)
+                  }
+                  onBlur={field.handleBlur}
+                  aria-invalid={field.state.meta.errors.length > 0}
+                  placeholder="e.g. LGA1700"
+                />
+                <FieldError errors={field.state.meta.errors} />
+              </Field>
+            )}
+          </form.Field>
+
+          <form.Field name="cores">
+            {(field) => (
+              <Field>
+                <LabelWithTooltip
+                  htmlFor={field.name}
+                  label="Cores"
+                  tip="Total number of CPU cores."
                 />
                 <Input
                   id={field.name}
@@ -101,86 +118,157 @@ export function PsuProductForm({
                   }
                   onBlur={field.handleBlur}
                   aria-invalid={field.state.meta.errors.length > 0}
-                  placeholder="e.g. 1000"
+                  placeholder="e.g. 24"
                 />
                 <FieldError errors={field.state.meta.errors} />
               </Field>
             )}
           </form.Field>
 
-          <form.Field name="efficiencyRating">
+          <form.Field name="threads">
             {(field) => (
               <Field>
                 <LabelWithTooltip
                   htmlFor={field.name}
-                  label="Efficiency Rating"
-                  tip="80 PLUS certification tier (e.g. 80+ Gold)."
+                  label="Threads"
+                  tip="Total number of CPU threads."
                 />
                 <Input
                   id={field.name}
+                  type="number"
+                  min={1}
                   value={field.state.value}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    field.handleChange(e.target.value)
+                    field.handleChange(parseInt(e.target.value, 10) || 0)
                   }
                   onBlur={field.handleBlur}
                   aria-invalid={field.state.meta.errors.length > 0}
-                  placeholder="e.g. 80+ Gold"
+                  placeholder="e.g. 32"
                 />
                 <FieldError errors={field.state.meta.errors} />
               </Field>
             )}
           </form.Field>
 
-          <form.Field name="modular">
+          <form.Field name="baseClockGHz">
             {(field) => (
               <Field>
                 <LabelWithTooltip
                   htmlFor={field.name}
-                  label="Modularity"
-                  tip="Whether cables are fully, semi, or non-modular."
+                  label="Base Clock (GHz)"
+                  tip="Base CPU clock speed in gigahertz."
                 />
-                <Select
+                <Input
+                  id={field.name}
+                  type="number"
+                  min={0.1}
+                  step={0.1}
                   value={field.state.value}
-                  onValueChange={(val) =>
-                    field.handleChange(val as PsuFormValues['modular'])
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    field.handleChange(parseFloat(e.target.value) || 0)
                   }
-                >
-                  <SelectTrigger
+                  onBlur={field.handleBlur}
+                  aria-invalid={field.state.meta.errors.length > 0}
+                  placeholder="e.g. 3.4"
+                />
+                <FieldError errors={field.state.meta.errors} />
+              </Field>
+            )}
+          </form.Field>
+
+          <form.Field name="boostClockGHz">
+            {(field) => (
+              <Field>
+                <LabelWithTooltip
+                  htmlFor={field.name}
+                  label="Boost Clock (GHz)"
+                  tip="Maximum boost clock speed in gigahertz (optional)."
+                />
+                <Input
+                  id={field.name}
+                  type="number"
+                  min={0.1}
+                  step={0.1}
+                  value={field.state.value ?? ''}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    field.handleChange(
+                      e.target.value === '' ? null : parseFloat(e.target.value)
+                    )
+                  }
+                  onBlur={field.handleBlur}
+                  placeholder="e.g. 5.8"
+                />
+              </Field>
+            )}
+          </form.Field>
+
+          <form.Field name="tdp">
+            {(field) => (
+              <Field>
+                <LabelWithTooltip
+                  htmlFor={field.name}
+                  label="TDP (W)"
+                  tip="Thermal design power in watts."
+                />
+                <Input
+                  id={field.name}
+                  type="number"
+                  min={1}
+                  value={field.state.value}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    field.handleChange(parseInt(e.target.value, 10) || 0)
+                  }
+                  onBlur={field.handleBlur}
+                  aria-invalid={field.state.meta.errors.length > 0}
+                  placeholder="e.g. 125"
+                />
+                <FieldError errors={field.state.meta.errors} />
+              </Field>
+            )}
+          </form.Field>
+
+          <form.Field name="cacheMB">
+            {(field) => (
+              <Field>
+                <LabelWithTooltip
+                  htmlFor={field.name}
+                  label="Cache (MB)"
+                  tip="Total cache size in megabytes (optional)."
+                />
+                <Input
+                  id={field.name}
+                  type="number"
+                  min={1}
+                  value={field.state.value ?? ''}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    field.handleChange(
+                      e.target.value === ''
+                        ? null
+                        : parseInt(e.target.value, 10)
+                    )
+                  }
+                  onBlur={field.handleBlur}
+                  placeholder="e.g. 36"
+                />
+              </Field>
+            )}
+          </form.Field>
+
+          <form.Field name="integratedGraphics">
+            {(field) => (
+              <Field>
+                <div className="flex items-center gap-3">
+                  <Switch
                     id={field.name}
-                    aria-invalid={field.state.meta.errors.length > 0}
-                  >
-                    <SelectValue placeholder="Select modularity" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Full">Full</SelectItem>
-                    <SelectItem value="Semi">Semi</SelectItem>
-                    <SelectItem value="Non-Modular">Non-Modular</SelectItem>
-                  </SelectContent>
-                </Select>
-                <FieldError errors={field.state.meta.errors} />
-              </Field>
-            )}
-          </form.Field>
-
-          <form.Field name="formFactor">
-            {(field) => (
-              <Field>
-                <LabelWithTooltip
-                  htmlFor={field.name}
-                  label="Form Factor"
-                  tip="Physical form factor (e.g. ATX, SFX)."
-                />
-                <Input
-                  id={field.name}
-                  value={field.state.value}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    field.handleChange(e.target.value)
-                  }
-                  onBlur={field.handleBlur}
-                  aria-invalid={field.state.meta.errors.length > 0}
-                  placeholder="e.g. ATX"
-                />
-                <FieldError errors={field.state.meta.errors} />
+                    checked={field.state.value}
+                    onCheckedChange={(checked) => field.handleChange(checked)}
+                  />
+                  <LabelWithTooltip
+                    htmlFor={field.name}
+                    label="Integrated Graphics"
+                    tip="Whether the CPU includes an integrated GPU."
+                  />
+                </div>
               </Field>
             )}
           </form.Field>
@@ -208,7 +296,7 @@ export function PsuProductForm({
       >
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Confirm New PSU</AlertDialogTitle>
+            <AlertDialogTitle>Confirm New CPU</AlertDialogTitle>
             <AlertDialogDescription asChild>
               <div className="space-y-1 text-sm">
                 {pendingValues && (
@@ -227,27 +315,37 @@ export function PsuProductForm({
                     </div>
                     <div className="flex gap-2">
                       <span className="text-muted-foreground w-32 shrink-0">
-                        Wattage
+                        Socket
                       </span>
-                      <span>{pendingValues.wattage} W</span>
+                      <span>{pendingValues.socketType}</span>
                     </div>
                     <div className="flex gap-2">
                       <span className="text-muted-foreground w-32 shrink-0">
-                        Efficiency
+                        Cores / Threads
                       </span>
-                      <span>{pendingValues.efficiencyRating}</span>
+                      <span>
+                        {pendingValues.cores} / {pendingValues.threads}
+                      </span>
                     </div>
                     <div className="flex gap-2">
                       <span className="text-muted-foreground w-32 shrink-0">
-                        Modular
+                        Base Clock
                       </span>
-                      <span>{pendingValues.modular}</span>
+                      <span>{pendingValues.baseClockGHz} GHz</span>
                     </div>
                     <div className="flex gap-2">
                       <span className="text-muted-foreground w-32 shrink-0">
-                        Form Factor
+                        TDP
                       </span>
-                      <span>{pendingValues.formFactor}</span>
+                      <span>{pendingValues.tdp} W</span>
+                    </div>
+                    <div className="flex gap-2">
+                      <span className="text-muted-foreground w-32 shrink-0">
+                        iGPU
+                      </span>
+                      <span>
+                        {pendingValues.integratedGraphics ? 'Yes' : 'No'}
+                      </span>
                     </div>
                     <div className="flex gap-2">
                       <span className="text-muted-foreground w-32 shrink-0">

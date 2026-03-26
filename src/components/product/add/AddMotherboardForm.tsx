@@ -13,25 +13,24 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { LabelWithTooltip } from '@/components/ui/label-with-tooltip';
-import { ProductBaseFields } from './ProductBaseFields';
-import type { ProductSpecFormProps } from './ProductAddForm';
+import { ProductBaseFields } from '../ProductBaseFields';
+import type { ProductSpecFormProps } from './AddBaseProductForm';
 import {
-  useAddRamForm,
-  type RamFormValues,
-} from '@/hooks/form/useAddRamProductForm';
+  useAddMotherboardForm,
+  type MotherboardFormValues,
+} from '@/hooks/form/useAddMotherboardProductForm';
 import { manufacturerDetails } from '@/data/stub/manufacturerData';
 import { ArrowLeft } from 'lucide-react';
 
-export function RamProductForm({
+export function MotherboardProductForm({
   onSuccess,
   onBack,
   onAdd,
 }: ProductSpecFormProps): React.JSX.Element {
-  const [pendingValues, setPendingValues] = useState<RamFormValues | null>(
-    null
-  );
+  const [pendingValues, setPendingValues] =
+    useState<MotherboardFormValues | null>(null);
 
-  const form = useAddRamForm({
+  const form = useAddMotherboardForm({
     onSubmit: async (values) => {
       setPendingValues(values);
     },
@@ -76,13 +75,82 @@ export function RamProductForm({
         <ProductBaseFields form={form} manufacturers={manufacturerDetails} />
 
         <FieldGroup>
+          <form.Field name="socketType">
+            {(field) => (
+              <Field>
+                <LabelWithTooltip
+                  htmlFor={field.name}
+                  label="Socket Type"
+                  tip="CPU socket supported (e.g. LGA1700, AM5)."
+                />
+                <Input
+                  id={field.name}
+                  value={field.state.value}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    field.handleChange(e.target.value)
+                  }
+                  onBlur={field.handleBlur}
+                  aria-invalid={field.state.meta.errors.length > 0}
+                  placeholder="e.g. LGA1700"
+                />
+                <FieldError errors={field.state.meta.errors} />
+              </Field>
+            )}
+          </form.Field>
+
+          <form.Field name="chipset">
+            {(field) => (
+              <Field>
+                <LabelWithTooltip
+                  htmlFor={field.name}
+                  label="Chipset"
+                  tip="Motherboard chipset (e.g. Z790, X670E)."
+                />
+                <Input
+                  id={field.name}
+                  value={field.state.value}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    field.handleChange(e.target.value)
+                  }
+                  onBlur={field.handleBlur}
+                  aria-invalid={field.state.meta.errors.length > 0}
+                  placeholder="e.g. Z790"
+                />
+                <FieldError errors={field.state.meta.errors} />
+              </Field>
+            )}
+          </form.Field>
+
+          <form.Field name="formFactor">
+            {(field) => (
+              <Field>
+                <LabelWithTooltip
+                  htmlFor={field.name}
+                  label="Form Factor"
+                  tip="Board form factor (e.g. ATX, Micro-ATX, Mini-ITX)."
+                />
+                <Input
+                  id={field.name}
+                  value={field.state.value}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    field.handleChange(e.target.value)
+                  }
+                  onBlur={field.handleBlur}
+                  aria-invalid={field.state.meta.errors.length > 0}
+                  placeholder="e.g. ATX"
+                />
+                <FieldError errors={field.state.meta.errors} />
+              </Field>
+            )}
+          </form.Field>
+
           <form.Field name="memoryType">
             {(field) => (
               <Field>
                 <LabelWithTooltip
                   htmlFor={field.name}
                   label="Memory Type"
-                  tip="RAM type (e.g. DDR5, DDR4)."
+                  tip="Supported RAM type (e.g. DDR5, DDR4)."
                 />
                 <Input
                   id={field.name}
@@ -99,13 +167,13 @@ export function RamProductForm({
             )}
           </form.Field>
 
-          <form.Field name="speedMHz">
+          <form.Field name="memorySlots">
             {(field) => (
               <Field>
                 <LabelWithTooltip
                   htmlFor={field.name}
-                  label="Speed (MHz)"
-                  tip="RAM speed in megahertz."
+                  label="Memory Slots"
+                  tip="Number of DIMM slots."
                 />
                 <Input
                   id={field.name}
@@ -117,20 +185,20 @@ export function RamProductForm({
                   }
                   onBlur={field.handleBlur}
                   aria-invalid={field.state.meta.errors.length > 0}
-                  placeholder="e.g. 6000"
+                  placeholder="e.g. 4"
                 />
                 <FieldError errors={field.state.meta.errors} />
               </Field>
             )}
           </form.Field>
 
-          <form.Field name="capacityGB">
+          <form.Field name="maxMemoryGB">
             {(field) => (
               <Field>
                 <LabelWithTooltip
                   htmlFor={field.name}
-                  label="Capacity (GB)"
-                  tip="Total capacity in gigabytes."
+                  label="Max Memory (GB)"
+                  tip="Maximum supported RAM in gigabytes."
                 />
                 <Input
                   id={field.name}
@@ -142,50 +210,25 @@ export function RamProductForm({
                   }
                   onBlur={field.handleBlur}
                   aria-invalid={field.state.meta.errors.length > 0}
-                  placeholder="e.g. 32"
+                  placeholder="e.g. 192"
                 />
                 <FieldError errors={field.state.meta.errors} />
               </Field>
             )}
           </form.Field>
 
-          <form.Field name="modules">
+          <form.Field name="m2Slots">
             {(field) => (
               <Field>
                 <LabelWithTooltip
                   htmlFor={field.name}
-                  label="Modules"
-                  tip="Number of sticks in the kit."
+                  label="M.2 Slots"
+                  tip="Number of M.2 slots (optional)."
                 />
                 <Input
                   id={field.name}
                   type="number"
-                  min={1}
-                  value={field.state.value}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
-                    field.handleChange(parseInt(e.target.value, 10) || 0)
-                  }
-                  onBlur={field.handleBlur}
-                  aria-invalid={field.state.meta.errors.length > 0}
-                  placeholder="e.g. 2"
-                />
-                <FieldError errors={field.state.meta.errors} />
-              </Field>
-            )}
-          </form.Field>
-
-          <form.Field name="casLatency">
-            {(field) => (
-              <Field>
-                <LabelWithTooltip
-                  htmlFor={field.name}
-                  label="CAS Latency"
-                  tip="CAS latency (CL) value (optional)."
-                />
-                <Input
-                  id={field.name}
-                  type="number"
-                  min={1}
+                  min={0}
                   value={field.state.value ?? ''}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                     field.handleChange(
@@ -195,33 +238,61 @@ export function RamProductForm({
                     )
                   }
                   onBlur={field.handleBlur}
-                  placeholder="e.g. 36"
+                  placeholder="e.g. 5"
                 />
               </Field>
             )}
           </form.Field>
 
-          <form.Field name="voltage">
+          <form.Field name="sataSlots">
             {(field) => (
               <Field>
                 <LabelWithTooltip
                   htmlFor={field.name}
-                  label="Voltage (V)"
-                  tip="Operating voltage (optional)."
+                  label="SATA Slots"
+                  tip="Number of SATA ports (optional)."
                 />
                 <Input
                   id={field.name}
                   type="number"
-                  min={0.1}
-                  step={0.1}
+                  min={0}
                   value={field.state.value ?? ''}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
                     field.handleChange(
-                      e.target.value === '' ? null : parseFloat(e.target.value)
+                      e.target.value === ''
+                        ? null
+                        : parseInt(e.target.value, 10)
                     )
                   }
                   onBlur={field.handleBlur}
-                  placeholder="e.g. 1.1"
+                  placeholder="e.g. 6"
+                />
+              </Field>
+            )}
+          </form.Field>
+
+          <form.Field name="pciSlots">
+            {(field) => (
+              <Field>
+                <LabelWithTooltip
+                  htmlFor={field.name}
+                  label="PCIe Slots"
+                  tip="Number of PCIe expansion slots (optional)."
+                />
+                <Input
+                  id={field.name}
+                  type="number"
+                  min={0}
+                  value={field.state.value ?? ''}
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                    field.handleChange(
+                      e.target.value === ''
+                        ? null
+                        : parseInt(e.target.value, 10)
+                    )
+                  }
+                  onBlur={field.handleBlur}
+                  placeholder="e.g. 3"
                 />
               </Field>
             )}
@@ -250,7 +321,7 @@ export function RamProductForm({
       >
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Confirm New RAM</AlertDialogTitle>
+            <AlertDialogTitle>Confirm New Motherboard</AlertDialogTitle>
             <AlertDialogDescription asChild>
               <div className="space-y-1 text-sm">
                 {pendingValues && (
@@ -269,18 +340,29 @@ export function RamProductForm({
                     </div>
                     <div className="flex gap-2">
                       <span className="text-muted-foreground w-32 shrink-0">
-                        Type / Speed
+                        Socket
                       </span>
-                      <span>
-                        {pendingValues.memoryType} {pendingValues.speedMHz} MHz
-                      </span>
+                      <span>{pendingValues.socketType}</span>
                     </div>
                     <div className="flex gap-2">
                       <span className="text-muted-foreground w-32 shrink-0">
-                        Capacity
+                        Chipset
+                      </span>
+                      <span>{pendingValues.chipset}</span>
+                    </div>
+                    <div className="flex gap-2">
+                      <span className="text-muted-foreground w-32 shrink-0">
+                        Form Factor
+                      </span>
+                      <span>{pendingValues.formFactor}</span>
+                    </div>
+                    <div className="flex gap-2">
+                      <span className="text-muted-foreground w-32 shrink-0">
+                        Memory
                       </span>
                       <span>
-                        {pendingValues.capacityGB} GB ({pendingValues.modules}x)
+                        {pendingValues.memoryType} · {pendingValues.memorySlots}{' '}
+                        slots · {pendingValues.maxMemoryGB} GB max
                       </span>
                     </div>
                     <div className="flex gap-2">
