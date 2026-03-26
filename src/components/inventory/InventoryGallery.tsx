@@ -119,12 +119,12 @@ export function InventoryGallery(): React.JSX.Element {
           placeholder="Search products..."
           value={filter}
           onChange={handleFilterChange}
-          className="max-w-sm flex-shrink-0"
+          className="max-w-sm shrink-0"
         />
 
         <div className="flex flex-col gap-3 sm:flex-row">
           <Select value={selectedCategory} onValueChange={handleCategoryChange}>
-            <SelectTrigger className="w-full sm:w-[180px]">
+            <SelectTrigger className="w-full sm:w-45">
               <SelectValue placeholder="Category" />
             </SelectTrigger>
             <SelectContent>
@@ -141,7 +141,7 @@ export function InventoryGallery(): React.JSX.Element {
             value={selectedManufacturer}
             onValueChange={handleManufacturerChange}
           >
-            <SelectTrigger className="w-full sm:w-[180px]">
+            <SelectTrigger className="w-full sm:w-45">
               <SelectValue placeholder="Manufacturer" />
             </SelectTrigger>
             <SelectContent>
@@ -155,7 +155,7 @@ export function InventoryGallery(): React.JSX.Element {
           </Select>
 
           <Select value={stockStatus} onValueChange={handleStockStatusChange}>
-            <SelectTrigger className="w-full sm:w-[180px]">
+            <SelectTrigger className="w-full sm:w-45">
               <SelectValue placeholder="Stock Status" />
             </SelectTrigger>
             <SelectContent>
