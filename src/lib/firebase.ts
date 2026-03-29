@@ -6,6 +6,7 @@ import {
   signInWithPopup,
   signOut,
 } from 'firebase/auth';
+import { getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -27,6 +28,9 @@ export const appCheck = initializeAppCheck(app, {
 // Setup Authentication Service
 export const auth = getAuth(app);
 const googleProvider = new GoogleAuthProvider();
+
+// Set up firestore
+export const db = getFirestore(app);
 
 export const signInWithGoogle = () => signInWithPopup(auth, googleProvider);
 export const signOutUser = () => signOut(auth);
