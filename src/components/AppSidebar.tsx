@@ -25,7 +25,7 @@ import { sidebarData } from '@/data/sidebarCategories';
 import { signInWithGoogle, signOutUser } from '@/lib/firebase';
 import { useAuth } from '@/hooks/useAuth';
 import { Link, useNavigate } from '@tanstack/react-router';
-import { GalleryVerticalEnd, LogInIcon, LogOutIcon } from 'lucide-react';
+import { LogInIcon, LogOutIcon, GpuIcon } from 'lucide-react';
 
 export function AppSidebar({
   ...props
@@ -42,13 +42,12 @@ export function AppSidebar({
     <Sidebar {...props}>
       <SidebarHeader>
         <div className="flex items-center gap-2">
-          <GalleryVerticalEnd className="size-4" />
+          <GpuIcon className="size-4" />
           Kaden's Computer Repair
         </div>
         <GlobalSearch />
       </SidebarHeader>
       <SidebarContent>
-        {/* We create a SidebarGroup for each parent. */}
         {sidebarData.navMain.map((sbGroup: SidebarData) => (
           <SidebarGroup key={sbGroup.title}>
             <SidebarGroupLabel>{sbGroup.title}</SidebarGroupLabel>
