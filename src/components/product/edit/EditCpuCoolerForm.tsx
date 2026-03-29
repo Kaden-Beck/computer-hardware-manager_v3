@@ -26,7 +26,7 @@ import {
   useCpuCoolerProductForm,
   type CpuCoolerFormValues,
 } from '@/hooks/form/product/edit/useEditCpuCoolerForm';
-import { manufacturerDetails } from '@/data/stub/manufacturerData';
+import { manufacturerDetails } from '@/_static_data/stub/manufacturerData';
 
 export function CpuCoolerProductEditForm({
   product,

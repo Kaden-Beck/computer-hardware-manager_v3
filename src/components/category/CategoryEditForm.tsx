@@ -23,7 +23,7 @@ import {
 } from '@/hooks/form/category/useEditCategoryForm';
 
 // Stub Data
-import { categoryDetails } from '@/data/stub/categoryData';
+import { categoryDetails } from '@/_static_data/stub/categoryData';
 
 // Props for pre-populating form
 interface CategoryEditFormProps {

@@ -1,9 +1,19 @@
 import { queryOptions } from '@tanstack/react-query';
-import { manufacturerDetails } from '@/data/stub/manufacturerData';
+import {
+  queryManufacturerById,
+  queryAllManufacturers,
+} from '@/db/queries/getManufacturers';
 
-// Placeholder until firestore implemented. Queries static stub data
 export const allManufacturersQueryOptions = queryOptions({
   queryKey: ['manufacturers'],
-  queryFn: () => Promise.resolve(manufacturerDetails),
-  staleTime: Infinity,
+  queryFn: queryAllManufacturers,
 });
+
+export const manufacturerByIdQueryOptions = (manufacturerId: string) =>
+  queryOptions({
+    queryKey: ['manufacturers', manufacturerId],
+    queryFn: () => queryManufacturerById(manufacturerId),
+  });
+
+
+

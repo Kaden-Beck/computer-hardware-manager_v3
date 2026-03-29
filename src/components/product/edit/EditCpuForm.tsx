@@ -20,7 +20,7 @@ import {
   useCpuProductForm,
   type CpuFormValues,
 } from '@/hooks/form/product/edit/useEditCpuForm';
-import { manufacturerDetails } from '@/data/stub/manufacturerData';
+import { manufacturerDetails } from '@/_static_data/stub/manufacturerData';
 
 export function CpuProductEditForm({
   product,

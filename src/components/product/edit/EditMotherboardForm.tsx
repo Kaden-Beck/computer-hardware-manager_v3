@@ -19,7 +19,7 @@ import {
   useMotherboardProductForm,
   type MotherboardFormValues,
 } from '@/hooks/form/product/edit/useEditMotherboardForm';
-import { manufacturerDetails } from '@/data/stub/manufacturerData';
+import { manufacturerDetails } from '@/_static_data/stub/manufacturerData';
 
 export function MotherboardProductEditForm({
   product,

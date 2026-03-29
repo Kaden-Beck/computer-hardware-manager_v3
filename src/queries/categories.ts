@@ -1,9 +1,23 @@
+import {
+  queryAllCategories,
+  queryCategoryById,
+  queryChildrenCategories,
+} from '@/db/queries/getCategories';
 import { queryOptions } from '@tanstack/react-query';
-import { categoryDetails } from '@/data/stub/categoryData';
 
-// Placeholder until firestore implemented. Queries static stub data
 export const allCategoriesQueryOptions = queryOptions({
   queryKey: ['categories'],
-  queryFn: () => Promise.resolve(categoryDetails),
-  staleTime: Infinity,
+  queryFn: queryAllCategories,
 });
+
+export const categoryByIdQueryOptions = (categoryId: string) =>
+  queryOptions({
+    queryKey: ['categories', categoryId],
+    queryFn: () => queryCategoryById(categoryId),
+  });
+
+export const childrenCategoriesOptions = (parentId: string) =>
+  queryOptions({
+    queryKey: ['categories', parentId],
+    queryFn: () => queryChildrenCategories(parentId),
+  });

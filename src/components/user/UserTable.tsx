@@ -44,7 +44,7 @@ import { ArrowUp, ArrowDown, ArrowUpDown } from 'lucide-react';
 
 // Types and Data
 import type { AppUser } from '@/schema/AppUser';
-import { userData as initialUserData } from '@/data/stub/userData';
+import { userData as initialUserData } from '@/_static_data/stub/userData';
 import { cn } from '@/lib/utils';
 
 function UserAvatar({ user }: { user: AppUser }): React.JSX.Element {

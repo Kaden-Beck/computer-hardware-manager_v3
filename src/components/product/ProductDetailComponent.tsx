@@ -2,9 +2,9 @@ import type React from 'react';
 import { useParams, Link, Outlet, useMatch } from '@tanstack/react-router';
 import { Button } from '@/components/ui/button';
 
-import { productDetails } from '@/data/stub/productData';
-import { manufacturerDetails } from '@/data/stub/manufacturerData';
-import { categoryDetails } from '@/data/stub/categoryData';
+import { productDetails } from '@/_static_data/stub/productData';
+import { manufacturerDetails } from '@/_static_data/stub/manufacturerData';
+import { categoryDetails } from '@/_static_data/stub/categoryData';
 import { cn } from '@/lib/utils';
 
 export default function ProductDetailComponent(): React.JSX.Element | null {

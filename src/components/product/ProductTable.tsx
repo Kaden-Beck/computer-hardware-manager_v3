@@ -42,9 +42,9 @@ import type React from 'react';
 import { useState } from 'react';
 
 // Types and Data
-import { productDetails } from '@/data/stub/productData';
-import { manufacturerDetails } from '@/data/stub/manufacturerData';
-import { categoryDetails } from '@/data/stub/categoryData';
+import { productDetails } from '@/_static_data/stub/productData';
+import { manufacturerDetails } from '@/_static_data/stub/manufacturerData';
+import { categoryDetails } from '@/_static_data/stub/categoryData';
 import type { Product } from '@/schema/Product';
 import ProductAddForm from './add/AddBaseProductForm';
 

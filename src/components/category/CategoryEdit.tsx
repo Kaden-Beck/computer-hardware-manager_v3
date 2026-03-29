@@ -2,7 +2,7 @@ import React from 'react';
 // Tanstack Imports
 import { useParams } from '@tanstack/react-router';
 // Stub Data
-import { categoryDetails } from '@/data/stub/categoryData';
+import { categoryDetails } from '@/_static_data/stub/categoryData';
 import CategoryEditForm from './CategoryEditForm';
 
 export default function CategoryEditComponent(): React.JSX.Element {

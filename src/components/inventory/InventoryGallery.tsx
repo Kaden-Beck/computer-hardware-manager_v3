@@ -18,9 +18,9 @@ import {
 } from '@/components/ui/select';
 import { cn } from '@/lib/utils';
 // Stub Data
-import { productDetails } from '@/data/stub/productData';
-import { categoryDetails } from '@/data/stub/categoryData';
-import { manufacturerDetails } from '@/data/stub/manufacturerData';
+import { productDetails } from '@/_static_data/stub/productData';
+import { categoryDetails } from '@/_static_data/stub/categoryData';
+import { manufacturerDetails } from '@/_static_data/stub/manufacturerData';
 
 // Need to make this dynamic or an option
 const PAGE_SIZE = 12;

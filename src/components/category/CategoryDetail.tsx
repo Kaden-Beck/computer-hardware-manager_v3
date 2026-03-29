@@ -13,8 +13,8 @@ import { cn } from '@/lib/utils';
 // Tanstack Imports
 import { useParams, Link, Outlet, useMatch } from '@tanstack/react-router';
 // Stub data imports
-import { categoryDetails } from '@/data/stub/categoryData';
-import { productDetails } from '@/data/stub/productData';
+import { categoryDetails } from '@/_static_data/stub/categoryData';
+import { productDetails } from '@/_static_data/stub/productData';
 
 export default function CategoryDetailComponent(): React.JSX.Element {
   // Get category by params

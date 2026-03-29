@@ -17,9 +17,9 @@ import {
   SidebarTrigger,
 } from '@/components/ui/sidebar';
 
-import { manufacturerDetails } from '@/data/stub/manufacturerData';
-import { productDetails } from '@/data/stub/productData';
-import { categoryDetails } from '@/data/stub/categoryData';
+import { manufacturerDetails } from '@/_static_data/stub/manufacturerData';
+import { productDetails } from '@/_static_data/stub/productData';
+import { categoryDetails } from '@/_static_data/stub/categoryData';
 
 type Crumb = {
   label: string;

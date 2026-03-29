@@ -1,9 +1,13 @@
 import { queryOptions } from '@tanstack/react-query';
-import { productDetails } from '@/data/stub/productData';
+import { queryAllProducts, queryProductById } from '@/db/queries/getProducts';
 
-// Placeholder until firestore implemented. Queries static stub data
 export const allProductsQueryOptions = queryOptions({
   queryKey: ['products'],
-  queryFn: () => Promise.resolve(productDetails),
-  staleTime: Infinity,
+  queryFn: queryAllProducts,
 });
+
+export const productByIdQueryOptions = (productId: string) =>
+  queryOptions({
+    queryKey: ['products', productId, 'children'],
+    queryFn: () => queryProductById(productId),
+  });

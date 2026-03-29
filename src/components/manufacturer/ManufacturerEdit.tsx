@@ -2,7 +2,7 @@ import React from 'react';
 // Tanstack Imports
 import { useParams } from '@tanstack/react-router';
 // Stub Data
-import { manufacturerDetails } from '@/data/stub/manufacturerData';
+import { manufacturerDetails } from '@/_static_data/stub/manufacturerData';
 import ManufacturerEditForm from './ManufacturerEditForm';
 
 export default function ManufacturerEditComponent(): React.JSX.Element {

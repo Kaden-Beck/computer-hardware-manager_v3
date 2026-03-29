@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/select';
 import { Field } from '@/components/ui/field';
 import { LabelWithTooltip } from '@/components/ui/label-with-tooltip';
-import { categoryDetails } from '@/data/stub/categoryData';
+import { categoryDetails } from '@/_static_data/stub/categoryData';
 import { getProductSpecType } from '@/lib/productFormMap';
 
 interface ProductCategoryStepProps {

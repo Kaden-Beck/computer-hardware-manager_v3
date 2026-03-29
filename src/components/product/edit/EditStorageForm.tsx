@@ -26,7 +26,7 @@ import {
   useStorageProductForm,
   type StorageFormValues,
 } from '@/hooks/form/product/edit/useEditStorageForm';
-import { manufacturerDetails } from '@/data/stub/manufacturerData';
+import { manufacturerDetails } from '@/_static_data/stub/manufacturerData';
 
 export function StorageProductEditForm({
   product,

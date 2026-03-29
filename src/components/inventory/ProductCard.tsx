@@ -7,7 +7,7 @@ import {
 
 import { Link } from '@tanstack/react-router';
 import { Button } from '@/components/ui/button';
-import { categoryDetails } from '@/data/stub/categoryData';
+import { categoryDetails } from '@/_static_data/stub/categoryData';
 
 // Update this when I switch to Zod
 import type { Product } from '@/schema/Product';

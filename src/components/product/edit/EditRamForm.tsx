@@ -19,7 +19,7 @@ import {
   useRamProductForm,
   type RamFormValues,
 } from '@/hooks/form/product/edit/useEditRamForm';
-import { manufacturerDetails } from '@/data/stub/manufacturerData';
+import { manufacturerDetails } from '@/_static_data/stub/manufacturerData';
 
 export function RamProductEditForm({
   product,

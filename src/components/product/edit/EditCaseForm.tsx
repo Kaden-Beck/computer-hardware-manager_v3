@@ -19,7 +19,7 @@ import {
   useCaseProductForm,
   type CaseFormValues,
 } from '@/hooks/form/product/edit/useEditCaseForm';
-import { manufacturerDetails } from '@/data/stub/manufacturerData';
+import { manufacturerDetails } from '@/_static_data/stub/manufacturerData';
 
 export function CaseProductEditForm({
   product,

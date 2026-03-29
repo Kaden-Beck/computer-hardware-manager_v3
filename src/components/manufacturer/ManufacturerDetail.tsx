@@ -13,8 +13,8 @@ import {
 import { useParams, Link, Outlet, useMatch } from '@tanstack/react-router';
 import { cn } from '@/lib/utils';
 // Stub Data
-import { manufacturerDetails } from '@/data/stub/manufacturerData';
-import { productDetails } from '@/data/stub/productData';
+import { manufacturerDetails } from '@/_static_data/stub/manufacturerData';
+import { productDetails } from '@/_static_data/stub/productData';
 
 export default function ManufacturerDetailComponent(): React.JSX.Element {
   // Get manufacturer by ID passed in params

@@ -21,7 +21,7 @@ interface SidebarData {
   items: Array<{ title: string; url: string }>;
 }
 
-import { sidebarData } from '@/data/sidebarCategories';
+import { sidebarData } from '@/_static_data/sidebarCategories';
 import { signInWithGoogle, signOutUser } from '@/lib/firebase';
 import { useAuth } from '@/hooks/useAuth';
 import { Link, useNavigate } from '@tanstack/react-router';

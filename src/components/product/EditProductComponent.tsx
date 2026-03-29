@@ -1,6 +1,6 @@
 import React from 'react';
 import { useParams } from '@tanstack/react-router';
-import { productDetails } from '@/data/stub/productData';
+import { productDetails } from '@/_static_data/stub/productData';
 import ProductEditForm from './edit/EditBaseProductForm';
 import type { Product } from '@/schema/Product';
 

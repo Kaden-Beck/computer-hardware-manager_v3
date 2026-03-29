@@ -26,7 +26,7 @@ import {
   usePsuProductForm,
   type PsuFormValues,
 } from '@/hooks/form/product/edit/useEditPsuForm';
-import { manufacturerDetails } from '@/data/stub/manufacturerData';
+import { manufacturerDetails } from '@/_static_data/stub/manufacturerData';
 
 export function PsuProductEditForm({
   product,

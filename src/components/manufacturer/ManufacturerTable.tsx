@@ -42,7 +42,7 @@ import type React from 'react';
 import { useState } from 'react';
 
 // Types and Data
-import { manufacturerDetails } from '@/data/stub/manufacturerData';
+import { manufacturerDetails } from '@/_static_data/stub/manufacturerData';
 import type { Manufacturer } from '@/schema/Manufacturer';
 import ManufacturerAddForm from './ManufacturerAddForm';
 

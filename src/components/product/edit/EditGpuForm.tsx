@@ -19,7 +19,7 @@ import {
   useGpuProductForm,
   type GpuFormValues,
 } from '@/hooks/form/product/edit/useEditGpuForm';
-import { manufacturerDetails } from '@/data/stub/manufacturerData';
+import { manufacturerDetails } from '@/_static_data/stub/manufacturerData';
 
 export function GpuProductEditForm({
   product,

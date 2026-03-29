@@ -31,7 +31,7 @@ import {
 import type { Category } from '@/schema/Category';
 
 // Stub Data
-import { categoryDetails } from '@/data/stub/categoryData';
+import { categoryDetails } from '@/_static_data/stub/categoryData';
 
 interface CategoryAddFormProps {
   onSuccess: () => void;

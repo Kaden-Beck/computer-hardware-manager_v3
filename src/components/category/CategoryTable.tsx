@@ -41,7 +41,7 @@ import { ArrowUpDown, ArrowUp, ArrowDown, Plus } from 'lucide-react';
 import { Link } from '@tanstack/react-router';
 
 // Types and Data
-import { categoryDetails } from '@/data/stub/categoryData';
+import { categoryDetails } from '@/_static_data/stub/categoryData';
 import type { Category } from '@/schema/Category';
 import CategoryAddForm from './CategoryAddForm';
 
