@@ -9,8 +9,8 @@ import {
 import { db } from '@/lib/firebase';
 import type { Category } from '@/schema/Category';
 
-export async function queryCategoryById(productId: string): Promise<Category | null> {
-  const productRef = doc(db, 'categories', productId);
+export async function queryCategoryById(categoryId: string): Promise<Category | null> {
+  const productRef = doc(db, 'categories', categoryId);
   const snapshot = await getDoc(productRef);
 
   if (!snapshot.exists()) return null;

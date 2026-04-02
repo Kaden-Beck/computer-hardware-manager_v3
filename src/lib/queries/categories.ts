@@ -2,7 +2,7 @@ import {
   queryAllCategories,
   queryCategoryById,
   queryChildrenCategories,
-} from '@/db/queries/getCategories';
+} from '@/db/query/getCategories';
 import { queryOptions } from '@tanstack/react-query';
 
 export const allCategoriesQueryOptions = queryOptions({
@@ -18,6 +18,6 @@ export const categoryByIdQueryOptions = (categoryId: string) =>
 
 export const childrenCategoriesOptions = (parentId: string) =>
   queryOptions({
-    queryKey: ['categories', parentId],
+    queryKey: ['categories', parentId, 'children'],
     queryFn: () => queryChildrenCategories(parentId),
   });

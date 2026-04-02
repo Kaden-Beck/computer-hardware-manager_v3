@@ -2,7 +2,9 @@ import { collection, doc, getDoc, getDocs } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import type { Product } from '@/schema/Product';
 
-export async function queryProductById(productId: string): Promise<Product | null> {
+export async function queryProductById(
+  productId: string
+): Promise<Product | null> {
   const productRef = doc(db, 'products', productId);
   const snapshot = await getDoc(productRef);
 

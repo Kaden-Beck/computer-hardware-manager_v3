@@ -1,5 +1,5 @@
 import { queryOptions } from '@tanstack/react-query';
-import { queryAllProducts, queryProductById } from '@/db/queries/getProducts';
+import { queryAllProducts, queryProductById } from '@/db/query/getProducts';
 
 export const allProductsQueryOptions = queryOptions({
   queryKey: ['products'],
@@ -8,6 +8,6 @@ export const allProductsQueryOptions = queryOptions({
 
 export const productByIdQueryOptions = (productId: string) =>
   queryOptions({
-    queryKey: ['products', productId, 'children'],
+    queryKey: ['products', productId],
     queryFn: () => queryProductById(productId),
   });

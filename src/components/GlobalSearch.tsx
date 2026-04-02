@@ -21,9 +21,9 @@ import { SidebarGroup, SidebarGroupContent } from '@/components/ui/sidebar';
 // Tanstack Imports
 import { useNavigate } from '@tanstack/react-router';
 import { useQuery } from '@tanstack/react-query';
-import { allProductsQueryOptions } from '@/queries/products';
-import { allCategoriesQueryOptions } from '@/queries/categories';
-import { allManufacturersQueryOptions } from '@/queries/manufacturers';
+import { allProductsQueryOptions } from '@/lib/queries/products';
+import { allCategoriesQueryOptions } from '@/lib/queries/categories';
+import { allManufacturersQueryOptions } from '@/lib/queries/manufacturers';
 
 export function GlobalSearch(): React.JSX.Element {
   // Handle search bar 'open' state
