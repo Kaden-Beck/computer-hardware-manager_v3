@@ -13,7 +13,10 @@ import { cn } from '@/lib/utils';
 // Tanstack Imports
 import { useParams, Link, Outlet, useMatch } from '@tanstack/react-router';
 import { useQuery } from '@tanstack/react-query';
-import { categoryByIdQueryOptions, allCategoriesQueryOptions } from '@/lib/queries/categories';
+import {
+  categoryByIdQueryOptions,
+  allCategoriesQueryOptions,
+} from '@/lib/queries/categories';
 import { allProductsQueryOptions } from '@/lib/queries/products';
 
 export default function CategoryDetailComponent(): React.JSX.Element {

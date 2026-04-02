@@ -12,5 +12,7 @@ export async function queryUserById(userId: string): Promise<AppUser | null> {
 
 export async function queryAllUsers(): Promise<AppUser[]> {
   const snapshot = await getDocs(collection(db, 'users'));
-  return snapshot.docs.map((doc) => ({ uuid: doc.id, ...doc.data() }) as AppUser);
+  return snapshot.docs.map(
+    (doc) => ({ uuid: doc.id, ...doc.data() }) as AppUser
+  );
 }

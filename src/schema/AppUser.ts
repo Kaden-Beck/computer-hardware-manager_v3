@@ -1,4 +1,3 @@
-
 export interface AppUser {
   uuid: string;
   displayName: string;

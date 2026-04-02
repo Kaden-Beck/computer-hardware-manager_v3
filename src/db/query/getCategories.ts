@@ -9,7 +9,9 @@ import {
 import { db } from '@/lib/firebase';
 import type { Category } from '@/schema/Category';
 
-export async function queryCategoryById(categoryId: string): Promise<Category | null> {
+export async function queryCategoryById(
+  categoryId: string
+): Promise<Category | null> {
   const productRef = doc(db, 'categories', categoryId);
   const snapshot = await getDoc(productRef);
 
@@ -19,15 +21,21 @@ export async function queryCategoryById(categoryId: string): Promise<Category | 
 
 export async function queryAllCategories(): Promise<Category[]> {
   const snapshot = await getDocs(collection(db, 'categories'));
-  return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }) as Category);
+  return snapshot.docs.map(
+    (doc) => ({ id: doc.id, ...doc.data() }) as Category
+  );
 }
 
-export async function queryChildrenCategories(parentId: string): Promise<Category[]> {
+export async function queryChildrenCategories(
+  parentId: string
+): Promise<Category[]> {
   const childrenQuery = query(
     collection(db, 'categories'),
     where('parent', '==', parentId)
   );
 
   const snapshot = await getDocs(childrenQuery);
-  return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }) as Category);
+  return snapshot.docs.map(
+    (doc) => ({ id: doc.id, ...doc.data() }) as Category
+  );
 }
