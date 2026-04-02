@@ -14,6 +14,3 @@ export const manufacturerByIdQueryOptions = (manufacturerId: string) =>
     queryKey: ['manufacturers', manufacturerId],
     queryFn: () => queryManufacturerById(manufacturerId),
   });
-
-
-
