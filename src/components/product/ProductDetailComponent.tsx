@@ -1,27 +1,28 @@
 import type React from 'react';
 import { useParams, Link, Outlet, useMatch } from '@tanstack/react-router';
 import { Button } from '@/components/ui/button';
-
-import { productDetails } from '@/_static_data/stub/productData';
-import { manufacturerDetails } from '@/_static_data/stub/manufacturerData';
-import { categoryDetails } from '@/_static_data/stub/categoryData';
+import { useQuery } from '@tanstack/react-query';
+import { productByIdQueryOptions } from '@/lib/queries/products';
+import { manufacturerByIdQueryOptions } from '@/lib/queries/manufacturers';
+import { categoryByIdQueryOptions } from '@/lib/queries/categories';
 import { cn } from '@/lib/utils';
 
 export default function ProductDetailComponent(): React.JSX.Element | null {
   const { prodId } = useParams({ from: '/dashboard/products/$prodId' });
-  const product = productDetails.find((p) => p.id === prodId);
-  // get editing status from url
+  const { data: product } = useQuery(productByIdQueryOptions(prodId));
   const isEditing = !!useMatch({
     from: '/dashboard/products/$prodId/edit',
     shouldThrow: false,
   });
 
-  if (!product) return <div>Product not found.</div>;
-
-  const manufacturer = manufacturerDetails.find(
-    (m) => m.id === product.manufacturerId
+  const { data: manufacturer } = useQuery(
+    manufacturerByIdQueryOptions(product?.manufacturerId ?? '')
   );
-  const category = categoryDetails.find((c) => c.id === product.categoryId);
+  const { data: category } = useQuery(
+    categoryByIdQueryOptions(product?.categoryId ?? '')
+  );
+
+  if (!product) return <div>Product not found.</div>;
 
   const specs = [
     `SKU: ${product.sku}`,

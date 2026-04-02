@@ -19,7 +19,8 @@ import {
   useMotherboardProductForm,
   type MotherboardFormValues,
 } from '@/hooks/form/product/edit/useEditMotherboardForm';
-import { manufacturerDetails } from '@/_static_data/stub/manufacturerData';
+import { useQuery } from '@tanstack/react-query';
+import { allManufacturersQueryOptions } from '@/lib/queries/manufacturers';
 
 export function MotherboardProductEditForm({
   product,
@@ -29,6 +30,7 @@ export function MotherboardProductEditForm({
   const [pendingValues, setPendingValues] =
     useState<MotherboardFormValues | null>(null);
 
+  const { data: manufacturers = [] } = useQuery(allManufacturersQueryOptions);
   const form = useMotherboardProductForm({
     categoryId: product.categoryId,
     defaultValues: product,
@@ -63,7 +65,7 @@ export function MotherboardProductEditForm({
         }}
         className="flex flex-col gap-5 mt-6 px-4"
       >
-        <ProductBaseFields form={form} manufacturers={manufacturerDetails} />
+        <ProductBaseFields form={form} manufacturers={manufacturers} />
 
         <FieldGroup>
           <form.Field name="socketType">

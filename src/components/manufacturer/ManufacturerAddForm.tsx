@@ -21,17 +21,17 @@ import {
   useAddManufacturerForm,
   type ManufacturerFormValues,
 } from '@/hooks/form/manufacturer/useAddManufacturerForm';
-import type { Manufacturer } from '@/schema/Manufacturer';
+import { addManufacturer } from '@/db/mutation/addManufacturer';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface ManufacturerAddFormProps {
   onSuccess: () => void;
-  onAdd: (item: Manufacturer) => void;
 }
 
 export default function ManufacturerAddForm({
   onSuccess,
-  onAdd,
 }: ManufacturerAddFormProps): React.JSX.Element {
+  const queryClient = useQueryClient();
   const [pendingValues, setPendingValues] =
     useState<ManufacturerFormValues | null>(null);
 
@@ -41,9 +41,10 @@ export default function ManufacturerAddForm({
     },
   });
 
-  function handleConfirm() {
+  async function handleConfirm() {
     if (pendingValues) {
-      onAdd({ id: crypto.randomUUID(), ...pendingValues });
+      await addManufacturer(pendingValues);
+      await queryClient.invalidateQueries({ queryKey: ['manufacturers'] });
     }
     setPendingValues(null);
     onSuccess();

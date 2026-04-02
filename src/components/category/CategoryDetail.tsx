@@ -12,40 +12,33 @@ import {
 import { cn } from '@/lib/utils';
 // Tanstack Imports
 import { useParams, Link, Outlet, useMatch } from '@tanstack/react-router';
-// Stub data imports
-import { categoryDetails } from '@/_static_data/stub/categoryData';
-import { productDetails } from '@/_static_data/stub/productData';
+import { useQuery } from '@tanstack/react-query';
+import { categoryByIdQueryOptions, allCategoriesQueryOptions } from '@/lib/queries/categories';
+import { allProductsQueryOptions } from '@/lib/queries/products';
 
 export default function CategoryDetailComponent(): React.JSX.Element {
-  // Get category by params
   const { catId } = useParams({ from: '/dashboard/categories/$catId' });
-  const category = categoryDetails.find((c) => c.id === catId);
+  const { data: category } = useQuery(categoryByIdQueryOptions(catId));
+  const { data: allCategories = [] } = useQuery(allCategoriesQueryOptions);
+  const { data: allProducts = [] } = useQuery(allProductsQueryOptions);
 
-  // Get editing state using useMatch Hook
   const isEditing = !!useMatch({
     from: '/dashboard/categories/$catId/edit',
     shouldThrow: false,
   });
 
-  // Handle no category found
   if (!category) return <div>Category not found.</div>;
 
-  // Get parent category if there is a parent else null
   const parent = category.parentId
-    ? categoryDetails.find((c) => c.id === category.parentId)
+    ? allCategories.find((c) => c.id === category.parentId)
     : null;
 
-  // Collect this category's and children ids (for carousel) and create a new Set
-  const subcategoryIds = categoryDetails
+  const subcategoryIds = allCategories
     .filter((c) => c.parentId === catId)
     .map((c) => c.id);
   const carouselCatIds = new Set([catId, ...subcategoryIds]);
-  // (lazy) Get products with ids that exist in Set
-  const products = productDetails.filter((p) =>
-    carouselCatIds.has(p.categoryId)
-  );
+  const products = allProducts.filter((p) => carouselCatIds.has(p.categoryId));
 
-  // Format specs into an array
   const specs = [
     `ID: ${category.id}`,
     category.description,

@@ -1,4 +1,5 @@
 import type React from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { AppSidebar } from './AppSidebar';
 import { Link, Outlet, useRouterState } from '@tanstack/react-router';
 
@@ -16,10 +17,12 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from '@/components/ui/sidebar';
-
-import { manufacturerDetails } from '@/_static_data/stub/manufacturerData';
-import { productDetails } from '@/_static_data/stub/productData';
-import { categoryDetails } from '@/_static_data/stub/categoryData';
+import { allManufacturersQueryOptions } from '@/lib/queries/manufacturers';
+import { allProductsQueryOptions } from '@/lib/queries/products';
+import { allCategoriesQueryOptions } from '@/lib/queries/categories';
+import type { Manufacturer } from '@/schema/Manufacturer';
+import type { Product } from '@/schema/Product';
+import type { Category } from '@/schema/Category';
 
 type Crumb = {
   label: string;
@@ -34,7 +37,12 @@ const SECTIONS: Record<string, { label: string; href: string }> = {
   users: { label: 'User Management', href: '/dashboard/users' },
 };
 
-function buildCrumbs(pathname: string): Crumb[] {
+function buildCrumbs(
+  pathname: string,
+  manufacturers: Manufacturer[],
+  products: Product[],
+  categories: Category[]
+): Crumb[] {
   const segments = pathname
     .replace(/^\/dashboard\/?/, '')
     .split('/')
@@ -53,16 +61,16 @@ function buildCrumbs(pathname: string): Crumb[] {
     { label: sectionInfo.label, href: sectionInfo.href },
   ];
 
-  // Resolve entity name from stub data
+  // Resolve entity name from data
   let entityName = id;
   const entityHref = `${sectionInfo.href}/${id}`;
 
   if (section === 'manufacturers') {
-    entityName = manufacturerDetails.find((m) => m.id === id)?.name ?? id;
+    entityName = manufacturers.find((m) => m.id === id)?.name ?? id;
   } else if (section === 'products') {
-    entityName = productDetails.find((p) => p.id === id)?.name ?? id;
+    entityName = products.find((p) => p.id === id)?.name ?? id;
   } else if (section === 'categories') {
-    entityName = categoryDetails.find((c) => c.id === id)?.name ?? id;
+    entityName = categories.find((c) => c.id === id)?.name ?? id;
   }
 
   // Detail page: /dashboard/manufacturers/$id
@@ -79,7 +87,18 @@ function buildCrumbs(pathname: string): Crumb[] {
 
 export default function DashboardComponent(): React.JSX.Element {
   const { location } = useRouterState();
-  const crumbs = buildCrumbs(location.pathname);
+
+  // Fetch data for breadcrumb resolution
+  const { data: manufacturers = [] } = useQuery(allManufacturersQueryOptions);
+  const { data: products = [] } = useQuery(allProductsQueryOptions);
+  const { data: categories = [] } = useQuery(allCategoriesQueryOptions);
+
+  const crumbs = buildCrumbs(
+    location.pathname,
+    manufacturers,
+    products,
+    categories
+  );
 
   return (
     <SidebarProvider>

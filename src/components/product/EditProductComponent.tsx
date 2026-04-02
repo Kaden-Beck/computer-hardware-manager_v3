@@ -1,12 +1,13 @@
 import React from 'react';
 import { useParams } from '@tanstack/react-router';
-import { productDetails } from '@/_static_data/stub/productData';
+import { useQuery } from '@tanstack/react-query';
+import { productByIdQueryOptions } from '@/lib/queries/products';
 import ProductEditForm from './edit/EditBaseProductForm';
 import type { Product } from '@/schema/Product';
 
 export default function ProductEditComponent(): React.JSX.Element {
   const { prodId } = useParams({ from: '/dashboard/products/$prodId/edit' });
-  const product = productDetails.find((p) => p.id === prodId);
+  const { data: product } = useQuery(productByIdQueryOptions(prodId));
 
   if (!product) return <div>Product not found.</div>;
 

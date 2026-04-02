@@ -26,7 +26,8 @@ import {
   useAddCpuCoolerForm,
   type CpuCoolerFormValues,
 } from '@/hooks/form/product/add/useAddCpuCoolerForm';
-import { manufacturerDetails } from '@/_static_data/stub/manufacturerData';
+import { useQuery } from '@tanstack/react-query';
+import { allManufacturersQueryOptions } from '@/lib/queries/manufacturers';
 import { ArrowLeft } from 'lucide-react';
 
 export function CpuCoolerProductForm({
@@ -37,6 +38,7 @@ export function CpuCoolerProductForm({
   const [pendingValues, setPendingValues] =
     useState<CpuCoolerFormValues | null>(null);
 
+  const { data: manufacturers = [] } = useQuery(allManufacturersQueryOptions);
   const form = useAddCpuCoolerForm({
     onSubmit: async (values) => {
       setPendingValues(values);
@@ -79,7 +81,7 @@ export function CpuCoolerProductForm({
         }}
         className="flex flex-col gap-5 mt-6 px-4"
       >
-        <ProductBaseFields form={form} manufacturers={manufacturerDetails} />
+        <ProductBaseFields form={form} manufacturers={manufacturers} />
 
         <FieldGroup>
           <form.Field name="coolerType">

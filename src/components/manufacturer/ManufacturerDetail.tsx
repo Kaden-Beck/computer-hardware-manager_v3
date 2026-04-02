@@ -11,27 +11,24 @@ import {
 } from '@/components/ui/carousel';
 // Tanstack Imports
 import { useParams, Link, Outlet, useMatch } from '@tanstack/react-router';
+import { useQuery } from '@tanstack/react-query';
 import { cn } from '@/lib/utils';
-// Stub Data
-import { manufacturerDetails } from '@/_static_data/stub/manufacturerData';
-import { productDetails } from '@/_static_data/stub/productData';
+import { manufacturerByIdQueryOptions } from '@/lib/queries/manufacturers';
+import { allProductsQueryOptions } from '@/lib/queries/products';
 
 export default function ManufacturerDetailComponent(): React.JSX.Element {
-  // Get manufacturer by ID passed in params
   const { manId } = useParams({ from: '/dashboard/manufacturers/$manId' });
-  const manufacturer = manufacturerDetails.find((m) => m.id === manId);
+  const { data: manufacturer } = useQuery(manufacturerByIdQueryOptions(manId));
+  const { data: allProducts = [] } = useQuery(allProductsQueryOptions);
 
-  // Get editing state using React Router useMatch Hook
   const isEditing = !!useMatch({
     from: '/dashboard/manufacturers/$manId/edit',
     shouldThrow: false,
   });
 
-  // Catch if no manufacturer at route
   if (!manufacturer) return <div>Manufacturer not found.</div>;
 
-  // Get products produced by manufacturer for carousel
-  const products = productDetails.filter((p) => p.manufacturerId === manId);
+  const products = allProducts.filter((p) => p.manufacturerId === manId);
   const specs = [`ID: ${manufacturer.id}`, manufacturer.description];
 
   return (

@@ -41,10 +41,11 @@ import {
   type SortingState,
 } from '@tanstack/react-table';
 import { ArrowUp, ArrowDown, ArrowUpDown } from 'lucide-react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 // Types and Data
 import type { AppUser } from '@/schema/AppUser';
-import { userData as initialUserData } from '@/_static_data/stub/userData';
+import { allUsersQueryOptions } from '@/lib/queries/user';
 import { cn } from '@/lib/utils';
 
 function UserAvatar({ user }: { user: AppUser }): React.JSX.Element {
@@ -215,7 +216,8 @@ function buildColumns(
 
 export default function UserTable(): React.JSX.Element {
   'use no memo';
-  const [data, setData] = React.useState<AppUser[]>(initialUserData);
+  const { data = [] } = useQuery(allUsersQueryOptions);
+  const queryClient = useQueryClient();
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [globalFilter, setGlobalFilter] = React.useState('');
   const [pendingUser, setPendingUser] = React.useState<AppUser | null>(null);
@@ -235,12 +237,14 @@ export default function UserTable(): React.JSX.Element {
 
   function handleConfirm(): void {
     if (!pendingUser) return;
-    setData((prev) =>
-      prev.map((u) =>
-        u.uuid === pendingUser.uuid
-          ? { ...u, revoked: dialogAction === 'revoke' }
-          : u
-      )
+    queryClient.setQueryData(
+      allUsersQueryOptions.queryKey,
+      (old: AppUser[] = []) =>
+        old.map((u) =>
+          u.uuid === pendingUser.uuid
+            ? { ...u, revoked: dialogAction === 'revoke' }
+            : u
+        )
     );
     setPendingUser(null);
   }

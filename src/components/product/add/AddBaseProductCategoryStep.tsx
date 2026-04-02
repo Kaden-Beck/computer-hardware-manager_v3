@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import {
   Select,
@@ -11,8 +12,8 @@ import {
 } from '@/components/ui/select';
 import { Field } from '@/components/ui/field';
 import { LabelWithTooltip } from '@/components/ui/label-with-tooltip';
-import { categoryDetails } from '@/_static_data/stub/categoryData';
 import { getProductSpecType } from '@/lib/productFormMap';
+import { allCategoriesQueryOptions } from '@/lib/queries/categories';
 
 interface ProductCategoryStepProps {
   onNext: (categoryId: string) => void;
@@ -22,9 +23,10 @@ export function ProductCategoryStep({
   onNext,
 }: ProductCategoryStepProps): React.JSX.Element {
   const [selectedCategoryId, setSelectedCategoryId] = useState('');
+  const { data: categories = [] } = useQuery(allCategoriesQueryOptions);
 
-  const parentCategories = categoryDetails.filter((c) => c.isParent);
-  const childCategories = categoryDetails.filter((c) => !c.isParent);
+  const parentCategories = categories.filter((c) => c.isParent);
+  const childCategories = categories.filter((c) => !c.isParent);
 
   // Only allow selecting categories that have a known spec form
   const isSelectable = (id: string) => !!getProductSpecType(id);

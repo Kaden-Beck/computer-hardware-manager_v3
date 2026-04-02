@@ -39,83 +39,84 @@ import {
 import { ArrowUpDown, ArrowUp, ArrowDown, Plus } from 'lucide-react';
 // TanStack Router Import for Link Element
 import { Link } from '@tanstack/react-router';
+import { useQuery } from '@tanstack/react-query';
 
 // Types and Data
-import { categoryDetails } from '@/_static_data/stub/categoryData';
 import type { Category } from '@/schema/Category';
+import { allCategoriesQueryOptions } from '@/lib/queries/categories';
 import CategoryAddForm from './CategoryAddForm';
 
 // Table Helpers
 const columnHelper = createColumnHelper<Category>();
 
-const columns = [
-  columnHelper.accessor('id', {
-    header: ({ column }) => (
-      <button
-        className="flex items-center gap-1 hover:text-foreground"
-        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-      >
-        ID
-        {column.getIsSorted() === 'asc' ? (
-          <ArrowUp className="h-3 w-3" />
-        ) : column.getIsSorted() === 'desc' ? (
-          <ArrowDown className="h-3 w-3" />
-        ) : (
-          <ArrowUpDown className="h-3 w-3 opacity-50" />
-        )}
-      </button>
-    ),
-    cell: (info) => (
-      <Link
-        to="/dashboard/categories/$catId"
-        params={{ catId: info.row.original.id }}
-        className="underline hover:text-primary"
-      >
-        {info.getValue()}
-      </Link>
-    ),
-  }),
-  columnHelper.accessor('name', {
-    header: ({ column }) => (
-      <button
-        className="flex items-center gap-1 hover:text-foreground"
-        onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
-      >
-        Name
-        {column.getIsSorted() === 'asc' ? (
-          <ArrowUp className="h-3 w-3" />
-        ) : column.getIsSorted() === 'desc' ? (
-          <ArrowDown className="h-3 w-3" />
-        ) : (
-          <ArrowUpDown className="h-3 w-3 opacity-50" />
-        )}
-      </button>
-    ),
-    cell: (info) => (
-      <Link
-        to="/dashboard/categories/$catId"
-        params={{ catId: info.row.original.id }}
-        className="underline hover:text-primary"
-      >
-        {info.getValue()}
-      </Link>
-    ),
-  }),
-  columnHelper.accessor('description', {
-    header: 'Description',
-    cell: (info) => info.getValue(),
-  }),
-  columnHelper.accessor('isParent', {
-    header: 'Parent',
-    cell: (info) => (info.getValue() ? 'Yes' : 'No'),
-  }),
-  columnHelper.accessor('parentId', {
-    header: 'Parent Category',
-    cell: (info) => {
-      const parentId = info.getValue();
-      if (!parentId) return '—';
-      else {
-        const parent = categoryDetails.find((c) => c.id === parentId);
+function buildColumns(categories: Category[]) {
+  return [
+    columnHelper.accessor('id', {
+      header: ({ column }) => (
+        <button
+          className="flex items-center gap-1 hover:text-foreground"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          ID
+          {column.getIsSorted() === 'asc' ? (
+            <ArrowUp className="h-3 w-3" />
+          ) : column.getIsSorted() === 'desc' ? (
+            <ArrowDown className="h-3 w-3" />
+          ) : (
+            <ArrowUpDown className="h-3 w-3 opacity-50" />
+          )}
+        </button>
+      ),
+      cell: (info) => (
+        <Link
+          to="/dashboard/categories/$catId"
+          params={{ catId: info.row.original.id }}
+          className="underline hover:text-primary"
+        >
+          {info.getValue()}
+        </Link>
+      ),
+    }),
+    columnHelper.accessor('name', {
+      header: ({ column }) => (
+        <button
+          className="flex items-center gap-1 hover:text-foreground"
+          onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
+        >
+          Name
+          {column.getIsSorted() === 'asc' ? (
+            <ArrowUp className="h-3 w-3" />
+          ) : column.getIsSorted() === 'desc' ? (
+            <ArrowDown className="h-3 w-3" />
+          ) : (
+            <ArrowUpDown className="h-3 w-3 opacity-50" />
+          )}
+        </button>
+      ),
+      cell: (info) => (
+        <Link
+          to="/dashboard/categories/$catId"
+          params={{ catId: info.row.original.id }}
+          className="underline hover:text-primary"
+        >
+          {info.getValue()}
+        </Link>
+      ),
+    }),
+    columnHelper.accessor('description', {
+      header: 'Description',
+      cell: (info) => info.getValue(),
+    }),
+    columnHelper.accessor('isParent', {
+      header: 'Parent',
+      cell: (info) => (info.getValue() ? 'Yes' : 'No'),
+    }),
+    columnHelper.accessor('parentId', {
+      header: 'Parent Category',
+      cell: (info) => {
+        const parentId = info.getValue();
+        if (!parentId) return '—';
+        const parent = categories.find((c) => c.id === parentId);
         return (
           <Link
             to="/dashboard/categories/$catId"
@@ -125,32 +126,33 @@ const columns = [
             {parent?.name ?? 'orphan'}
           </Link>
         );
-        // parent?.name ?? parentId;
-      }
-    },
-  }),
-  columnHelper.display({
-    id: 'actions',
-    header: 'Actions',
-    cell: (info) => (
-      <Button variant="outline" size="sm" asChild>
-        <Link
-          to="/dashboard/categories/$catId/edit"
-          params={{ catId: info.row.original.id }}
-        >
-          Edit
-        </Link>
-      </Button>
-    ),
-  }),
-];
+      },
+    }),
+    columnHelper.display({
+      id: 'actions',
+      header: 'Actions',
+      cell: (info) => (
+        <Button variant="outline" size="sm" asChild>
+          <Link
+            to="/dashboard/categories/$catId/edit"
+            params={{ catId: info.row.original.id }}
+          >
+            Edit
+          </Link>
+        </Button>
+      ),
+    }),
+  ];
+}
 
 export default function CategoryTable(): React.JSX.Element {
   'use no memo';
-  const [data, setData] = React.useState<Category[]>(categoryDetails);
+  const { data = [] } = useQuery(allCategoriesQueryOptions);
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [globalFilter, setGlobalFilter] = React.useState('');
   const [sheetOpen, setSheetOpen] = React.useState(false);
+
+  const columns = React.useMemo(() => buildColumns(data), [data]);
 
   const table = useReactTable({
     data,
@@ -187,10 +189,7 @@ export default function CategoryTable(): React.JSX.Element {
             <SheetHeader>
               <SheetTitle>Add Category</SheetTitle>
             </SheetHeader>
-            <CategoryAddForm
-              onSuccess={() => setSheetOpen(false)}
-              onAdd={(item) => setData((prev) => [...prev, item])}
-            />
+            <CategoryAddForm onSuccess={() => setSheetOpen(false)} />
           </SheetContent>
         </Sheet>
       </div>
@@ -200,7 +199,7 @@ export default function CategoryTable(): React.JSX.Element {
         {table.getRowModel().rows.map((row) => {
           const c = row.original;
           const parent = c.parentId
-            ? categoryDetails.find((cat) => cat.id === c.parentId)
+            ? data.find((cat) => cat.id === c.parentId)
             : null;
           return (
             <div

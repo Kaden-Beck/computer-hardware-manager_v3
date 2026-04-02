@@ -40,10 +40,11 @@ import { Link } from '@tanstack/react-router';
 
 import type React from 'react';
 import { useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 
 // Types and Data
-import { manufacturerDetails } from '@/_static_data/stub/manufacturerData';
 import type { Manufacturer } from '@/schema/Manufacturer';
+import { allManufacturersQueryOptions } from '@/lib/queries/manufacturers';
 import ManufacturerAddForm from './ManufacturerAddForm';
 
 // Table Helpers
@@ -124,7 +125,7 @@ const columns = [
 
 export default function ManufacturerTable(): React.JSX.Element {
   'use no memo';
-  const [data, setData] = useState<Manufacturer[]>(manufacturerDetails);
+  const { data = [] } = useQuery(allManufacturersQueryOptions);
   const [sorting, setSorting] = useState<SortingState>([]);
   const [globalFilter, setGlobalFilter] = useState('');
   const [sheetOpen, setSheetOpen] = useState(false);
@@ -166,7 +167,6 @@ export default function ManufacturerTable(): React.JSX.Element {
             </SheetHeader>
             <ManufacturerAddForm
               onSuccess={() => setSheetOpen(false)}
-              onAdd={(item) => setData((prev) => [...prev, item])}
             />
           </SheetContent>
         </Sheet>

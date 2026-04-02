@@ -26,7 +26,8 @@ import {
   useStorageProductForm,
   type StorageFormValues,
 } from '@/hooks/form/product/edit/useEditStorageForm';
-import { manufacturerDetails } from '@/_static_data/stub/manufacturerData';
+import { useQuery } from '@tanstack/react-query';
+import { allManufacturersQueryOptions } from '@/lib/queries/manufacturers';
 
 export function StorageProductEditForm({
   product,
@@ -37,6 +38,7 @@ export function StorageProductEditForm({
     null
   );
 
+  const { data: manufacturers = [] } = useQuery(allManufacturersQueryOptions);
   const form = useStorageProductForm({
     categoryId: product.categoryId,
     defaultValues: product,
@@ -71,7 +73,7 @@ export function StorageProductEditForm({
         }}
         className="flex flex-col gap-5 mt-6 px-4"
       >
-        <ProductBaseFields form={form} manufacturers={manufacturerDetails} />
+        <ProductBaseFields form={form} manufacturers={manufacturers} />
 
         <FieldGroup>
           <form.Field name="storageType">

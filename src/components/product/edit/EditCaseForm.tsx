@@ -19,7 +19,8 @@ import {
   useCaseProductForm,
   type CaseFormValues,
 } from '@/hooks/form/product/edit/useEditCaseForm';
-import { manufacturerDetails } from '@/_static_data/stub/manufacturerData';
+import { useQuery } from '@tanstack/react-query';
+import { allManufacturersQueryOptions } from '@/lib/queries/manufacturers';
 
 export function CaseProductEditForm({
   product,
@@ -30,6 +31,7 @@ export function CaseProductEditForm({
     null
   );
 
+  const { data: manufacturers = [] } = useQuery(allManufacturersQueryOptions);
   const form = useCaseProductForm({
     categoryId: product.categoryId,
     defaultValues: product,
@@ -64,7 +66,7 @@ export function CaseProductEditForm({
         }}
         className="flex flex-col gap-5 mt-6 px-4"
       >
-        <ProductBaseFields form={form} manufacturers={manufacturerDetails} />
+        <ProductBaseFields form={form} manufacturers={manufacturers} />
 
         <FieldGroup>
           <form.Field name="formFactor">

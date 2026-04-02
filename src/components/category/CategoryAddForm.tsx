@@ -28,24 +28,23 @@ import {
   useAddCategoryForm,
   type AddCategoryFormValues,
 } from '@/hooks/form/category/useAddCategoryForm';
-import type { Category } from '@/schema/Category';
-
-// Stub Data
-import { categoryDetails } from '@/_static_data/stub/categoryData';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { allCategoriesQueryOptions } from '@/lib/queries/categories';
+import { addCategory } from '@/db/mutation/addCategory';
 
 interface CategoryAddFormProps {
   onSuccess: () => void;
-  onAdd: (item: Category) => void;
 }
 
 export default function CategoryAddForm({
   onSuccess,
-  onAdd,
 }: CategoryAddFormProps): React.JSX.Element {
   const [pendingValues, setPendingValues] =
     useState<AddCategoryFormValues | null>(null);
+  const queryClient = useQueryClient();
+  const { data: allCategories = [] } = useQuery(allCategoriesQueryOptions);
 
-  const parentCategories = categoryDetails.filter((c) => c.isParent);
+  const parentCategories = allCategories.filter((c) => c.isParent);
 
   const form = useAddCategoryForm({
     onSubmit: async (values) => {
@@ -53,13 +52,10 @@ export default function CategoryAddForm({
     },
   });
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     if (pendingValues) {
-      onAdd({
-        id: crypto.randomUUID(),
-        isParent: false,
-        ...pendingValues,
-      });
+      await addCategory({ isParent: false, ...pendingValues });
+      await queryClient.invalidateQueries({ queryKey: ['categories'] });
     }
     setPendingValues(null);
     onSuccess();

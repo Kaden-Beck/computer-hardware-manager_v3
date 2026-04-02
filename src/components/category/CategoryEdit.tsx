@@ -1,15 +1,15 @@
 import React from 'react';
 // Tanstack Imports
 import { useParams } from '@tanstack/react-router';
-// Stub Data
-import { categoryDetails } from '@/_static_data/stub/categoryData';
+import { useQuery } from '@tanstack/react-query';
+import { categoryByIdQueryOptions } from '@/lib/queries/categories';
 import CategoryEditForm from './CategoryEditForm';
 
 export default function CategoryEditComponent(): React.JSX.Element {
   const { catId } = useParams({
     from: '/dashboard/categories/$catId/edit',
   });
-  const category = categoryDetails.find((c) => c.id === catId);
+  const { data: category } = useQuery(categoryByIdQueryOptions(catId));
 
   if (!category) return <div>Category not found.</div>;
 

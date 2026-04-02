@@ -21,9 +21,8 @@ import {
   useCategoryForm,
   type CategoryFormValues,
 } from '@/hooks/form/category/useEditCategoryForm';
-
-// Stub Data
-import { categoryDetails } from '@/_static_data/stub/categoryData';
+import { useQuery } from '@tanstack/react-query';
+import { allCategoriesQueryOptions } from '@/lib/queries/categories';
 
 // Props for pre-populating form
 interface CategoryEditFormProps {
@@ -43,9 +42,10 @@ export default function CategoryEditForm({
   const [pendingValues, setPendingValues] = useState<CategoryFormValues | null>(
     null
   );
+  const { data: allCategories = [] } = useQuery(allCategoriesQueryOptions);
 
   const parentName =
-    categoryDetails.find((c) => c.id === category.parentId)?.name ?? '—';
+    allCategories.find((c) => c.id === category.parentId)?.name ?? '—';
 
   const form = useCategoryForm({
     defaultValues: {

@@ -1,4 +1,5 @@
 import React from 'react';
+import { useQuery } from '@tanstack/react-query';
 import ProductCard from './ProductCard';
 // Shadcn/ TW
 import { Input } from '@/components/ui/input';
@@ -17,15 +18,22 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { cn } from '@/lib/utils';
-// Stub Data
-import { productDetails } from '@/_static_data/stub/productData';
-import { categoryDetails } from '@/_static_data/stub/categoryData';
-import { manufacturerDetails } from '@/_static_data/stub/manufacturerData';
+// Queries
+import { allProductsQueryOptions } from '@/lib/queries/products';
+import { allCategoriesQueryOptions } from '@/lib/queries/categories';
+import { allManufacturersQueryOptions } from '@/lib/queries/manufacturers';
 
 // Need to make this dynamic or an option
 const PAGE_SIZE = 12;
 
 export function InventoryGallery(): React.JSX.Element {
+  /***************
+   * useQuery Hooks
+   ****************/
+  const { data: products = [] } = useQuery(allProductsQueryOptions);
+  const { data: categories = [] } = useQuery(allCategoriesQueryOptions);
+  const { data: manufacturers = [] } = useQuery(allManufacturersQueryOptions);
+
   /***************
    * useState Hooks
    ****************/
@@ -40,22 +48,22 @@ export function InventoryGallery(): React.JSX.Element {
   // (lazy)
   // Get unique categories and manufacturers from products
   const uniqueCategories = Array.from(
-    new Set(productDetails.map((p) => p.categoryId))
+    new Set(products.map((p) => p.categoryId))
   )
-    .map((catId) => categoryDetails.find((c) => c.id === catId))
+    .map((catId) => categories.find((c) => c.id === catId))
     .filter((cat) => cat !== undefined)
     .sort((a, b) => a!.name.localeCompare(b!.name));
 
   const uniqueManufacturers = Array.from(
-    new Set(productDetails.map((p) => p.manufacturerId))
+    new Set(products.map((p) => p.manufacturerId))
   )
-    .map((mfgId) => manufacturerDetails.find((m) => m.id === mfgId))
+    .map((mfgId) => manufacturers.find((m) => m.id === mfgId))
     .filter((mfg) => mfg !== undefined)
     .sort((a, b) => a!.name.localeCompare(b!.name));
 
   // (lazy)
-  // Returned a list of filtered products based on user filter from stub data
-  const filtered = productDetails.filter((product) => {
+  // Returned a list of filtered products based on user filter
+  const filtered = products.filter((product) => {
     // Filter (text)
     const textMatches: boolean =
       !filter ||
@@ -168,9 +176,16 @@ export function InventoryGallery(): React.JSX.Element {
       </div>
 
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-        {paged.map((product) => (
-          <ProductCard key={product.id} product={product} />
-        ))}
+        {paged.map((product) => {
+          const category = categories.find((c) => c.id === product.categoryId);
+          return (
+            <ProductCard
+              key={product.id}
+              product={product}
+              category={category}
+            />
+          );
+        })}
         {paged.length === 0 && (
           <p className="col-span-full py-12 text-center text-sm text-muted-foreground">
             No products found.

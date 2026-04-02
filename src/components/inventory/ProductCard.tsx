@@ -1,3 +1,4 @@
+import { useQuery } from '@tanstack/react-query';
 import {
   Card,
   CardFooter,
@@ -7,21 +8,29 @@ import {
 
 import { Link } from '@tanstack/react-router';
 import { Button } from '@/components/ui/button';
-import { categoryDetails } from '@/_static_data/stub/categoryData';
+import { categoryByIdQueryOptions } from '@/lib/queries/categories';
 
 // Update this when I switch to Zod
 import type { Product } from '@/schema/Product';
+import type { Category } from '@/schema/Category';
+
 interface ProductCardProps {
   product: Product;
+  category?: Category;
   compact?: boolean;
 }
 
 export default function ProductCard({
   product,
+  category,
   compact = false,
 }: ProductCardProps): React.JSX.Element {
-  // Find category in details array by id+
-  const category = categoryDetails.find((c) => c.id === product.categoryId);
+  // If category not provided, fetch it
+  const { data: fetchedCategory } = useQuery(
+    categoryByIdQueryOptions(product.categoryId)
+  );
+
+  const resolvedCategory = category || fetchedCategory;
 
   // Build a shadcn based card with placeholder image
   return (
@@ -55,7 +64,7 @@ export default function ProductCard({
           <CardTitle className="truncate text-sm">{product.name}</CardTitle>
           {!compact && (
             <CardDescription className="mt-0.5">
-              {category?.name ?? '—'}
+              {resolvedCategory?.name ?? '—'}
             </CardDescription>
           )}
           <p

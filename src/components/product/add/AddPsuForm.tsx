@@ -26,7 +26,8 @@ import {
   useAddPsuForm,
   type PsuFormValues,
 } from '@/hooks/form/product/add/useAddPsuForm';
-import { manufacturerDetails } from '@/_static_data/stub/manufacturerData';
+import { useQuery } from '@tanstack/react-query';
+import { allManufacturersQueryOptions } from '@/lib/queries/manufacturers';
 import { ArrowLeft } from 'lucide-react';
 
 export function PsuProductForm({
@@ -38,6 +39,7 @@ export function PsuProductForm({
     null
   );
 
+  const { data: manufacturers = [] } = useQuery(allManufacturersQueryOptions);
   const form = useAddPsuForm({
     onSubmit: async (values) => {
       setPendingValues(values);
@@ -80,7 +82,7 @@ export function PsuProductForm({
         }}
         className="flex flex-col gap-5 mt-6 px-4"
       >
-        <ProductBaseFields form={form} manufacturers={manufacturerDetails} />
+        <ProductBaseFields form={form} manufacturers={manufacturers} />
 
         <FieldGroup>
           <form.Field name="wattage">

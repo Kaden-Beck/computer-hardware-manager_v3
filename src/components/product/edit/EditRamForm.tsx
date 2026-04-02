@@ -19,7 +19,8 @@ import {
   useRamProductForm,
   type RamFormValues,
 } from '@/hooks/form/product/edit/useEditRamForm';
-import { manufacturerDetails } from '@/_static_data/stub/manufacturerData';
+import { useQuery } from '@tanstack/react-query';
+import { allManufacturersQueryOptions } from '@/lib/queries/manufacturers';
 
 export function RamProductEditForm({
   product,
@@ -30,6 +31,7 @@ export function RamProductEditForm({
     null
   );
 
+  const { data: manufacturers = [] } = useQuery(allManufacturersQueryOptions);
   const form = useRamProductForm({
     categoryId: product.categoryId,
     defaultValues: product,
@@ -64,7 +66,7 @@ export function RamProductEditForm({
         }}
         className="flex flex-col gap-5 mt-6 px-4"
       >
-        <ProductBaseFields form={form} manufacturers={manufacturerDetails} />
+        <ProductBaseFields form={form} manufacturers={manufacturers} />
 
         <FieldGroup>
           <form.Field name="memoryType">

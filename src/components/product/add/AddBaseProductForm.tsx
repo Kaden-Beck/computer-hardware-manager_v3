@@ -10,6 +10,8 @@ import { CaseProductForm } from './AddCaseForm';
 import { CpuCoolerProductForm } from './AddCpuCoolerForm';
 import { getProductSpecType, type ProductSpecType } from '@/lib/productFormMap';
 import type { Product } from '@/schema/Product';
+import { useQueryClient } from '@tanstack/react-query';
+import { addProduct } from '@/db/mutation/addProduct';
 
 export interface ProductSpecFormProps {
   onSuccess: () => void;
@@ -19,16 +21,15 @@ export interface ProductSpecFormProps {
 
 interface ProductAddFormProps {
   onSuccess: () => void;
-  onAdd: (item: Product) => void;
 }
 
 export default function ProductAddForm({
   onSuccess,
-  onAdd,
 }: ProductAddFormProps): React.JSX.Element {
   const [selectedCategoryId, setSelectedCategoryId] = useState<string | null>(
     null
   );
+  const queryClient = useQueryClient();
 
   const specType: ProductSpecType | undefined = selectedCategoryId
     ? getProductSpecType(selectedCategoryId)
@@ -45,12 +46,11 @@ export default function ProductAddForm({
   const formProps = {
     onSuccess,
     onBack: handleBack,
-    onAdd: (base: Omit<Product, 'id' | 'categoryId'>) =>
-      onAdd({
-        id: crypto.randomUUID(),
-        categoryId: selectedCategoryId!,
-        ...base,
-      }),
+    onAdd: (base: Omit<Product, 'id' | 'categoryId'>) => {
+      addProduct({ categoryId: selectedCategoryId, ...base }).then(() =>
+        queryClient.invalidateQueries({ queryKey: ['products'] })
+      );
+    },
   };
 
   switch (specType) {
