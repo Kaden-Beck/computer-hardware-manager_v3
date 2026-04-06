@@ -1,7 +1,17 @@
+import { useState } from 'react';
 import type React from 'react';
 import ProductCard from '@/components/inventory/ProductCard';
-// Shadcn/ TW Imports
 import { Button } from '@/components/ui/button';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 import {
   Carousel,
   CarouselContent,
@@ -10,14 +20,20 @@ import {
   CarouselPrevious,
 } from '@/components/ui/carousel';
 import { cn } from '@/lib/utils';
-// Tanstack Imports
-import { useParams, Link, Outlet, useMatch } from '@tanstack/react-router';
+import {
+  useParams,
+  Link,
+  Outlet,
+  useMatch,
+  useNavigate,
+} from '@tanstack/react-router';
 import { useQuery } from '@tanstack/react-query';
 import {
   categoryByIdQueryOptions,
   allCategoriesQueryOptions,
 } from '@/lib/queries/categoryQueries';
 import { allProductsQueryOptions } from '@/lib/queries/productQueries';
+import { useRemoveCategory } from '@/lib/queries/categoryMutations';
 
 export default function CategoryDetailComponent(): React.JSX.Element {
   const { catId } = useParams({ from: '/dashboard/categories/$catId' });
@@ -29,6 +45,10 @@ export default function CategoryDetailComponent(): React.JSX.Element {
     from: '/dashboard/categories/$catId/edit',
     shouldThrow: false,
   });
+
+  const navigate = useNavigate();
+  const { mutate: removeCategory } = useRemoveCategory();
+  const [confirmDelete, setConfirmDelete] = useState(false);
 
   if (!category) return <div>Category not found.</div>;
 
@@ -47,6 +67,12 @@ export default function CategoryDetailComponent(): React.JSX.Element {
     category.description,
     `Top-level: ${category.isParent ? 'Yes' : 'No'}`,
   ];
+
+  function handleDelete() {
+    removeCategory(category!.id, {
+      onSuccess: () => navigate({ to: '/dashboard/categories' }),
+    });
+  }
 
   return (
     <div className="flex flex-col gap-6">
@@ -92,14 +118,23 @@ export default function CategoryDetailComponent(): React.JSX.Element {
                 </Link>
               </Button>
             ) : (
-              <Button asChild className="mt-auto w-fit px-8">
-                <Link
-                  to="/dashboard/categories/$catId/edit"
-                  params={{ catId: category.id }}
+              <div className="flex flex-col gap-2 mt-auto">
+                <Button asChild className="w-fit px-8">
+                  <Link
+                    to="/dashboard/categories/$catId/edit"
+                    params={{ catId: category.id }}
+                  >
+                    Edit
+                  </Link>
+                </Button>
+                <Button
+                  variant="destructive"
+                  className="w-fit px-8"
+                  onClick={() => setConfirmDelete(true)}
                 >
-                  Edit
-                </Link>
-              </Button>
+                  Delete
+                </Button>
+              </div>
             )}
           </div>
         </div>
@@ -130,6 +165,22 @@ export default function CategoryDetailComponent(): React.JSX.Element {
           </div>
         )
       )}
+
+      <AlertDialog open={confirmDelete} onOpenChange={setConfirmDelete}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete {category.name}?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. The category will be permanently
+              removed.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDelete}>Delete</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

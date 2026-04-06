@@ -1,7 +1,17 @@
+import { useState } from 'react';
 import type React from 'react';
 import ProductCard from '@/components/inventory/ProductCard';
-// Shadcn/ TW Imports
 import { Button } from '@/components/ui/button';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 import {
   Carousel,
   CarouselContent,
@@ -9,12 +19,18 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from '@/components/ui/carousel';
-// Tanstack Imports
-import { useParams, Link, Outlet, useMatch } from '@tanstack/react-router';
+import {
+  useParams,
+  Link,
+  Outlet,
+  useMatch,
+  useNavigate,
+} from '@tanstack/react-router';
 import { useQuery } from '@tanstack/react-query';
 import { cn } from '@/lib/utils';
 import { manufacturerByIdQueryOptions } from '@/lib/queries/manufacturerQueries';
 import { allProductsQueryOptions } from '@/lib/queries/productQueries';
+import { useRemoveManufacturer } from '@/lib/queries/manufacturerMutations';
 
 export default function ManufacturerDetailComponent(): React.JSX.Element {
   const { manId } = useParams({ from: '/dashboard/manufacturers/$manId' });
@@ -26,10 +42,20 @@ export default function ManufacturerDetailComponent(): React.JSX.Element {
     shouldThrow: false,
   });
 
+  const navigate = useNavigate();
+  const { mutate: removeManufacturer } = useRemoveManufacturer();
+  const [confirmDelete, setConfirmDelete] = useState(false);
+
   if (!manufacturer) return <div>Manufacturer not found.</div>;
 
   const products = allProducts.filter((p) => p.manufacturerId === manId);
   const specs = [`ID: ${manufacturer.id}`, manufacturer.description];
+
+  function handleDelete() {
+    removeManufacturer(manufacturer!.id, {
+      onSuccess: () => navigate({ to: '/dashboard/manufacturers' }),
+    });
+  }
 
   return (
     <div className="flex flex-col gap-6">
@@ -63,14 +89,23 @@ export default function ManufacturerDetailComponent(): React.JSX.Element {
                 </Link>
               </Button>
             ) : (
-              <Button asChild className="mt-auto w-fit px-8">
-                <Link
-                  to="/dashboard/manufacturers/$manId/edit"
-                  params={{ manId: manufacturer.id }}
+              <div className="flex flex-col gap-2 mt-auto">
+                <Button asChild className="w-fit px-8">
+                  <Link
+                    to="/dashboard/manufacturers/$manId/edit"
+                    params={{ manId: manufacturer.id }}
+                  >
+                    Edit
+                  </Link>
+                </Button>
+                <Button
+                  variant="destructive"
+                  className="w-fit px-8"
+                  onClick={() => setConfirmDelete(true)}
                 >
-                  Edit
-                </Link>
-              </Button>
+                  Delete
+                </Button>
+              </div>
             )}
           </div>
         </div>
@@ -101,6 +136,22 @@ export default function ManufacturerDetailComponent(): React.JSX.Element {
           </div>
         )
       )}
+
+      <AlertDialog open={confirmDelete} onOpenChange={setConfirmDelete}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete {manufacturer.name}?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. The manufacturer will be permanently
+              removed.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDelete}>Delete</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

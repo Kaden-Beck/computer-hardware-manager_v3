@@ -130,6 +130,7 @@ export default function ManufacturerTable(): React.JSX.Element {
   const [globalFilter, setGlobalFilter] = useState('');
   const [sheetOpen, setSheetOpen] = useState(false);
 
+  // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
     data,
     columns,

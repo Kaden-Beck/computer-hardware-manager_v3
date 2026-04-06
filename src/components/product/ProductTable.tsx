@@ -219,6 +219,7 @@ export default function ProductTable(): React.JSX.Element {
     [manufacturers, categories]
   );
 
+  // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
     data: products,
     columns,

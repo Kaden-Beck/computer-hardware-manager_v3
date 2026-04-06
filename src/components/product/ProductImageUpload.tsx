@@ -9,18 +9,22 @@ interface ProductImageUploadProps {
   images: ProductImage[];
 }
 
+type UploadStatus = { type: 'success' | 'error'; message: string } | null;
+
 export default function ProductImageUpload({
   productId,
   images,
 }: ProductImageUploadProps): React.JSX.Element {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploading, setUploading] = useState(false);
+  const [status, setStatus] = useState<UploadStatus>(null);
   const { mutate: saveImages } = useUpdateProductImages();
 
   async function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
 
+    setStatus(null);
     setUploading(true);
     try {
       const url = await uploadProductImage(productId, file);
@@ -30,7 +34,23 @@ export default function ProductImageUpload({
         isPrimary: images.length === 0,
         order: images.length,
       };
-      saveImages({ productId, images: [...images, newImage] });
+      saveImages(
+        { productId, images: [...images, newImage] },
+        {
+          onSuccess: () =>
+            setStatus({ type: 'success', message: 'Image uploaded.' }),
+          onError: (err) =>
+            setStatus({
+              type: 'error',
+              message: `Failed to save image: ${err instanceof Error ? err.message : 'Unknown error'}`,
+            }),
+        }
+      );
+    } catch (err) {
+      setStatus({
+        type: 'error',
+        message: `Upload failed: ${err instanceof Error ? err.message : 'Unknown error'}`,
+      });
     } finally {
       setUploading(false);
       if (fileInputRef.current) fileInputRef.current.value = '';
@@ -55,7 +75,6 @@ export default function ProductImageUpload({
           img.isPrimary && i === 0 ? true : (images[0]?.isPrimary ?? i === 0),
       }));
 
-    // If we removed the primary, promote the first remaining image
     const hasPrimary = updated.some((img) => img.isPrimary);
     if (!hasPrimary && updated.length > 0) updated[0].isPrimary = true;
 
@@ -106,16 +125,28 @@ export default function ProductImageUpload({
         className="hidden"
         onChange={handleFileChange}
       />
-      <Button
-        type="button"
-        variant="outline"
-        size="sm"
-        disabled={uploading}
-        onClick={() => fileInputRef.current?.click()}
-        className="w-fit"
-      >
-        {uploading ? 'Uploading…' : 'Add image'}
-      </Button>
+      <div className="flex items-center gap-3">
+        <Button
+          type="button"
+          variant="outline"
+          size="sm"
+          disabled={uploading}
+          onClick={() => {
+            setStatus(null);
+            fileInputRef.current?.click();
+          }}
+          className="w-fit"
+        >
+          {uploading ? 'Uploading…' : 'Add image'}
+        </Button>
+        {status && (
+          <p
+            className={`text-xs ${status.type === 'error' ? 'text-destructive' : 'text-muted-foreground'}`}
+          >
+            {status.message}
+          </p>
+        )}
+      </div>
     </div>
   );
 }

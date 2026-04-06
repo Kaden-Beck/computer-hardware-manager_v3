@@ -154,6 +154,7 @@ export default function CategoryTable(): React.JSX.Element {
 
   const columns = React.useMemo(() => buildColumns(data), [data]);
 
+  // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
     data,
     columns,

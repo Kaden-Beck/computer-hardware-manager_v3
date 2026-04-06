@@ -1,10 +1,28 @@
+import { useState } from 'react';
 import type React from 'react';
-import { useParams, Link, Outlet, useMatch } from '@tanstack/react-router';
+import {
+  useParams,
+  Link,
+  Outlet,
+  useMatch,
+  useNavigate,
+} from '@tanstack/react-router';
 import { Button } from '@/components/ui/button';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 import { useQuery } from '@tanstack/react-query';
 import { productByIdQueryOptions } from '@/lib/queries/productQueries';
 import { manufacturerByIdQueryOptions } from '@/lib/queries/manufacturerQueries';
 import { categoryByIdQueryOptions } from '@/lib/queries/categoryQueries';
+import { useRemoveProduct } from '@/lib/queries/productMutations';
 import { cn } from '@/lib/utils';
 
 export default function ProductDetailComponent(): React.JSX.Element | null {
@@ -22,7 +40,17 @@ export default function ProductDetailComponent(): React.JSX.Element | null {
     categoryByIdQueryOptions(product?.categoryId ?? '')
   );
 
+  const navigate = useNavigate();
+  const { mutate: removeProduct } = useRemoveProduct();
+  const [confirmDelete, setConfirmDelete] = useState(false);
+
   if (!product) return <div>Product not found.</div>;
+
+  function handleDelete() {
+    removeProduct(product!.id, {
+      onSuccess: () => navigate({ to: '/dashboard/products' }),
+    });
+  }
 
   const specs = [
     `SKU: ${product.sku}`,
@@ -89,8 +117,8 @@ export default function ProductDetailComponent(): React.JSX.Element | null {
             </ul>
           </div>
 
-          {/* Column 3: Pricing + Action */}
-          <div className="flex flex-col gap-1 h-full">
+          {/* Column 3: Pricing + Actions */}
+          <div className="flex flex-col gap-2 h-full">
             <h3 className="text-3xl font-bold">${product.msrp.toFixed(2)}</h3>
             <p className="text-sm text-muted-foreground">MSRP</p>
             {isEditing ? (
@@ -103,20 +131,45 @@ export default function ProductDetailComponent(): React.JSX.Element | null {
                 </Link>
               </Button>
             ) : (
-              <Button asChild className="mt-auto w-fit px-8">
-                <Link
-                  to="/dashboard/products/$prodId/edit"
-                  params={{ prodId: product.id }}
+              <div className="flex flex-col gap-2 mt-auto">
+                <Button asChild className="w-fit px-8">
+                  <Link
+                    to="/dashboard/products/$prodId/edit"
+                    params={{ prodId: product.id }}
+                  >
+                    Edit
+                  </Link>
+                </Button>
+                <Button
+                  variant="destructive"
+                  className="w-fit px-8"
+                  onClick={() => setConfirmDelete(true)}
                 >
-                  Edit
-                </Link>
-              </Button>
+                  Delete
+                </Button>
+              </div>
             )}
           </div>
         </div>
       </div>
 
       {isEditing && <Outlet />}
+
+      <AlertDialog open={confirmDelete} onOpenChange={setConfirmDelete}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete {product.name}?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This action cannot be undone. The product will be permanently
+              removed.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDelete}>Delete</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }
