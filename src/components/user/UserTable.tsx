@@ -45,7 +45,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 // Types and Data
 import type { AppUser } from '@/schema/AppUser';
-import { allUsersQueryOptions } from '@/lib/queries/user';
+import { allUsersQueryOptions } from '@/lib/queries/users';
 import { cn } from '@/lib/utils';
 
 function UserAvatar({ user }: { user: AppUser }): React.JSX.Element {

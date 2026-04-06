@@ -1,6 +1,7 @@
-import { queryOptions } from '@tanstack/react-query';
+import queryAllUsers from '@/db/query/user/queryAllUsers';
+import queryUserById from '@/db/query/user/queryUserById';
 
-import { queryUserById, queryAllUsers } from '@/db/query/user/getUsers';
+import { queryOptions } from '@tanstack/react-query';
 
 export const userByIdQueryOptions = (userId: string) =>
   queryOptions({
