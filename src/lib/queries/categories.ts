@@ -2,7 +2,7 @@ import {
   queryAllCategories,
   queryCategoryById,
   queryChildrenCategories,
-} from '@/db/query/getCategories';
+} from '@/db/query/category/queryAllCategories';
 import { queryOptions } from '@tanstack/react-query';
 
 export const allCategoriesQueryOptions = queryOptions({

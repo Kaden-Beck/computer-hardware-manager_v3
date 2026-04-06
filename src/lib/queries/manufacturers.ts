@@ -2,7 +2,7 @@ import { queryOptions } from '@tanstack/react-query';
 import {
   queryManufacturerById,
   queryAllManufacturers,
-} from '@/db/query/getManufacturers';
+} from '@/db/query/manufacturer/getManufacturers';
 
 export const allManufacturersQueryOptions = queryOptions({
   queryKey: ['manufacturers'],

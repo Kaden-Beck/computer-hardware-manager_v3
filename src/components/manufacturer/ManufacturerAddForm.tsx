@@ -21,7 +21,7 @@ import {
   useAddManufacturerForm,
   type ManufacturerFormValues,
 } from '@/hooks/form/manufacturer/useAddManufacturerForm';
-import { addManufacturer } from '@/db/mutation/addManufacturer';
+import { addManufacturer } from '@/db/mutation/manufacturer/addManufacturer';
 import { useQueryClient } from '@tanstack/react-query';
 
 interface ManufacturerAddFormProps {

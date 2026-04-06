@@ -11,7 +11,7 @@ import { CpuCoolerProductForm } from './AddCpuCoolerForm';
 import { getProductSpecType, type ProductSpecType } from '@/lib/productFormMap';
 import type { Product } from '@/schema/Product';
 import { useQueryClient } from '@tanstack/react-query';
-import { addProduct } from '@/db/mutation/addProduct';
+import { addProduct } from '@/db/mutation/product/addProduct';
 
 export interface ProductSpecFormProps {
   onSuccess: () => void;
