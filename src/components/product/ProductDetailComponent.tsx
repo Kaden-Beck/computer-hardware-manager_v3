@@ -42,8 +42,15 @@ export default function ProductDetailComponent(): React.JSX.Element | null {
           {/* Column 1: Image */}
           <div className="w-full aspect-square max-w-50 mx-auto bg-muted rounded-md overflow-hidden">
             <img
-              src={`https://placehold.co/200x200/f3f4f6/6b7280?text=${encodeURIComponent(product.name)}`}
-              alt={product.name}
+              src={
+                product.images?.find((img) => img.isPrimary)?.url ??
+                product.images?.[0]?.url ??
+                `https://placehold.co/200x200/f3f4f6/6b7280?text=${encodeURIComponent(product.name)}`
+              }
+              alt={
+                product.images?.find((img) => img.isPrimary)?.altText ??
+                product.name
+              }
               width={200}
               height={200}
               className="object-contain w-full h-full"

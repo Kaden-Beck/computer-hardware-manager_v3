@@ -1,3 +1,4 @@
+import type { ProductImage } from './ProductImage';
 import type { Cpu } from './categories/Cpu';
 import type { CpuCooler } from './categories/CpuCooler';
 import type { Case } from './categories/Case';
@@ -29,4 +30,5 @@ export type Product = {
   manufacturerId: string; // references Manufacturer
   categoryId: string; // references Category
   specs?: ProductSpecs;
+  images?: ProductImage[];
 };
