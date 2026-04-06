@@ -34,7 +34,7 @@ export function GpuProductEditForm({
   const { data: manufacturers = [] } = useQuery(allManufacturersQueryOptions);
   const form = useGpuProductForm({
     categoryId: product.categoryId,
-    defaultValues: product,
+    product,
     onSubmit: async (values) => {
       setPendingValues(values);
     },

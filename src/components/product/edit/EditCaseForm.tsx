@@ -34,7 +34,7 @@ export function CaseProductEditForm({
   const { data: manufacturers = [] } = useQuery(allManufacturersQueryOptions);
   const form = useCaseProductForm({
     categoryId: product.categoryId,
-    defaultValues: product,
+    product,
     onSubmit: async (values) => {
       setPendingValues(values);
     },

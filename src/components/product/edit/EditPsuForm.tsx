@@ -41,7 +41,7 @@ export function PsuProductEditForm({
   const { data: manufacturers = [] } = useQuery(allManufacturersQueryOptions);
   const form = usePsuProductForm({
     categoryId: product.categoryId,
-    defaultValues: product,
+    product,
     onSubmit: async (values) => {
       setPendingValues(values);
     },

@@ -41,7 +41,7 @@ export function StorageProductEditForm({
   const { data: manufacturers = [] } = useQuery(allManufacturersQueryOptions);
   const form = useStorageProductForm({
     categoryId: product.categoryId,
-    defaultValues: product,
+    product,
     onSubmit: async (values) => {
       setPendingValues(values);
     },

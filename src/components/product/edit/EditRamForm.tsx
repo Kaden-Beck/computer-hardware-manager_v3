@@ -34,7 +34,7 @@ export function RamProductEditForm({
   const { data: manufacturers = [] } = useQuery(allManufacturersQueryOptions);
   const form = useRamProductForm({
     categoryId: product.categoryId,
-    defaultValues: product,
+    product,
     onSubmit: async (values) => {
       setPendingValues(values);
     },

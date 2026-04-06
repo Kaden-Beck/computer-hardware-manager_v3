@@ -3,46 +3,45 @@ import {
   motherboardProductSchema,
   type MotherboardFormValues,
 } from '@/lib/validators/product/motherboard';
+import type { Product } from '@/schema/Product';
 
 export type { MotherboardFormValues };
 
 interface UseMotherboardProductFormOptions {
   categoryId: string;
-  defaultValues?: Partial<MotherboardFormValues>;
-  onSubmit: (
-    values: MotherboardFormValues,
-    categoryId: string
-  ) => Promise<void>;
+  product?: Product;
+  onSubmit: (values: MotherboardFormValues, categoryId: string) => Promise<void>;
 }
 
 export function useMotherboardProductForm({
   categoryId,
-  defaultValues,
+  product,
   onSubmit,
 }: UseMotherboardProductFormOptions) {
+  const specs =
+    product?.specs?.type === 'motherboard' ? product.specs : undefined;
+
   return useForm({
     defaultValues: {
-      name: defaultValues?.name ?? '',
-      sku: defaultValues?.sku ?? '',
-      description: defaultValues?.description ?? '',
-      color: defaultValues?.color ?? '',
-      msrp: defaultValues?.msrp ?? 0,
-      price: defaultValues?.price ?? null,
-      quantity: defaultValues?.quantity ?? 0,
-      manufacturerId: defaultValues?.manufacturerId ?? '',
-      socketType: defaultValues?.socketType ?? '',
-      chipset: defaultValues?.chipset ?? '',
-      formFactor: defaultValues?.formFactor ?? '',
-      memoryType: defaultValues?.memoryType ?? '',
-      memorySlots: defaultValues?.memorySlots ?? 0,
-      maxMemoryGB: defaultValues?.maxMemoryGB ?? 0,
-      m2Slots: defaultValues?.m2Slots ?? null,
-      sataSlots: defaultValues?.sataSlots ?? null,
-      pciSlots: defaultValues?.pciSlots ?? null,
+      name: product?.name ?? '',
+      sku: product?.sku ?? '',
+      description: product?.description ?? '',
+      color: product?.color ?? '',
+      msrp: product?.msrp ?? 0,
+      price: product?.price ?? null,
+      quantity: product?.quantity ?? 0,
+      manufacturerId: product?.manufacturerId ?? '',
+      socketType: specs?.socketType ?? '',
+      chipset: specs?.chipset ?? '',
+      formFactor: specs?.formFactor ?? '',
+      memoryType: specs?.memoryType ?? '',
+      memorySlots: specs?.memorySlots ?? 0,
+      maxMemoryGB: specs?.maxMemoryGB ?? 0,
+      m2Slots: specs?.m2Slots ?? null,
+      sataSlots: specs?.sataSlots ?? null,
+      pciSlots: specs?.pciSlots ?? null,
     },
-    validators: {
-      onChange: motherboardProductSchema,
-    },
+    validators: { onChange: motherboardProductSchema },
     onSubmit: async ({ value }) => {
       await onSubmit(value, categoryId);
     },
