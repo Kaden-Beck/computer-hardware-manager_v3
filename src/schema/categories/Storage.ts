@@ -1,10 +1,9 @@
 export type Storage = {
-  id: string;
-  productId: string; // 1:1 reference to Product
+  type: 'storage';
   storageType: 'SSD' | 'HDD' | 'NVMe';
   capacityGB: number;
   interface: string;
   formFactor: string;
-  readSpeedMBps?: number;
-  writeSpeedMBps?: number;
+  readSpeedMBps: number | null;
+  writeSpeedMBps: number | null;
 };

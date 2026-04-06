@@ -1,12 +1,11 @@
 export type Cpu = {
-  id: string;
-  productId: string; // 1:1 reference to Product
+  type: 'cpu';
   cores: number;
   threads: number;
   baseClockGHz: number;
-  boostClockGHz?: number;
+  boostClockGHz: number | null;
   tdp: number;
   socketType: string;
   integratedGraphics: boolean;
-  cacheMB?: number;
+  cacheMB: number | null;
 };

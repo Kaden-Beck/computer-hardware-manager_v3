@@ -1,10 +1,9 @@
 export type Ram = {
-  id: string;
-  productId: string; // 1:1 reference to Product
-  memoryType: string; // e.g. "DDR5"
+  type: 'ram';
+  memoryType: string;
   speedMHz: number;
   capacityGB: number;
   modules: number;
-  casLatency?: number;
-  voltage?: number;
+  casLatency: number | null;
+  voltage: number | null;
 };

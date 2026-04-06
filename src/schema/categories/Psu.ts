@@ -1,8 +1,7 @@
 export type Psu = {
-  id: string;
-  productId: string; // 1:1 reference to Product
+  type: 'psu';
   wattage: number;
-  efficiencyRating: string; // e.g. "80 Plus Gold"
+  efficiencyRating: string;
   modular: 'Full' | 'Semi' | 'Non-Modular';
   formFactor: string;
 };

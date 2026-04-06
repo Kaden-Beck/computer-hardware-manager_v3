@@ -1,13 +1,12 @@
 export type Case = {
-  id: string;
-  productId: string; // 1:1 reference to Product
+  type: 'case';
   formFactor: string;
-  moboSupport: string; // e.g. "ATX, mATX, ITX"
-  maxGPULengthMM?: number;
-  maxCPUCoolerHeightMM?: number;
-  maxPSULengthMM?: number;
-  driveSlotsTwoHalf?: number;
-  driveSlotsThreeHalf?: number;
-  fanSlots?: number;
-  radiatorSupport?: string;
+  moboSupport: string;
+  maxGPULengthMM: number | null;
+  maxCPUCoolerHeightMM: number | null;
+  maxPSULengthMM: number | null;
+  driveSlotsTwoHalf: number | null;
+  driveSlotsThreeHalf: number | null;
+  fanSlots: number | null;
+  radiatorSupport: string;
 };

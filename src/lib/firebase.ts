@@ -7,6 +7,7 @@ import {
   signOut,
 } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
+import { getStorage } from 'firebase/storage';
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -31,6 +32,9 @@ const googleProvider = new GoogleAuthProvider();
 
 // Set up firestore
 export const db = getFirestore(app);
+
+// Set up Storage
+export const storage = getStorage(app);
 
 export const signInWithGoogle = () => signInWithPopup(auth, googleProvider);
 export const signOutUser = () => signOut(auth);
