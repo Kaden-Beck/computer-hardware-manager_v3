@@ -29,7 +29,7 @@ import {
   type AddCategoryFormValues,
 } from '@/hooks/form/category/useAddCategoryForm';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { allCategoriesQueryOptions } from '@/lib/queries/categories';
+import { allCategoriesQueryOptions } from '@/lib/queries/categoryQueries';
 import { addCategory } from '@/db/mutation/category/addCategory';
 
 interface CategoryAddFormProps {

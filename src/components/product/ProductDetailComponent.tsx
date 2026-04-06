@@ -2,9 +2,9 @@ import type React from 'react';
 import { useParams, Link, Outlet, useMatch } from '@tanstack/react-router';
 import { Button } from '@/components/ui/button';
 import { useQuery } from '@tanstack/react-query';
-import { productByIdQueryOptions } from '@/lib/queries/products';
-import { manufacturerByIdQueryOptions } from '@/lib/queries/manufacturers';
-import { categoryByIdQueryOptions } from '@/lib/queries/categories';
+import { productByIdQueryOptions } from '@/lib/queries/productQueries';
+import { manufacturerByIdQueryOptions } from '@/lib/queries/manufacturerQueries';
+import { categoryByIdQueryOptions } from '@/lib/queries/categoryQueries';
 import { cn } from '@/lib/utils';
 
 export default function ProductDetailComponent(): React.JSX.Element | null {

@@ -20,7 +20,7 @@ import {
   type CaseFormValues,
 } from '@/hooks/form/product/edit/useEditCaseForm';
 import { useQuery } from '@tanstack/react-query';
-import { allManufacturersQueryOptions } from '@/lib/queries/manufacturers';
+import { allManufacturersQueryOptions } from '@/lib/queries/manufacturerQueries';
 
 export function CaseProductEditForm({
   product,

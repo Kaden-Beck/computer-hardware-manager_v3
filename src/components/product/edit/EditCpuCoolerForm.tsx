@@ -27,7 +27,7 @@ import {
   type CpuCoolerFormValues,
 } from '@/hooks/form/product/edit/useEditCpuCoolerForm';
 import { useQuery } from '@tanstack/react-query';
-import { allManufacturersQueryOptions } from '@/lib/queries/manufacturers';
+import { allManufacturersQueryOptions } from '@/lib/queries/manufacturerQueries';
 
 export function CpuCoolerProductEditForm({
   product,

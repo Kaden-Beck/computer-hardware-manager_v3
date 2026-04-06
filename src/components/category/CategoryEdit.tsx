@@ -2,7 +2,7 @@ import React from 'react';
 // Tanstack Imports
 import { useParams } from '@tanstack/react-router';
 import { useQuery } from '@tanstack/react-query';
-import { categoryByIdQueryOptions } from '@/lib/queries/categories';
+import { categoryByIdQueryOptions } from '@/lib/queries/categoryQueries';
 import CategoryEditForm from './CategoryEditForm';
 
 export default function CategoryEditComponent(): React.JSX.Element {

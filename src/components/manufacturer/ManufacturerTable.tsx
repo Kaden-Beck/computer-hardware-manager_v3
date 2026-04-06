@@ -44,7 +44,7 @@ import { useQuery } from '@tanstack/react-query';
 
 // Types and Data
 import type { Manufacturer } from '@/schema/Manufacturer';
-import { allManufacturersQueryOptions } from '@/lib/queries/manufacturers';
+import { allManufacturersQueryOptions } from '@/lib/queries/manufacturerQueries';
 import ManufacturerAddForm from './ManufacturerAddForm';
 
 // Table Helpers

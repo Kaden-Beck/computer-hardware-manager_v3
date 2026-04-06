@@ -20,7 +20,7 @@ import {
   type RamFormValues,
 } from '@/hooks/form/product/edit/useEditRamForm';
 import { useQuery } from '@tanstack/react-query';
-import { allManufacturersQueryOptions } from '@/lib/queries/manufacturers';
+import { allManufacturersQueryOptions } from '@/lib/queries/manufacturerQueries';
 
 export function RamProductEditForm({
   product,

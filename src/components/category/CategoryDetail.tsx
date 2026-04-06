@@ -16,8 +16,8 @@ import { useQuery } from '@tanstack/react-query';
 import {
   categoryByIdQueryOptions,
   allCategoriesQueryOptions,
-} from '@/lib/queries/categories';
-import { allProductsQueryOptions } from '@/lib/queries/products';
+} from '@/lib/queries/categoryQueries';
+import { allProductsQueryOptions } from '@/lib/queries/productQueries';
 
 export default function CategoryDetailComponent(): React.JSX.Element {
   const { catId } = useParams({ from: '/dashboard/categories/$catId' });

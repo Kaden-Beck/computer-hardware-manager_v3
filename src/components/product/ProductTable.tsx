@@ -46,9 +46,9 @@ import { useMemo, useState } from 'react';
 import type { Product } from '@/schema/Product';
 import type { Manufacturer } from '@/schema/Manufacturer';
 import type { Category } from '@/schema/Category';
-import { allProductsQueryOptions } from '@/lib/queries/products';
-import { allManufacturersQueryOptions } from '@/lib/queries/manufacturers';
-import { allCategoriesQueryOptions } from '@/lib/queries/categories';
+import { allProductsQueryOptions } from '@/lib/queries/productQueries';
+import { allManufacturersQueryOptions } from '@/lib/queries/manufacturerQueries';
+import { allCategoriesQueryOptions } from '@/lib/queries/categoryQueries';
 import ProductAddForm from './add/AddBaseProductForm';
 
 // Table Helpers

@@ -19,9 +19,9 @@ import {
 } from '@/components/ui/select';
 import { cn } from '@/lib/utils';
 // Queries
-import { allProductsQueryOptions } from '@/lib/queries/products';
-import { allCategoriesQueryOptions } from '@/lib/queries/categories';
-import { allManufacturersQueryOptions } from '@/lib/queries/manufacturers';
+import { allProductsQueryOptions } from '@/lib/queries/productQueries';
+import { allCategoriesQueryOptions } from '@/lib/queries/categoryQueries';
+import { allManufacturersQueryOptions } from '@/lib/queries/manufacturerQueries';
 
 // Need to make this dynamic or an option
 const PAGE_SIZE = 12;

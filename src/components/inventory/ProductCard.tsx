@@ -8,7 +8,7 @@ import {
 
 import { Link } from '@tanstack/react-router';
 import { Button } from '@/components/ui/button';
-import { categoryByIdQueryOptions } from '@/lib/queries/categories';
+import { categoryByIdQueryOptions } from '@/lib/queries/categoryQueries';
 
 // Update this when I switch to Zod
 import type { Product } from '@/schema/Product';

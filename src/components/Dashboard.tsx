@@ -17,9 +17,9 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from '@/components/ui/sidebar';
-import { allManufacturersQueryOptions } from '@/lib/queries/manufacturers';
-import { allProductsQueryOptions } from '@/lib/queries/products';
-import { allCategoriesQueryOptions } from '@/lib/queries/categories';
+import { allManufacturersQueryOptions } from '@/lib/queries/manufacturerQueries';
+import { allProductsQueryOptions } from '@/lib/queries/productQueries';
+import { allCategoriesQueryOptions } from '@/lib/queries/categoryQueries';
 import type { Manufacturer } from '@/schema/Manufacturer';
 import type { Product } from '@/schema/Product';
 import type { Category } from '@/schema/Category';

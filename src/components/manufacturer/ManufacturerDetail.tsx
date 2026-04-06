@@ -13,8 +13,8 @@ import {
 import { useParams, Link, Outlet, useMatch } from '@tanstack/react-router';
 import { useQuery } from '@tanstack/react-query';
 import { cn } from '@/lib/utils';
-import { manufacturerByIdQueryOptions } from '@/lib/queries/manufacturers';
-import { allProductsQueryOptions } from '@/lib/queries/products';
+import { manufacturerByIdQueryOptions } from '@/lib/queries/manufacturerQueries';
+import { allProductsQueryOptions } from '@/lib/queries/productQueries';
 
 export default function ManufacturerDetailComponent(): React.JSX.Element {
   const { manId } = useParams({ from: '/dashboard/manufacturers/$manId' });

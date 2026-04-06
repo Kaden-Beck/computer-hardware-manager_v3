@@ -1,7 +1,7 @@
 import React from 'react';
 import { useParams } from '@tanstack/react-router';
 import { useQuery } from '@tanstack/react-query';
-import { productByIdQueryOptions } from '@/lib/queries/products';
+import { productByIdQueryOptions } from '@/lib/queries/productQueries';
 import ProductEditForm from './edit/EditBaseProductForm';
 import type { Product } from '@/schema/Product';
 

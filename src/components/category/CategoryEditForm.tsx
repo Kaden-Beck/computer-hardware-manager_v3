@@ -22,7 +22,7 @@ import {
   type CategoryFormValues,
 } from '@/hooks/form/category/useEditCategoryForm';
 import { useQuery } from '@tanstack/react-query';
-import { allCategoriesQueryOptions } from '@/lib/queries/categories';
+import { allCategoriesQueryOptions } from '@/lib/queries/categoryQueries';
 
 // Props for pre-populating form
 interface CategoryEditFormProps {

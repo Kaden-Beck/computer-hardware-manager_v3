@@ -20,7 +20,7 @@ import {
   type GpuFormValues,
 } from '@/hooks/form/product/add/useAddGpuForm';
 import { useQuery } from '@tanstack/react-query';
-import { allManufacturersQueryOptions } from '@/lib/queries/manufacturers';
+import { allManufacturersQueryOptions } from '@/lib/queries/manufacturerQueries';
 import { ArrowLeft } from 'lucide-react';
 
 export function GpuProductForm({

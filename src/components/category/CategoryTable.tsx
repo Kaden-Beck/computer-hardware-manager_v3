@@ -43,7 +43,7 @@ import { useQuery } from '@tanstack/react-query';
 
 // Types and Data
 import type { Category } from '@/schema/Category';
-import { allCategoriesQueryOptions } from '@/lib/queries/categories';
+import { allCategoriesQueryOptions } from '@/lib/queries/categoryQueries';
 import CategoryAddForm from './CategoryAddForm';
 
 // Table Helpers

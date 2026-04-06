@@ -13,7 +13,7 @@ import {
 import { Field } from '@/components/ui/field';
 import { LabelWithTooltip } from '@/components/ui/label-with-tooltip';
 import { getProductSpecType } from '@/lib/productFormMap';
-import { allCategoriesQueryOptions } from '@/lib/queries/categories';
+import { allCategoriesQueryOptions } from '@/lib/queries/categoryQueries';
 
 interface ProductCategoryStepProps {
   onNext: (categoryId: string) => void;

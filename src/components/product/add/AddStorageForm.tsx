@@ -27,7 +27,7 @@ import {
   type StorageFormValues,
 } from '@/hooks/form/product/add/useAddStorageForm';
 import { useQuery } from '@tanstack/react-query';
-import { allManufacturersQueryOptions } from '@/lib/queries/manufacturers';
+import { allManufacturersQueryOptions } from '@/lib/queries/manufacturerQueries';
 import { ArrowLeft } from 'lucide-react';
 
 export function StorageProductForm({

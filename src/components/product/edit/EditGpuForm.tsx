@@ -20,7 +20,7 @@ import {
   type GpuFormValues,
 } from '@/hooks/form/product/edit/useEditGpuForm';
 import { useQuery } from '@tanstack/react-query';
-import { allManufacturersQueryOptions } from '@/lib/queries/manufacturers';
+import { allManufacturersQueryOptions } from '@/lib/queries/manufacturerQueries';
 
 export function GpuProductEditForm({
   product,
