@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 
 // Tanstack Form hook
 import { useManufacturerForm } from '@/hooks/form/manufacturer/useEditManufacturerForm';
+import { useUpdateManufacturer } from '@/lib/queries/manufacturerMutations';
 
 // Props for pre-populating form
 interface ManufacturerEditFormProps {
@@ -17,14 +18,18 @@ interface ManufacturerEditFormProps {
 export default function ManufacturerEditForm({
   manufacturer,
 }: ManufacturerEditFormProps): React.JSX.Element {
+  const { mutate: updateManufacturer } = useUpdateManufacturer();
+
   const form = useManufacturerForm({
     defaultValues: {
       name: manufacturer.name,
       description: manufacturer.description,
     },
     onSubmit: async (values) => {
-      // TODO: wire up mutation
-      console.log('submit', values);
+      updateManufacturer({
+        id: manufacturer.id,
+        data: { name: values.name, description: values.description },
+      });
     },
   });
 

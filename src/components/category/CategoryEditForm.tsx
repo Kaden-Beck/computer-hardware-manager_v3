@@ -23,6 +23,7 @@ import {
 } from '@/hooks/form/category/useEditCategoryForm';
 import { useQuery } from '@tanstack/react-query';
 import { allCategoriesQueryOptions } from '@/lib/queries/categoryQueries';
+import { useUpdateCategory } from '@/lib/queries/categoryMutations';
 
 // Props for pre-populating form
 interface CategoryEditFormProps {
@@ -43,6 +44,7 @@ export default function CategoryEditForm({
     null
   );
   const { data: allCategories = [] } = useQuery(allCategoriesQueryOptions);
+  const { mutate: updateCategory } = useUpdateCategory();
 
   const parentName =
     allCategories.find((c) => c.id === category.parentId)?.name ?? '—';
@@ -61,8 +63,16 @@ export default function CategoryEditForm({
   });
 
   function handleConfirm() {
-    // TODO: wire up mutation
-    console.log('submit', pendingValues);
+    if (pendingValues) {
+      updateCategory({
+        id: category.id,
+        data: {
+          name: pendingValues.name,
+          description: pendingValues.description,
+          miscDetails: pendingValues.miscDetails,
+        },
+      });
+    }
     setPendingValues(null);
   }
 
