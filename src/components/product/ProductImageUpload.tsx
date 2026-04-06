@@ -38,7 +38,10 @@ export default function ProductImageUpload({
   }
 
   function handleSetPrimary(index: number) {
-    const updated = images.map((img, i) => ({ ...img, isPrimary: i === index }));
+    const updated = images.map((img, i) => ({
+      ...img,
+      isPrimary: i === index,
+    }));
     saveImages({ productId, images: updated });
   }
 
@@ -48,7 +51,8 @@ export default function ProductImageUpload({
       .map((img, i) => ({
         ...img,
         order: i,
-        isPrimary: img.isPrimary && i === 0 ? true : images[0]?.isPrimary ?? i === 0,
+        isPrimary:
+          img.isPrimary && i === 0 ? true : (images[0]?.isPrimary ?? i === 0),
       }));
 
     // If we removed the primary, promote the first remaining image

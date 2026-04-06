@@ -10,7 +10,10 @@ export type { MotherboardFormValues };
 interface UseMotherboardProductFormOptions {
   categoryId: string;
   product?: Product;
-  onSubmit: (values: MotherboardFormValues, categoryId: string) => Promise<void>;
+  onSubmit: (
+    values: MotherboardFormValues,
+    categoryId: string
+  ) => Promise<void>;
 }
 
 export function useMotherboardProductForm({

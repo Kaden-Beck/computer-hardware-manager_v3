@@ -18,8 +18,7 @@ export function useStorageProductForm({
   product,
   onSubmit,
 }: UseStorageProductFormOptions) {
-  const specs =
-    product?.specs?.type === 'storage' ? product.specs : undefined;
+  const specs = product?.specs?.type === 'storage' ? product.specs : undefined;
 
   return useForm({
     defaultValues: {

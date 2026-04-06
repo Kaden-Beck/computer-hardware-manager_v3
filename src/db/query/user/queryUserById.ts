@@ -2,7 +2,9 @@ import { doc, getDoc } from 'firebase/firestore';
 import { db } from '@/lib/firebase';
 import type { AppUser } from '@/schema/AppUser';
 
-export default async function queryUserById(userId: string): Promise<AppUser | null> {
+export default async function queryUserById(
+  userId: string
+): Promise<AppUser | null> {
   const userRef = doc(db, 'users', userId);
   const snapshot = await getDoc(userRef);
 
