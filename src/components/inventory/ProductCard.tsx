@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import {
   Card,
@@ -5,12 +6,12 @@ import {
   CardTitle,
   CardDescription,
 } from '@/components/ui/card';
-
+import { Skeleton } from '@/components/ui/skeleton';
 import { Link } from '@tanstack/react-router';
 import { Button } from '@/components/ui/button';
 import { categoryByIdQueryOptions } from '@/lib/queries/categoryQueries';
+import { cn } from '@/lib/utils';
 
-// Update this when I switch to Zod
 import type { Product } from '@/schema/Product';
 import type { Category } from '@/schema/Category';
 
@@ -25,14 +26,18 @@ export default function ProductCard({
   category,
   compact = false,
 }: ProductCardProps): React.JSX.Element {
-  // If category not provided, fetch it
   const { data: fetchedCategory } = useQuery(
     categoryByIdQueryOptions(product.categoryId)
   );
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   const resolvedCategory = category || fetchedCategory;
 
-  // Build a shadcn based card with placeholder image
+  const imageSrc =
+    product.images?.find((img) => img.isPrimary)?.url ??
+    product.images?.[0]?.url ??
+    `https://placehold.co/200x200/f3f4f6/6b7280?text=${encodeURIComponent(product.name)}`;
+
   return (
     <Card className="gap-0 pt-0">
       <Link
@@ -41,14 +46,24 @@ export default function ProductCard({
         className="block"
       >
         <div
-          className={`flex items-center justify-center bg-muted overflow-hidden ${compact ? 'h-24' : 'aspect-square'}`}
+          className={cn(
+            'relative flex items-center justify-center bg-muted overflow-hidden',
+            compact ? 'h-24' : 'aspect-square'
+          )}
         >
+          {!imageLoaded && (
+            <Skeleton className="absolute inset-0 w-full h-full rounded-none" />
+          )}
           <img
-            src={`https://placehold.co/200x200/f3f4f6/6b7280?text=${encodeURIComponent(product.name)}`}
+            src={imageSrc}
             alt={product.name}
             width={200}
             height={200}
-            className="object-contain w-full h-full"
+            onLoad={() => setImageLoaded(true)}
+            className={cn(
+              'object-contain w-full h-full transition-opacity duration-300',
+              imageLoaded ? 'opacity-100' : 'opacity-0'
+            )}
           />
         </div>
       </Link>
@@ -64,7 +79,9 @@ export default function ProductCard({
           <CardTitle className="truncate text-sm">{product.name}</CardTitle>
           {!compact && (
             <CardDescription className="mt-0.5">
-              {resolvedCategory?.name ?? '—'}
+              {resolvedCategory?.name ?? (
+                <Skeleton className="h-3 w-20 rounded" />
+              )}
             </CardDescription>
           )}
           <p

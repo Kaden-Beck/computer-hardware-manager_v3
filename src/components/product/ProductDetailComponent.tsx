@@ -8,6 +8,7 @@ import {
   useNavigate,
 } from '@tanstack/react-router';
 import { Button } from '@/components/ui/button';
+import { Skeleton } from '@/components/ui/skeleton';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -25,9 +26,33 @@ import { categoryByIdQueryOptions } from '@/lib/queries/categoryQueries';
 import { useRemoveProduct } from '@/lib/queries/productMutations';
 import { cn } from '@/lib/utils';
 
+function ProductDetailSkeleton(): React.JSX.Element {
+  return (
+    <div className="bg-background border rounded-lg overflow-hidden w-full p-4 md:p-6">
+      <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr_1fr] gap-6 items-stretch">
+        <Skeleton className="w-full aspect-square max-w-50 mx-auto rounded-md" />
+        <div className="flex flex-col gap-3">
+          <Skeleton className="h-6 w-48 rounded" />
+          <div className="space-y-2 pt-2">
+            <Skeleton className="h-4 w-40 rounded" />
+            <Skeleton className="h-4 w-36 rounded" />
+            <Skeleton className="h-4 w-32 rounded" />
+            <Skeleton className="h-4 w-44 rounded" />
+          </div>
+        </div>
+        <div className="flex flex-col gap-2">
+          <Skeleton className="h-9 w-24 rounded" />
+          <Skeleton className="h-4 w-12 rounded" />
+          <Skeleton className="h-9 w-24 rounded mt-auto" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function ProductDetailComponent(): React.JSX.Element | null {
   const { prodId } = useParams({ from: '/dashboard/products/$prodId' });
-  const { data: product } = useQuery(productByIdQueryOptions(prodId));
+  const { data: product, isPending } = useQuery(productByIdQueryOptions(prodId));
   const isEditing = !!useMatch({
     from: '/dashboard/products/$prodId/edit',
     shouldThrow: false,
@@ -43,6 +68,15 @@ export default function ProductDetailComponent(): React.JSX.Element | null {
   const navigate = useNavigate();
   const { mutate: removeProduct } = useRemoveProduct();
   const [confirmDelete, setConfirmDelete] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
+
+  if (isPending) {
+    return (
+      <div className="flex flex-col gap-6">
+        <ProductDetailSkeleton />
+      </div>
+    );
+  }
 
   if (!product) return <div>Product not found.</div>;
 
@@ -59,6 +93,11 @@ export default function ProductDetailComponent(): React.JSX.Element | null {
     `In Stock: ${product.quantity} units`,
   ];
 
+  const imageSrc =
+    product.images?.find((img) => img.isPrimary)?.url ??
+    product.images?.[0]?.url ??
+    `https://placehold.co/200x200/f3f4f6/6b7280?text=${encodeURIComponent(product.name)}`;
+
   return (
     <div className="flex flex-col gap-6">
       <div
@@ -68,20 +107,23 @@ export default function ProductDetailComponent(): React.JSX.Element | null {
       >
         <div className="grid grid-cols-1 md:grid-cols-[1fr_2fr_1fr] gap-6 items-stretch">
           {/* Column 1: Image */}
-          <div className="w-full aspect-square max-w-50 mx-auto bg-muted rounded-md overflow-hidden">
+          <div className="w-full aspect-square max-w-50 mx-auto bg-muted rounded-md overflow-hidden relative">
+            {!imageLoaded && (
+              <Skeleton className="absolute inset-0 w-full h-full rounded-md" />
+            )}
             <img
-              src={
-                product.images?.find((img) => img.isPrimary)?.url ??
-                product.images?.[0]?.url ??
-                `https://placehold.co/200x200/f3f4f6/6b7280?text=${encodeURIComponent(product.name)}`
-              }
+              src={imageSrc}
               alt={
                 product.images?.find((img) => img.isPrimary)?.altText ??
                 product.name
               }
               width={200}
               height={200}
-              className="object-contain w-full h-full"
+              onLoad={() => setImageLoaded(true)}
+              className={cn(
+                'object-contain w-full h-full transition-opacity duration-300',
+                imageLoaded ? 'opacity-100' : 'opacity-0'
+              )}
             />
           </div>
 
@@ -93,23 +135,31 @@ export default function ProductDetailComponent(): React.JSX.Element | null {
             <ul className="space-y-2 text-sm list-none text-muted-foreground pt-2">
               <li>
                 Manufacturer:{' '}
-                <Link
-                  to="/dashboard/manufacturers/$manId"
-                  params={{ manId: product.manufacturerId }}
-                  className="text-primary hover:underline"
-                >
-                  {manufacturer?.name ?? product.manufacturerId}
-                </Link>
+                {manufacturer ? (
+                  <Link
+                    to="/dashboard/manufacturers/$manId"
+                    params={{ manId: product.manufacturerId }}
+                    className="text-primary hover:underline"
+                  >
+                    {manufacturer.name}
+                  </Link>
+                ) : (
+                  <Skeleton className="inline-block h-3 w-24 rounded align-middle" />
+                )}
               </li>
               <li>
                 Category:{' '}
-                <Link
-                  to="/dashboard/categories/$catId"
-                  params={{ catId: product.categoryId }}
-                  className="text-primary hover:underline"
-                >
-                  {category?.name ?? product.categoryId}
-                </Link>
+                {category ? (
+                  <Link
+                    to="/dashboard/categories/$catId"
+                    params={{ catId: product.categoryId }}
+                    className="text-primary hover:underline"
+                  >
+                    {category.name}
+                  </Link>
+                ) : (
+                  <Skeleton className="inline-block h-3 w-24 rounded align-middle" />
+                )}
               </li>
               {specs.map((spec, index) => (
                 <li key={index}>{spec}</li>

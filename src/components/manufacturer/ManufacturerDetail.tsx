@@ -2,6 +2,7 @@ import { useState } from 'react';
 import type React from 'react';
 import ProductCard from '@/components/inventory/ProductCard';
 import { Button } from '@/components/ui/button';
+import { Skeleton } from '@/components/ui/skeleton';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -32,9 +33,28 @@ import { manufacturerByIdQueryOptions } from '@/lib/queries/manufacturerQueries'
 import { allProductsQueryOptions } from '@/lib/queries/productQueries';
 import { useRemoveManufacturer } from '@/lib/queries/manufacturerMutations';
 
+function ManufacturerDetailSkeleton(): React.JSX.Element {
+  return (
+    <div className="bg-background border rounded-lg overflow-hidden w-full p-4 md:p-6">
+      <div className="grid grid-cols-1 md:grid-cols-[2fr_1fr] gap-6 items-stretch">
+        <div className="flex flex-col gap-3">
+          <Skeleton className="h-6 w-40 rounded" />
+          <div className="space-y-2 pt-2">
+            <Skeleton className="h-4 w-48 rounded" />
+            <Skeleton className="h-4 w-64 rounded" />
+          </div>
+        </div>
+        <div className="flex flex-col h-full">
+          <Skeleton className="h-9 w-24 rounded mt-auto" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function ManufacturerDetailComponent(): React.JSX.Element {
   const { manId } = useParams({ from: '/dashboard/manufacturers/$manId' });
-  const { data: manufacturer } = useQuery(manufacturerByIdQueryOptions(manId));
+  const { data: manufacturer, isPending } = useQuery(manufacturerByIdQueryOptions(manId));
   const { data: allProducts = [] } = useQuery(allProductsQueryOptions);
 
   const isEditing = !!useMatch({
@@ -45,6 +65,14 @@ export default function ManufacturerDetailComponent(): React.JSX.Element {
   const navigate = useNavigate();
   const { mutate: removeManufacturer } = useRemoveManufacturer();
   const [confirmDelete, setConfirmDelete] = useState(false);
+
+  if (isPending) {
+    return (
+      <div className="flex flex-col gap-6">
+        <ManufacturerDetailSkeleton />
+      </div>
+    );
+  }
 
   if (!manufacturer) return <div>Manufacturer not found.</div>;
 
