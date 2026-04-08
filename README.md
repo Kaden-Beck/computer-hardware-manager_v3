@@ -1,6 +1,22 @@
 # Hardware Manager (Part 2 of 3) Overview
 
-Full-stack app utilizing React and TypeScript to demonstrate type-safe patterns of user interaction and reactive design.
+Full-stack app utilizing React and TypeScript to demonstrate type-safe patterns of user interaction and reactive design. This iteration includes a dynamic backend supported by Firebase.
+
+## Firebase Implementation Details
+
+- Product Data and User Information are stored in Firebase FireStore
+- Product Images are stored in Firebase Storage
+- Firebase Auth and Firebase AppCheck are used for Authentication/Authorization
+- The site is hosted on Firebase Hosting (not using App Hosting since it is Vite React)
+
+The FireStore database is organized into 4 collections:
+
+1. App Users
+2. Manufacturers
+3. Categories
+4. Products
+
+Zod is used for runtime validation and React Query is used for stateful queries and caching.
 
 ## Using the Software
 
@@ -25,10 +41,6 @@ npm run format
 # lint
 npm run lint
 ```
-
-You can watch a demo of the software running on the dev server here:
-
-> [Software Demo Video](http://youtube.link.goes.here)
 
 ## Web Pages
 
@@ -68,6 +80,7 @@ You can watch a demo of the software running on the dev server here:
 - Firebase Authentication
 - Firebase Hosting
 - Firebase App Check
+- Firebase Storage
 
 ## Useful Websites
 
@@ -79,8 +92,9 @@ You can watch a demo of the software running on the dev server here:
 - [TanStack Docs](https://tanstack.com/)
 - [shadcn](https://ui.shadcn.com/)
 - [Firebase Docs](https://firebase.google.com/docs)
+- [FireStore Ref](https://firebase.google.com/docs)
 
 ## Future Work
 
 - Redirect common name params to the proper route (i.e. `manufacturer/nvidia` should redirect to the NVIDIA details page)
-- This entire project uses static data, the third part of this project will implement the backend with FireStore and TanStack Query
+- Add better reactivity for images and protect against malicous image uploads

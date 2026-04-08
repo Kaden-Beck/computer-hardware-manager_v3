@@ -93,20 +93,20 @@ export default function ProductCard({
 
         {!compact && (
           <div className="flex w-full gap-2">
-            <Button variant="outline" size="sm" className="flex-1" asChild>
-              <Link
-                to="/dashboard/products/$prodId"
-                params={{ prodId: product.id }}
-              >
-                View
-              </Link>
-            </Button>
             <Button size="sm" className="flex-1" asChild>
               <Link
                 to="/dashboard/products/$prodId/edit"
                 params={{ prodId: product.id }}
               >
                 Edit
+              </Link>
+            </Button>
+            <Button variant="outline" size="sm" className="flex-1" asChild>
+              <Link
+                to="/dashboard/products/$prodId"
+                params={{ prodId: product.id }}
+              >
+                View
               </Link>
             </Button>
           </div>

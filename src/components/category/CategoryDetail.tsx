@@ -58,7 +58,9 @@ function CategoryDetailSkeleton(): React.JSX.Element {
 
 export default function CategoryDetailComponent(): React.JSX.Element {
   const { catId } = useParams({ from: '/dashboard/categories/$catId' });
-  const { data: category, isPending } = useQuery(categoryByIdQueryOptions(catId));
+  const { data: category, isPending } = useQuery(
+    categoryByIdQueryOptions(catId)
+  );
   const { data: allCategories = [] } = useQuery(allCategoriesQueryOptions);
   const { data: allProducts = [] } = useQuery(allProductsQueryOptions);
 

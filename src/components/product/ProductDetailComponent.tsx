@@ -52,7 +52,9 @@ function ProductDetailSkeleton(): React.JSX.Element {
 
 export default function ProductDetailComponent(): React.JSX.Element | null {
   const { prodId } = useParams({ from: '/dashboard/products/$prodId' });
-  const { data: product, isPending } = useQuery(productByIdQueryOptions(prodId));
+  const { data: product, isPending } = useQuery(
+    productByIdQueryOptions(prodId)
+  );
   const isEditing = !!useMatch({
     from: '/dashboard/products/$prodId/edit',
     shouldThrow: false,

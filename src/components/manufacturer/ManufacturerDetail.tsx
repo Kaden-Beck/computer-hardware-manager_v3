@@ -54,7 +54,9 @@ function ManufacturerDetailSkeleton(): React.JSX.Element {
 
 export default function ManufacturerDetailComponent(): React.JSX.Element {
   const { manId } = useParams({ from: '/dashboard/manufacturers/$manId' });
-  const { data: manufacturer, isPending } = useQuery(manufacturerByIdQueryOptions(manId));
+  const { data: manufacturer, isPending } = useQuery(
+    manufacturerByIdQueryOptions(manId)
+  );
   const { data: allProducts = [] } = useQuery(allProductsQueryOptions);
 
   const isEditing = !!useMatch({
